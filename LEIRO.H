@@ -1,7 +1,7 @@
 
-#define FILENEVHOSSZ (17)
+#define FILEnameHOSSZ (17)
 
-typedef char filenev[FILENEVHOSSZ+1];
+typedef char filename[FILEnameHOSSZ+1];
 
 extern int Displaysizex, Displaysizey;
 
@@ -47,7 +47,7 @@ public:
 	unsigned char ugroindex;
 	unsigned char keretindex;
 
-	palyaleiro( char* nev );
+	palyaleiro( char* name );
 	~palyaleiro( void );
 	void foldbeolv_ratesz( int leiroindex );
 };

@@ -1,13 +1,13 @@
 #include	"all.h"
 
-vekt2 spritehely( szakasz* psz, targy* pt, double t ) {
+vector2 spritehely( szakasz* psz, targy* pt, double t ) {
 	if( !pt->mozgo )
 		return psz->vv.r+psz->vv.v;
-	vekt2 r = psz->vv.r;
-	vekt2 v = psz->vv.v;
+	vector2 r = psz->vv.r;
+	vector2 v = psz->vv.v;
 	// Csere:
 	r = r+v;
-	v = Vekt2null-v;
+	v = vector2null-v;
 	double fazis = t*pt->sebesseg+pt->fazis;
 	// Kepezzuk fazis tort reszet:
 	long l = fazis;
@@ -27,7 +27,7 @@ vekt2 spritehely( szakasz* psz, targy* pt, double t ) {
 	}
 }
 
-int utkozikesprite( vekt2 r, double sugar, int fej, double t,
+int utkozikesprite( vector2 r, double sugar, int fej, double t,
 							targytomb* pttt ) {
 	Pszakt->felsorolasresetszak();
 	szakasz* psz = NULL;
@@ -41,7 +41,7 @@ int utkozikesprite( vekt2 r, double sugar, int fej, double t,
 
 		if( !pt->aktiv || (fej&&!ptt->fejerz) || (!fej&&!ptt->kerekerz) )
 			continue;
-		vekt2 diff = r-spritehely( psz, psz->ptargy, t );
+		vector2 diff = r-spritehely( psz, psz->ptargy, t );
 		double maxtav = sugar+ptt->sugar;
 		if( diff.x*diff.x+diff.y*diff.y < maxtav*maxtav )
 			return Pszakt->getsorszam( psz );

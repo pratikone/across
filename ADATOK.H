@@ -13,7 +13,7 @@ void initadatok( void );
 
 extern double Magassag, Szelesseg;
 
-extern vekt2 P_alap1, P_alap2, P_alap3, P_alap4, P_alap6;
+extern vector2 P_alap1, P_alap2, P_alap3, P_alap4, P_alap6;
 extern double Fejsugar;
 
 extern double Spritemaxsugar; // Targykereseshez!

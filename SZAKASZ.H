@@ -30,7 +30,7 @@ class szakaszok {
 	pvonalnode* tertomb;
 	int xdim, ydim;
 	double cellameret;
-	vekt2 origo;
+	vector2 origo;
 	vonalnode* nextnode; // getnext ez alapjan dolgozik!
 
 
@@ -48,13 +48,13 @@ public:
 	szakaszok( topol* ptop, int targyas );
 	~szakaszok( void );
 	void save( FILE* h, int targyas );
-	//void add( vekt2 r, vekt2 v, int targyas );
+	//void add( vector2 r, vector2 v, int targyas );
 	//void remove( szakasz* psz );
 
 	// Terbeli fv.-ek:
 	// rendez-t csak egyszer szabad hivni!
 	void rendez( double maxtav );
-	void felsorolasreset( vekt2 r );
+	void felsorolasreset( vector2 r );
 	vonal* getnext( void );
 
 	// Osszes szakaszon vegigmennek:
@@ -72,7 +72,7 @@ public:
 };
 
 struct vonal {
-	vekt2 r, v, egyseg;
+	vector2 r, v, egyseg;
 	double hossz;
 };
 
@@ -84,9 +84,9 @@ public:
 
 class leiro;
 
-void loadszakaszok( char* nev, int kulso, szakaszok** ppszak,
+void loadszakaszok( char* name, int kulso, szakaszok** ppszak,
 			szakaszok** ppszakt );
-void saveszakaszok( char* nev, szakaszok* pszak, szakaszok* pszakt );
+void saveszakaszok( char* name, szakaszok* pszak, szakaszok* pszakt );
 
 // loadszakasz beleirja ptop->lezart-at ha topologia file-t olvas be:
 // Ezt azutan afterplayext fuggveny hasznalja ki:

@@ -94,12 +94,12 @@ static int loadtargytipus( targytipus* ptipus, FILE* h ) {
 	for( int i = 0; i < ptipus->frameszam; i++ ) {
 		char sor[200];
 		if( fgets( sor, 190, h ) == NULL )
-			hiba( "Nem tudott olvasni frame nevet filebol!" );
-		char nev[200];
-		if( sscanf( sor, "%s", nev ) != 1 )
+			hiba( "Nem tudott olvasni frame nameet filebol!" );
+		char name[200];
+		if( sscanf( sor, "%s", name ) != 1 )
 			hiba( "targytomb konstban nem tudta feldolgozni sort!: ", sor );
 		pic8* ptmp = NULL;
-		{ ptmp = NEW(pic8*) pic8( nev ); }
+		{ ptmp = NEW(pic8*) pic8( name ); }
 		unsigned char lyukindex = ptmp->gpixel( 0, 0 );
 		{ ptipus->spriteok[i] = NEW(pic8*) pic8( kellx, kelly ); }
 		mintavetel8( ptipus->spriteok[i], ptmp );
@@ -121,10 +121,10 @@ static int loadtargytipus( targytipus* ptipus, FILE* h ) {
 			}
 		}
 		// Kiterjesztes megkeresese:
-		int j = strlen( nev ) - 1;
+		int j = strlen( name ) - 1;
 		while( j > 0 ) {
-			if( nev[j] == '.' ) {
-				if( strcmpi( nev+j, ".pcx" ) == 0 ) {
+			if( name[j] == '.' ) {
+				if( strcmpi( name+j, ".pcx" ) == 0 ) {
 					// Ki kell lyukasztani sprite-ta!:
 					spriteosit( ptipus->spriteok[i], lyukindex );
 				}
@@ -144,7 +144,7 @@ static void felszabtargytipus( targytipus* ptipus ) {
 }
 
 
-targytomb::targytomb( char* nev ) {
+targytomb::targytomb( char* name ) {
 	{ targytipusok = NEW(targytipus*) targytipus[MAXTARGYTIPUSSZAM]; }
 	if( !targytipusok )
 		uzenet( "memory" );
@@ -153,9 +153,9 @@ targytomb::targytomb( char* nev ) {
 	for( int i = 0; i < MAXTARGYTIPUSSZAM; i++ )
 		memset( &targytipusok[i], 0, sizeof( targytipus ) );
 
-	FILE* h = qopen( nev, "rt" );
+	FILE* h = qopen( name, "rt" );
 	if( !h )
-		hiba( "Nem tudta megnyitni file-t!: ", nev );
+		hiba( "Nem tudta megnyitni file-t!: ", name );
 
 	// Beolvassa targytipusok szamat:
 	char sor[200];

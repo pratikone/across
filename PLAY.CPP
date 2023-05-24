@@ -14,7 +14,7 @@ static void betuki( int oszlop, char c ) {
 	lassufizre( Korny->picbuffer, Korny->pal_newjatekos );
 }
 
-static int bevesznevet( char* nev ) {
+static int bevesznameet( char* name ) {
 	int i = 0;
 	betuki( 0, '_' );
 	while( 1 ) {
@@ -25,7 +25,7 @@ static int bevesznevet( char* nev ) {
 		if( c == MK_ENTER ) {
 			// ENTER
 			if( i > 0 ) {
-				nev[i] = 0;
+				name[i] = 0;
 				return 1;
 			}
 		}
@@ -35,7 +35,7 @@ static int bevesznevet( char* nev ) {
 			if( i >= 8 )
 				continue;
 			betuki( i, c );
-			nev[i] = c;
+			name[i] = c;
 			i++;
 			betuki( i, '_' );
 		}
@@ -116,7 +116,7 @@ void saveplay( long belyeg ) {
 	Korny->pabc_saveplay->write( Korny->picbuffer, 20, 5*SM, "Please enter filename:" );
 	lassufizre( Korny->picbuffer, Korny->pal_saveplay );
 	char tmp[20] = "";
-	if( !bevesznevet( tmp ) )
+	if( !bevesznameet( tmp ) )
 		return;
 	if( strcmp( tmp, "memtocpy" ) == 0 ) {
 		// Itt most kiirja specialis uzenetet:
@@ -304,25 +304,25 @@ void ervenytlenitpalya( void ) {
 	Korny->levelpszak = -30;
 }
 
-// Vagy level == -1 es belyeg != 0 es filenev == NULL,
-// vagy level >= 0 < 100 es belyeg = 0 es filenev == NULL,
-// vagy level == -1 es belyeg = 0 es filenev ervenyes,
+// Vagy level == -1 es belyeg != 0 es filename == NULL,
+// vagy level >= 0 < 100 es belyeg = 0 es filename == NULL,
+// vagy level == -1 es belyeg = 0 es filename ervenyes,
 // Hamis eseten nem sikerult betolteni palyat (rec filehoz nincs lev):
-int palyabe( int level, unsigned long belyeg, char* filenev ) {
+int palyabe( int level, unsigned long belyeg, char* filename ) {
 	if( (level >= 0 && belyeg) ||
-		(level >= 0 && filenev) ||
-		(filenev && belyeg) )
+		(level >= 0 && filename) ||
+		(filename && belyeg) )
 		hiba( "palyabe-ben tul sok param van beallitva!" );
-	if( level < 0 && !belyeg && !filenev )
-		hiba( "palyabe-ben level < 0 && !belyeg && !filenev!" );
+	if( level < 0 && !belyeg && !filename )
+		hiba( "palyabe-ben level < 0 && !belyeg && !filename!" );
 
-	char* kiirnev = "External level";
+	char* kiirname = "External level";
 	leveltomb_s *plev = NULL;
 	if( level >= 0 ) {
 		if( level >= MAXPALYASZAM )
 			hiba( "palyabe-ben level >= MAXPALYASZAM!" );
 		plev = &Leveltomb[Levellista[level]];
-		kiirnev = getleveldescription( level );
+		kiirname = getleveldescription( level );
 	}
 
 	int ujleiroazonosito = 2;
@@ -348,15 +348,15 @@ int palyabe( int level, unsigned long belyeg, char* filenev ) {
 	setglobals( State->res, fakt );
 
 	if( ujraegesz ) {
-		pleasewait( kiirnev );
+		pleasewait( kiirname );
 		Korny->leiroazonosito = ujleiroazonosito;
 		DELETE Korny->pleiro; }
-		{ Korny->pleiro = NEW(palyaleiro*) palyaleiro( Leironevtomb[ujleiroazonosito] ); }
+		{ Korny->pleiro = NEW(palyaleiro*) palyaleiro( Leironametomb[ujleiroazonosito] ); }
 	}
 	else {
 		if( Korny->leiroazonosito != ujleiroazonosito ) {
 			// Most csak a foldet kell kicserelni:
-			pleasewait( kiirnev );
+			pleasewait( kiirname );
 			Korny->leiroazonosito = ujleiroazonosito;
 			ujtopol = 1;
 			csakfoldcsere();
@@ -370,24 +370,24 @@ int palyabe( int level, unsigned long belyeg, char* filenev ) {
 		ujtopol = 1;
 	if( belyeg )
 		ujtopol = 1;
-	if( filenev ) // External file-nal mindig ujraolvasunk
+	if( filename ) // External file-nal mindig ujraolvasunk
 		ujtopol = 1;
 	if( ujtopol ) {
-		char tmpnev[20] = "";
-		char* nev = NULL;
+		char tmpname[20] = "";
+		char* name = NULL;
 		if( level >= 0 )
-			nev = plev->filenev;
+			name = plev->filename;
 		else {
 			if( belyeg ) {
-				nev = tmpnev;
-				if( !getbelyegheznev( belyeg, nev ) ) {
+				name = tmpname;
+				if( !getbelyeghezname( belyeg, name ) ) {
 					dialog320( "Level file not found!",
 							   "Read file EDITOR.TXT!" );
 					return 0;
 				}
 			}
 			else
-				nev = filenev;
+				name = filename;
 		}
 
 		DELETE Pszak; } Pszak = NULL;
@@ -397,9 +397,9 @@ int palyabe( int level, unsigned long belyeg, char* filenev ) {
 
 		Korny->levelpszak = level;
 		if( level >= 0 )
-			loadszakaszok( nev, 0, &Pszak, &Pszakt );
+			loadszakaszok( name, 0, &Pszak, &Pszakt );
 		else
-			loadszakaszok( nev, 1, &Pszak, &Pszakt );
+			loadszakaszok( name, 1, &Pszak, &Pszakt );
 
 		if( Fejsugar > Kor2.sugar )
 			Pszak->rendez( Fejsugar );
@@ -445,7 +445,7 @@ static void idoelintezes( long ido, char* valasz1, char* valasz2, char* valasz3,
 		// Elso ido:
 		pidok->idokszama = 1;
 		pidok->idok[0] = ido;
-		pidok->nevindexek[0] = State->jatekos;
+		pidok->nameindexek[0] = State->jatekos;
 		strcat( valasz2, "Best Time!" );
 		return;
 	}
@@ -469,11 +469,11 @@ static void idoelintezes( long ido, char* valasz1, char* valasz2, char* valasz3,
 	// Beillesztjuk uj idot vegere!:
 	if( pidok->idokszama == MAXIDOK ) {
 		pidok->idok[MAXIDOK-1] = ido;
-		pidok->nevindexek[MAXIDOK-1] = State->jatekos;
+		pidok->nameindexek[MAXIDOK-1] = State->jatekos;
 	}
 	else {
 		pidok->idok[int(pidok->idokszama)] = ido;
-		pidok->nevindexek[int(pidok->idokszama)] = State->jatekos;
+		pidok->nameindexek[int(pidok->idokszama)] = State->jatekos;
 		pidok->idokszama++;
 	}
 	// Sorrendbe allitjuk idoket:
@@ -485,9 +485,9 @@ static void idoelintezes( long ido, char* valasz1, char* valasz2, char* valasz3,
 				pidok->idok[j] = pidok->idok[j+1];
 				pidok->idok[j+1] = tmp;
 
-				tmp = pidok->nevindexek[j];
-				pidok->nevindexek[j] = pidok->nevindexek[j+1];
-				pidok->nevindexek[j+1] = tmp;
+				tmp = pidok->nameindexek[j];
+				pidok->nameindexek[j] = pidok->nameindexek[j+1];
+				pidok->nameindexek[j+1] = tmp;
 			}
 		}
 	}

@@ -18,7 +18,7 @@ enum { T_MOVE = 0, T_ZOOMIN, T_CREATE_VERT, T_DELETE_VERT, T_DELETE_POLY,
 
 extern int Tool;
 
-//extern char Editfilenev[20]; // "nincsnev.lev" eseten meg nincs neve
+//extern char Editfilename[20]; // "nincsname.lev" eseten meg nincs namee
 
 //extern unsigned char Feketeindex;
 

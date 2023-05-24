@@ -9,7 +9,7 @@ extern double   Hatarx1,
 void resetkirajzol( void );
 
 struct st320 {
-	vekt2 origo;
+	vector2 origo;
 	int vxelozo, vyelozo;
 	magassag *pmviz, *pmfugg;
 };

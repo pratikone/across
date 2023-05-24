@@ -1,12 +1,12 @@
 #include	"all.h"
 
-void pleasewait( char* nev ) {
+void pleasewait( char* name ) {
 	if( !Korny )
 		hiba( "pleasewait-ben Korny == NULL!" );
 	blt8( Korny->picbuffer, Korny->ppic_load );
-	if( nev ) {
+	if( name ) {
 		Korny->pabc_load->writekozep( Korny->picbuffer, 160, 65, "Loading" );
-		Korny->pabc_load->writekozep( Korny->picbuffer, 160, 95, nev );
+		Korny->pabc_load->writekozep( Korny->picbuffer, 160, 95, name );
 		Korny->pabc_load->writekozep( Korny->picbuffer, 160, 125, "Please Wait!" );
 	}
 	else {
@@ -241,7 +241,7 @@ kornyezet::kornyezet( void ) {
 	}
 
 
-	{ pleiro = NEW(palyaleiro*) palyaleiro( Leironevtomb[0] ); }
+	{ pleiro = NEW(palyaleiro*) palyaleiro( Leironametomb[0] ); }
 	leiroazonosito = 0;
 
 	levelpszak = 0;
@@ -508,7 +508,7 @@ char* getleveldescription( int level ) {
 }
 
 // PALYASZAM csak maximumkent van ideirva:
-char Leironevtomb[5][20] = {
+char Leironametomb[5][20] = {
 	"leir1.lei",
 	"leir2.lei",
 	"leir3.lei"

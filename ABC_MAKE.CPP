@@ -188,14 +188,14 @@ void kulonexe_abcmake( void ) {
 	blt8( Pscr8, pnpic );
 
 	// Megnyitja abc-t irasra:
-	char* abcneve = "abc.abc";
-	FILE* h = fopen( abcneve, "wb" );
+	char* abcnamee = "abc.abc";
+	FILE* h = fopen( abcnamee, "wb" );
 	if( !h ) {
-		hiba( "Nem tudta megnyitni abc-t irasra!: ", abcneve );
+		hiba( "Nem tudta megnyitni abc-t irasra!: ", abcnamee );
 		return;
 	}
 	if( fwrite( "RA1", 4, 1, h ) != 1 ) {
-		hiba( "Nem tudja irni abc-t!: ", abcneve );
+		hiba( "Nem tudja irni abc-t!: ", abcnamee );
 		fclose( h );
 		return;
 	}
@@ -204,7 +204,7 @@ void kulonexe_abcmake( void ) {
 	long szamhely = ftell( h );
 	short szam = 0;
 	if( fwrite( &szam, 2, 1, h ) != 1 ) {
-		hiba( "Nem tudja irni abc-t!: ", abcneve );
+		hiba( "Nem tudja irni abc-t!: ", abcnamee );
 		fclose( h );
 		return;
 	}
@@ -223,7 +223,7 @@ void kulonexe_abcmake( void ) {
 	if( fseek( h, szamhely, SEEK_SET ) != 0 )
 		hiba( "Nem megy fseek!" );
 	if( fwrite( &szam, 2, 1, h ) != 1 ) {
-		hiba( "Nem tudja irni abc-t!: ", abcneve );
+		hiba( "Nem tudja irni abc-t!: ", abcnamee );
 		fclose( h );
 		return;
 	}

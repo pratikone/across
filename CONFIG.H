@@ -1,8 +1,8 @@
 
 class conf {
 public:
-	void load( char* nev );
-	void save( char* nev );
+	void load( char* name );
+	void save( char* name );
 	int viewxsize, viewysize;
 	int viewxorig, viewyorig;
 	int viewxtolas;

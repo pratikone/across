@@ -2,19 +2,19 @@
 //enum { W_MONO = 1, W_LEFT, W_RIGHT };
 
 class wav {
-	void	lefoglal( void ); // size alapjan lefoglal!
+	void	allocate( void ); // reserve based on size!
 public:
 	signed short* 	tomb;
 	unsigned 	 	size;
 
 			wav( unsigned sizepar );
-			// maxamplitudo 0 es 1 kozott valtozik!:
-			wav( char* nev, double maxamplitudo,
+			// maxamplitudo varies between 0 and 1!:
+			wav( char* name, double maxamplitudo,
 									int start = -1, int ucsoutani = -1 );
-	void    save( char* nev );
+	void    save( char* name );
 	// Manipulalas:
 
-	// Elejere tesz egy loopot a vegebol:
+	// First, make a loop from the vegebol:
 	void loopol( int n );
 	// pwav elejet rateszi vegere:
 	void vegereilleszt( wav* pwav, int n );

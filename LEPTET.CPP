@@ -1,6 +1,6 @@
 #include	"all.h"
 
-static void surlodasverseny( vekt2 fgumi, vekt2 sebesseg );
+static void surlodasverseny( vector2 fgumi, vector2 sebesseg );
 
 static double Maxsurlodas = 0;
 
@@ -44,52 +44,52 @@ static double fv_ero( double l ) {
 	*/
 }
 
-static void erokszamitasa( kor* pkor, vekt2 i1, vekt2 j1,
+static void erokszamitasa( kor* pkor, vector2 i1, vector2 j1,
 			double kordx, double kordy,
-			vekt2* pFkerek, vekt2* pFtest, double* pMtest,
+			vector2* pFkerek, vector2* pFtest, double* pMtest,
 			double* pMkerek ) {
-	vekt2 gumis = i1*kordx+j1*kordy;
-	vekt2 gumisabsz = gumis + Kor1.r;
+	vector2 gumis = i1*kordx+j1*kordy;
+	vector2 gumisabsz = gumis + Kor1.r;
 
 	// Gumi huzoero kiszamolasa:
-	vekt2 gumi = gumisabsz-pkor->r;
+	vector2 gumi = gumisabsz-pkor->r;
 	double Fsugar = 0;
 	double Ftang = 0;
 	if( gumi.x < -0.0001 || gumi.x > 0.0001 ||
 				gumi.y < -0.0001 || gumi.y > 0.0001 ) {
 		// Gumieronek szetbontasa ket komponensre:
 		double rudhossz = abs( gumis );
-		vekt2 rudegys = gumis*(1.0/rudhossz);
-		vekt2 rudegysmer = forgatas90fokkal( rudegys );
+		vector2 rudegys = gumis*(1.0/rudhossz);
+		vector2 rudegysmer = rotateby90degrees( rudegys );
 
 		Fsugar = fv_ero(gumi*rudegys);   // eredetileg: *Drsugar;
 		Ftang = fv_ero(gumi*rudegysmer); // eredetileg: *Drtang;
 
 		*pFkerek = Fsugar*rudegys+Ftang*rudegysmer;
 
-		*pFtest = Vekt2null - *pFkerek;
+		*pFtest = vector2null - *pFkerek;
 		*pMtest = -Ftang*rudhossz;
 	}
 	else {
-		*pFkerek = vekt2();
-		*pFtest = vekt2();
+		*pFkerek = vector2();
+		*pFtest = vector2();
 		*pMtest = 0;
 	}
 	// Most jon surlodas szamitasa:
-	vekt2 koto = pkor->r-Kor1.r;
+	vector2 koto = pkor->r-Kor1.r;
 	double kotol = abs( koto );
 	double reckotol = 1.0/kotol;
-	vekt2 kotoe = koto*reckotol;
-	vekt2 kotomer = forgatas90fokkal( koto );
-	vekt2 kotoemer = forgatas90fokkal( kotoe );
-	vekt2 korongrelv = (kotomer*Kor1.omega+Kor1.v)-pkor->v;
+	vector2 kotoe = koto*reckotol;
+	vector2 kotomer = rotateby90degrees( koto );
+	vector2 kotoemer = rotateby90degrees( kotoe );
+	vector2 korongrelv = (kotomer*Kor1.omega+Kor1.v)-pkor->v;
 	double vlong = korongrelv*kotoe;
 	double vtang = korongrelv*kotoemer;
-	vekt2 Fklong = (vlong*Sr)*kotoe;
-	vekt2 Fktang = (vtang*Sr)*kotoemer;
+	vector2 Fklong = (vlong*Sr)*kotoe;
+	vector2 Fktang = (vtang*Sr)*kotoemer;
 
 	// Most jon kerek forgatonyomateka:
-	vekt2 Ftestnyom = kotoemer*(*pMkerek*reckotol);
+	vector2 Ftestnyom = kotoemer*(*pMkerek*reckotol);
 
 	*pFkerek = *pFkerek + Fklong + Fktang - Ftestnyom;
 	*pMtest += -(Fktang*kotomer);
@@ -118,8 +118,8 @@ void leptet( double most, double dt, int gaz, int fek,
 									int ugrik1, int ugrik2 ) {
 	Maxsurlodas = 0;
 
-	vekt2 i1( cos( Kor1.alfa ), sin( Kor1.alfa ) );
-	vekt2 j1 = forgatas90fokkal( i1 );
+	vector2 i1( cos( Kor1.alfa ), sin( Kor1.alfa ) );
+	vector2 j1 = rotateby90degrees( i1 );
 
 	// Fek, gaz:
 	if( !Voltfek && fek ) {
@@ -160,14 +160,14 @@ void leptet( double most, double dt, int gaz, int fek,
 
 	int crcido = most*1000;
 
-	vekt2 Fkerek2;
-	vekt2 Ftest2;
+	vector2 Fkerek2;
+	vector2 Ftest2;
 	double Mtest2;
 	erokszamitasa( &Kor2, i1, j1, Kord2x, Kord2y, &Fkerek2,
 					&Ftest2, &Mtest2, &Mkerek2 );
 
-	vekt2 Fkerek4;
-	vekt2 Ftest4;
+	vector2 Fkerek4;
+	vector2 Ftest4;
 	double Mtest4;
 	erokszamitasa( &Kor4, i1, j1, Kord4x, Kord4y, &Fkerek4,
 					&Ftest4, &Mtest4, &Mkerek4 );
@@ -227,10 +227,10 @@ void leptet( double most, double dt, int gaz, int fek,
 		Kor1.omega += Loket;
 	}
 
-	beallit( &Kor1, Ftest2+Ftest4-Vekt2j*Kor1.m*G,
+	beallit( &Kor1, Ftest2+Ftest4-vector2j*Kor1.m*G,
 					Mtest2+Mtest4, dt, 0 );
-	beallit( &Kor2, Fkerek2-Vekt2j*Kor2.m*G, Mkerek2, 	   dt, 1 );
-	beallit( &Kor4, Fkerek4-Vekt2j*Kor4.m*G, Mkerek4, 	   dt, 1 );
+	beallit( &Kor2, Fkerek2-vector2j*Kor2.m*G, Mkerek2, 	   dt, 1 );
+	beallit( &Kor4, Fkerek4-vector2j*Kor4.m*G, Mkerek4, 	   dt, 1 );
 	Kor12Fejr();
 }
 
@@ -240,13 +240,13 @@ void Kor12Fejr( void ) {
 	double fejhatra = -0.1;
 	if( Hatra )
 		fejhatra = 0-fejhatra;
-	Fejr = Kor1.r + vekt2( tav*cos( Kor1.alfa+K_pip2+fejhatra ),
+	Fejr = Kor1.r + vector2( tav*cos( Kor1.alfa+K_pip2+fejhatra ),
 						   tav*sin( Kor1.alfa+K_pip2+fejhatra ) );
 }
 
 // 0-meghalt, 2-semmi kulonos
 int vizsgalat( double t, targytomb* ptt ) {
-	vekt2 t1, t2;
+	vector2 t1, t2;
 	if( talppontkereses( Fejr, Fejsugar, &t1, &t2 ) )
 		return 0;
 
@@ -277,8 +277,8 @@ int vizsgalat( double t, targytomb* ptt ) {
 
 static double Oszto = 1.0/1.0;
 
-static void surlodasverseny( vekt2 fgumi_v, vekt2 sebesseg_v ) {
-	vekt2 joirany( cos( Kor1.alfa-K_pip2 ), sin( Kor1.alfa-K_pip2 ) );
+static void surlodasverseny( vector2 fgumi_v, vector2 sebesseg_v ) {
+	vector2 joirany( cos( Kor1.alfa-K_pip2 ), sin( Kor1.alfa-K_pip2 ) );
 	double fgumi = joirany*fgumi_v;
 	double sebesseg = joirany*sebesseg_v;
 	if( fgumi <= 0 || sebesseg <= 0 )

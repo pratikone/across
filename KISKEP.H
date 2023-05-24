@@ -8,6 +8,6 @@ public:
 	unsigned char* tomb;
 	int xsize, ysize;
 	long hossz;
-	kiskep( char* pic8nev );
+	kiskep( char* pic8name );
 	~kiskep( void );
 };

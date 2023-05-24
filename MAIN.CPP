@@ -56,7 +56,7 @@ static void ugraseldontes( void ) {
 		psz = pszakok->getnextszak();
     }
 
-    vekt2 origo = vekt2( minx-400/Aranyx, miny-300/Aranyy );
+    vector2 origo = vector2( minx-400/Aranyx, miny-300/Aranyy );
     // Egy kis veletlenites!:
     origo.x += 0.0000145839857463;
     origo.y += 0.0000295874632574;
@@ -128,22 +128,22 @@ void mv_main( void ) {
 	teljes();
 
 	// Editor:
-	/*char* palyanev = NULL;
-	char* leironev = NULL;
+	/*char* palyaname = NULL;
+	char* leironame = NULL;
 	#ifndef WATCOM
 		if( _argc != 3 )
-			hiba( "Meg kell adni palya es leiro nevet!" );
-		palyanev = _argv[1];
-		leironev = _argv[2];
+			hiba( "Meg kell adni palya es leiro nameet!" );
+		palyaname = _argv[1];
+		leironame = _argv[2];
 	#endif
 
-	palyaleiro leiro( leironev, 0 );
+	palyaleiro leiro( leironame, 0 );
 	st320 st;
 
 	while( 1 ) {
-		int kov = editor( palyanev, &leiro );
+		int kov = editor( palyaname, &leiro );
 		if( kov == 0 ) {
-			loadszakaszok( palyanev, &Pszak, &Pszakt, &Phordok, &leiro );
+			loadszakaszok( palyaname, &Pszak, &Pszakt, &Phordok, &leiro );
 			char kihasznaltsag[40];
 			elemszam( kihasznaltsag, Pszak );
 			//DELETE Pszak; } Pszak = NULL;
@@ -152,7 +152,7 @@ void mv_main( void ) {
 			hiba( kihasznaltsag );
 		}
 		if( kov == 1 ) {
-			loadszakaszok( palyanev, &Pszak, &Pszakt, &Phordok, &leiro );
+			loadszakaszok( palyaname, &Pszak, &Pszakt, &Phordok, &leiro );
 			if( Fejsugar > Kor2.sugar )
 				Pszak->rendez( Phordok, Fejsugar );
 			else

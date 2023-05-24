@@ -37,7 +37,7 @@
 
 #include	"..\rayback.h"
 
-#include	"..\vekt2.h"
+#include	"..\vector2.h"
 #include	"..\kor.h"
 #include	"..\beallit.h"
 #include	"..\leptet.h"

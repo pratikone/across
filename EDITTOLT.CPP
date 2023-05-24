@@ -4,35 +4,35 @@ static const unsigned short Save_as_box_szin = 215, Save_as_szelszin = 0;
 
 static unsigned short Openlistaszin = 173, Openlistainvszin = 205;
 
-static int Maxnev = 1000; // Nem lehet nagyobb 3000-nel!
-static char* Soknev = NULL;
+static int Maxname = 1000; // Nem lehet nagyobb 3000-nel!
+static char* Sokname = NULL;
 
-static void abcberendez( int nevszam ) {
-	for( int i = 0; i < nevszam+3; i++ ) {
-		for( int j = 0; j < nevszam-1; j++ ) {
+static void abcberendez( int nameszam ) {
+	for( int i = 0; i < nameszam+3; i++ ) {
+		for( int j = 0; j < nameszam-1; j++ ) {
 			// Ha j es j+1 edik elem forditva van visszacsereljuk oket:
-			char* nev1 = &Soknev[j*10];
-			char* nev2 = &Soknev[(j+1)*10];
-			if( strcmp( nev1, nev2 ) > 0 ) {
+			char* name1 = &Sokname[j*10];
+			char* name2 = &Sokname[(j+1)*10];
+			if( strcmp( name1, name2 ) > 0 ) {
 				// Csere:
 				char tmp[20];
-				strcpy( tmp, nev1 );
-				strcpy( nev1, nev2 );
-				strcpy( nev2, tmp );
+				strcpy( tmp, name1 );
+				strcpy( name1, name2 );
+				strcpy( name2, tmp );
 			}
 		}
 	}
 }
 
-static void betolt( char* nev ) {
+static void betolt( char* name ) {
 	if( !Ptop )
 		hiba( "uoiwfiufre" );
-	if( !*nev )
+	if( !*name )
 		hiba( "oiufewguyxygxw" );
 	char tmp[15];
-	if( strlen( nev ) > 8 )
+	if( strlen( name ) > 8 )
 		hiba( "iovffiufi" );
-	strcpy( tmp, nev );
+	strcpy( tmp, name );
 	strcat( tmp, ".lev" );
 
 	delete Ptop;
@@ -41,16 +41,16 @@ static void betolt( char* nev ) {
 	Valtozott = 0;
 	if( strlen( tmp ) > 12 )
 		hiba( "betolt-ben strlen( tmp ) > 12!" );
-	strcpy( State->editfilenev, tmp );
+	strcpy( State->editfilename, tmp );
 	if( Ptop->lezart ) {
 		char szoveg[40];
 		sprintf( szoveg, "The file '%s' is locked, you cannot edit it!",
-											State->editfilenev );
+											State->editfilename );
 		dialog( szoveg );
 		delete Ptop;
 		Ptop = new topol;
 		Valtozott = 0;
-		State->editfilenev[0] = 0;
+		State->editfilename[0] = 0;
 	}
 
 	// Most megnezzuk hogy nincs-e tul sok pontja palyanak:
@@ -59,11 +59,11 @@ static void betolt( char* nev ) {
 	kitolt();
 }
 
-static void igazit( int* pkur, int* pfelso, int nevszam, int helyszam ) {
+static void igazit( int* pkur, int* pfelso, int nameszam, int helyszam ) {
 	if( *pkur < 0 )
 		*pkur = 0;
-	if( *pkur > nevszam-1 )
-		*pkur = nevszam-1;
+	if( *pkur > nameszam-1 )
+		*pkur = nameszam-1;
 	if( *pfelso > *pkur )
 		*pfelso = *pkur;
 	if( *pfelso < *pkur-helyszam+1 )
@@ -107,58 +107,58 @@ void tolt_open( void ) {
 					"GOMBOK", "Yes", "No" ) == 1 )
 		return;
 	}
-	if( !Soknev ) {
-		Soknev = new char[Maxnev*10+100];
-		if( !Soknev )
+	if( !Sokname ) {
+		Sokname = new char[Maxname*10+100];
+		if( !Sokname )
 			hiba( "Nincs eleg memoria tolt_open-ben (hjfdf)!" );
 	}
-	for( int i = 0; i < Maxnev*10+10; i++ )
-		Soknev[i] = 0;
+	for( int i = 0; i < Maxname*10+10; i++ )
+		Sokname[i] = 0;
 	int done;
 	find_t ffblk;
 	done = _dos_findfirst( "*.lev", _A_NORMAL, &ffblk );
-	int nevszam = 0;
+	int nameszam = 0;
 	while( !done ) {
 		if( strlen( ffblk.name ) > 14 )
 			hiba( "ijhfiyewpp" );
-		char* nev = &Soknev[nevszam*10];
-		strcpy( nev, ffblk.name );
+		char* name = &Sokname[nameszam*10];
+		strcpy( name, ffblk.name );
 		// Leveszi kiterjesztest:
 		int i = 0;
-		while( nev[i] != '.' ) {
-			if( !nev[i] )
-				hiba( "Nincs pont nevben! (yewruyrewuy): ", nev );
+		while( name[i] != '.' ) {
+			if( !name[i] )
+				hiba( "Nincs pont nameben! (yewruyrewuy): ", name );
 			i++;
 		}
-		nev[i] = 0;
-		if( strlen( nev ) > 8 )
+		name[i] = 0;
+		if( strlen( name ) > 8 )
 			hiba( "iuoriureiur" );
 
 		done = _dos_findnext( &ffblk );
-		nevszam++;
-		if( nevszam >= Maxnev ) {
+		nameszam++;
+		if( nameszam >= Maxname ) {
 			dialog( "Number of files > 1000 in open dialog box!",
 					"Could not load all the files!" );
 			done = 1;
 		}
 	}
-	if( nevszam < 1 ) {
+	if( nameszam < 1 ) {
 		dialog( "There is not any level file (*.lev) in this directory!" );
 		return;
 	}
 
-	abcberendez( nevszam );
+	abcberendez( nameszam );
 
 	int kur = 0; // Ha megtalalja eddigit, akkor kur-t raallitja
-	for( i = 0; i < nevszam; i++ ) {
+	for( i = 0; i < nameszam; i++ ) {
 		char tmp[50];
-		strcpy( tmp, &Soknev[i*10] );
+		strcpy( tmp, &Sokname[i*10] );
 		strcat( tmp, ".lev" );
-		if( strcmpi( tmp, State->editfilenev ) == 0 )
+		if( strcmpi( tmp, State->editfilename ) == 0 )
 			kur = i;
 	}
 
-	//State->editfilenev[0] = 0; Igy nem lesz unnamed CANCEL utan
+	//State->editfilename[0] = 0; Igy nem lesz unnamed CANCEL utan
 
 	// Koordok megadasa:
 	int helyszam = 10;
@@ -188,8 +188,8 @@ void tolt_open( void ) {
 			if( c == MK_ESC )
 				return;
 			if( c == MK_ENTER ) {
-				igazit( &kur, &felso, nevszam, helyszam );
-				betolt( &Soknev[kur*10] );
+				igazit( &kur, &felso, nameszam, helyszam );
+				betolt( &Sokname[kur*10] );
 				return;
 			}
 			if( c == MK_UP ) kur--;
@@ -223,29 +223,29 @@ void tolt_open( void ) {
 			if( ujx > lx1 && ujx < lx2 && ujy > ly1 && ujy < ly2 ) {
 				// Lista folott nyomta meg gombot:
 				if( ujy < ly1 + dy*helyszam ) {
-					// Egy nevet el is talalt:
+					// Egy nameet el is talalt:
 					int index = (ujy-ly1)/dy;
 					index += felso;
-					if( index < nevszam ) {
-						betolt( &Soknev[index*10] );
+					if( index < nameszam ) {
+						betolt( &Sokname[index*10] );
 						return;
 					}
 				}
 			}
 		}
-		igazit( &kur, &felso, nevszam, helyszam );
+		igazit( &kur, &felso, nameszam, helyszam );
 		if( felso != eddigfelso || kur != eddigkur ) {
 			// Kirajzoljuk, mivel valtozott kep:
 			push();
 			kirajzbox( Editbuffer, x1, y1, x2, y2, Dialogszin, Dialogszelszin );
 			kirajzbox( Editbuffer, lx1, ly1, lx2, ly2, Openlistaszin,  Dialogszelszin );
-			for( int i = 0; i < helyszam && i < nevszam; i++ ) {
+			for( int i = 0; i < helyszam && i < nameszam; i++ ) {
 				if( i + felso == kur ) {
-					// Ez most kuurens nev:
+					// Ez most kuurens name:
 					Editbuffer->fillbox( lx1+1, ly1+i*dy + 1,
 							lx2-1, ly1+(i+1)*dy-1, Openlistainvszin );
 				}
-				Pabc2->write( Editbuffer, lx1+3, ly1+15+i*dy, &Soknev[(i+felso)*10] );
+				Pabc2->write( Editbuffer, lx1+3, ly1+15+i*dy, &Sokname[(i+felso)*10] );
 			}
 			// Most jonnek gombok:
 			kirajzbox( Editbuffer, boxfel, Buttonszin, Dialogszelszin );
@@ -273,62 +273,62 @@ void tolt_open( void ) {
 	}
 }
 
-// Editfilenev alapjan megprobal josolni, majd oda teszi eredmenyt:
+// Editfilename alapjan megprobal josolni, majd oda teszi eredmenyt:
 void kivalasztkezdetit( void ) {
 	invalidateegesz();
-	if( !Soknev ) {
-		Soknev = new char[Maxnev*10+100];
-		if( !Soknev )
+	if( !Sokname ) {
+		Sokname = new char[Maxname*10+100];
+		if( !Sokname )
 			hiba( "Nincs eleg memoria tolt_open-ben (hjfdf)!" );
 	}
-	for( int i = 0; i < Maxnev*10+10; i++ )
-		Soknev[i] = 0;
+	for( int i = 0; i < Maxname*10+10; i++ )
+		Sokname[i] = 0;
 	int done;
 	find_t ffblk;
 	done = _dos_findfirst( "*.lev", _A_NORMAL, &ffblk );
-	int nevszam = 0;
+	int nameszam = 0;
 	while( !done ) {
 		if( strlen( ffblk.name ) > 14 )
 			hiba( "ijhfiyewpp" );
-		char* nev = &Soknev[nevszam*10];
-		strcpy( nev, ffblk.name );
+		char* name = &Sokname[nameszam*10];
+		strcpy( name, ffblk.name );
 
 		// Leveszi kiterjesztest:
 		int i = 0;
-		while( nev[i] != '.' ) {
-			if( !nev[i] )
-				hiba( "Nincs pont nevben! (yewruyrewuy): ", nev );
+		while( name[i] != '.' ) {
+			if( !name[i] )
+				hiba( "Nincs pont nameben! (yewruyrewuy): ", name );
 			i++;
 		}
-		nev[i] = 0;
-		if( strlen( nev ) > 8 )
+		name[i] = 0;
+		if( strlen( name ) > 8 )
 			hiba( "iuoriureiur" );
 
 		done = _dos_findnext( &ffblk );
-		nevszam++;
-		if( nevszam >= Maxnev ) {
+		nameszam++;
+		if( nameszam >= Maxname ) {
 			dialog( "Number of files > 1000 in open dialog box!",
 					"Could not load all the files!" );
 			done = 1;
 		}
 	}
-	if( nevszam < 1 ) {
-		State->editfilenev[0] = 0;
+	if( nameszam < 1 ) {
+		State->editfilename[0] = 0;
 		return;
 	}
 
-	abcberendez( nevszam );
+	abcberendez( nameszam );
 
 	int kur = 0; // Ha megtalalja eddigit, akkor kur-t raallitja
-	for( i = 0; i < nevszam; i++ ) {
+	for( i = 0; i < nameszam; i++ ) {
 		char tmp[50];
-		strcpy( tmp, &Soknev[i*10] );
+		strcpy( tmp, &Sokname[i*10] );
 		strcat( tmp, ".lev" );
-		if( strcmpi( tmp, State->editfilenev ) == 0 )
+		if( strcmpi( tmp, State->editfilename ) == 0 )
 			kur = i;
 	}
 
-	State->editfilenev[0] = 0;
+	State->editfilename[0] = 0;
 
 	// Koordok megadasa:
 	int helyszam = 10;
@@ -360,12 +360,12 @@ void kivalasztkezdetit( void ) {
 			if( c == MK_ESC )
 				return;
 			if( c == MK_ENTER ) {
-				igazit( &kur, &felso, nevszam, helyszam );
-				char* nev = &Soknev[kur*10];
-				if( strlen( nev ) > 8 )
+				igazit( &kur, &felso, nameszam, helyszam );
+				char* name = &Sokname[kur*10];
+				if( strlen( name ) > 8 )
 					hiba( "iovfgsdgffiufi" );
-				strcpy( State->editfilenev, nev );
-				strcat( State->editfilenev, ".lev" );
+				strcpy( State->editfilename, name );
+				strcat( State->editfilename, ".lev" );
 				return;
 			}
 			if( c == MK_UP ) kur--;
@@ -395,39 +395,39 @@ void kivalasztkezdetit( void ) {
 			if( boxban( ujx, ujy, boxcancel ) )
 				return;
 			if( boxban( ujx, ujy, boxnew ) ) {
-				State->editfilenev[0] = 0;
+				State->editfilename[0] = 0;
 				return;
 			}
 			if( ujx > lx1 && ujx < lx2 && ujy > ly1 && ujy < ly2 ) {
 				// Lista folott nyomta meg gombot:
 				if( ujy < ly1 + dy*helyszam ) {
-					// Egy nevet el is talalt:
+					// Egy nameet el is talalt:
 					int index = (ujy-ly1)/dy;
 					index += felso;
-					if( index < nevszam ) {
-						char* nev = &Soknev[index*10];
-						if( strlen( nev ) > 8 )
+					if( index < nameszam ) {
+						char* name = &Sokname[index*10];
+						if( strlen( name ) > 8 )
 							hiba( "iovfgsdgffiufi" );
-						strcpy( State->editfilenev, nev );
-						strcat( State->editfilenev, ".lev" );
+						strcpy( State->editfilename, name );
+						strcat( State->editfilename, ".lev" );
 						return;
 					}
 				}
 			}
 		}
-		igazit( &kur, &felso, nevszam, helyszam );
+		igazit( &kur, &felso, nameszam, helyszam );
 		if( felso != eddigfelso || kur != eddigkur ) {
 			// Kirajzoljuk, mivel valtozott kep:
 			push();
 			kirajzbox( Editbuffer, x1, y1, x2, y2, Dialogszin, Dialogszelszin );
 			kirajzbox( Editbuffer, lx1, ly1, lx2, ly2, Openlistaszin,  Dialogszelszin );
-			for( int i = 0; i < helyszam && i < nevszam; i++ ) {
+			for( int i = 0; i < helyszam && i < nameszam; i++ ) {
 				if( i + felso == kur ) {
-					// Ez most kuurens nev:
+					// Ez most kuurens name:
 					Editbuffer->fillbox( lx1+1, ly1+i*dy + 1,
 							lx2-1, ly1+(i+1)*dy-1, Openlistainvszin );
 				}
-				Pabc2->write( Editbuffer, lx1+3, ly1+15+i*dy, &Soknev[(i+felso)*10] );
+				Pabc2->write( Editbuffer, lx1+3, ly1+15+i*dy, &Sokname[(i+felso)*10] );
 			}
 			// Most jonnek gombok:
 			kirajzbox( Editbuffer, boxfel, Buttonszin, Dialogszelszin );
@@ -473,7 +473,7 @@ void tolt_new( void ) {
 
 	delete Ptop;
 	Ptop = new topol;
-	State->editfilenev[0] = 0;
+	State->editfilename[0] = 0;
 	kitolt();
 	Valtozott = 0;
 }
@@ -481,11 +481,11 @@ void tolt_new( void ) {
 // Ha sikeresen mentett, akkor igaz:
 int tolt_save( int lokkolhato ) {
 	invalidateegesz();
-	if( State->editfilenev[0] == 0 ) {
-		// Ez a file meg nincsen elnevezve:
+	if( State->editfilename[0] == 0 ) {
+		// Ez a file meg nincsen elnameezve:
 		return tolt_save_as( lokkolhato );
 	}
-	Ptop->save( State->editfilenev );
+	Ptop->save( State->editfilename );
 	Valtozott = 0;
 	return 1;
 }
@@ -493,7 +493,7 @@ int tolt_save( int lokkolhato ) {
 // Ha sikeresen mentett, akkor igaz:
 int tolt_save_as( int lokkolhato ) {
 	invalidateegesz();
-	// Itt most be kell olvasnunk egy nevet:
+	// Itt most be kell olvasnunk egy nameet:
 	box boxnagy = { 20, 200, 600, 380 };
 	if( !lokkolhato )
 		boxnagy.y2 = 300;
@@ -516,14 +516,14 @@ int tolt_save_as( int lokkolhato ) {
 	pop();
 
 	mk_emptychar();
-	char nev[10] = "";
+	char name[10] = "";
 	int i = 0;
 	int egerballevoltnyomva = 0;
 	int egerjobblevoltnyomva = 0;
-	char eddignev[10] = "$%...%^&";
+	char eddigname[10] = "$%...%^&";
 	while( 1 ) {
-		if( strcmp( eddignev, nev ) != 0 ) {
-			strcpy( eddignev, nev );
+		if( strcmp( eddigname, name ) != 0 ) {
+			strcpy( eddigname, name );
 
 			int ex1 = boxnagy.x1+100;
 			int ey1 = boxnagy.y1+30;
@@ -531,9 +531,9 @@ int tolt_save_as( int lokkolhato ) {
 			int ey2 = boxnagy.y1+55;
 			//Editbuffer->fillbox( ex1, ey1, ex2, ey2, Buttonszin );
 			blt8( Pscr8, Editbuffer, ex1, ey1, ex1, ey1, ex2, ey2 );
-			Pabc2->write( Pscr8, 290, 250, nev );
+			Pabc2->write( Pscr8, 290, 250, name );
 			char tmp[40];
-			strcpy( tmp, nev );
+			strcpy( tmp, name );
 			tmp[i] = 0;
 			Pabc2->write( Pscr8, 290+Pabc1->len( tmp ), 255, "-" );
 		}
@@ -542,58 +542,58 @@ int tolt_save_as( int lokkolhato ) {
 			if( c == MK_ESC )
 				return 0;
 			if( c == MK_ENTER ) {
-				if( nev[0] == 0 )
+				if( name[0] == 0 )
 					continue;
 				// Most mentunk:
-				// Eloallitjuk nevet:
-				strcat( nev, ".lev" );
-				if( access( nev, 0 ) == 0 )
-					if( dialog( "File exists, overwrite?", nev,
+				// Eloallitjuk nameet:
+				strcat( name, ".lev" );
+				if( access( name, 0 ) == 0 )
+					if( dialog( "File exists, overwrite?", name,
 										"GOMBOK", "Yes", "No" ) == 1 )
 						return 0;
-				Ptop->save( nev );
-				strcpy( State->editfilenev, nev );
+				Ptop->save( name );
+				strcpy( State->editfilename, name );
 				Valtozott = 0;
 				return 1;
 			}
 			if( ( c >= 'A' && c <= 'Z' ) ||
 				( c >= 'a' && c <= 'z' ) ||
 				( c >= '0' && c <= '9' ) ) {
-				if( strlen( nev ) >= 8 )
+				if( strlen( name ) >= 8 )
 					continue;
 				// c-t beillesztjuk i. helyre:
-				int hossz = strlen( nev );
+				int hossz = strlen( name );
 				for( int j = hossz; j >= i; j-- )
-					nev[j+1] = nev[j];
-				nev[i] = c;
+					name[j+1] = name[j];
+				name[i] = c;
 				i++;
 			}
 			if( c == MK_BACKSPACE ) {
 				// Torles:
-				if( nev[0] == 0 || i <= 0 )
+				if( name[0] == 0 || i <= 0 )
 					continue;
 				// Kiszedjuk i-1-edik helyrol karaktert:
-				int hossz = strlen( nev );
+				int hossz = strlen( name );
 				for( int j = i-1; j < hossz; j++ )
-					nev[j] = nev[j+1];
+					name[j] = name[j+1];
 				i--;
 			}
 			if( c == MK_DEL ) {
 				// Torles:
-				if( nev[0] == 0 || i >= strlen( nev ) )
+				if( name[0] == 0 || i >= strlen( name ) )
 					continue;
 				// Kiszedjuk i-1-edik helyrol karaktert:
-				int hossz = strlen( nev );
+				int hossz = strlen( name );
 				for( int j = i; j < hossz; j++ )
-					nev[j] = nev[j+1];
+					name[j] = name[j+1];
 			}
 			if( c == MK_LEFT && i > 0 ) {
 				i--;
-				eddignev[0] = 0;
+				eddigname[0] = 0;
 			}
-			if( c == MK_RIGHT && i < strlen( nev ) ) {
+			if( c == MK_RIGHT && i < strlen( name ) ) {
 				i++;
-				eddignev[0] = 0;
+				eddigname[0] = 0;
 			}
 		}
 		// Eger lenyomas:
@@ -627,28 +627,28 @@ int tolt_save_as( int lokkolhato ) {
 			pop();
 			// Most nezzuk meg, hogy hova kattintott:
 			if( boxban( ujx, ujy, boxsave ) ) {
-				if( nev[0] == 0 )
+				if( name[0] == 0 )
 					continue;
 				// Most mentunk:
-				// Eloallitjuk nevet:
-				strcat( nev, ".lev" );
-				if( access( nev, 0 ) == 0 )
-					if( dialog( "File exists, overwrite?", nev,
+				// Eloallitjuk nameet:
+				strcat( name, ".lev" );
+				if( access( name, 0 ) == 0 )
+					if( dialog( "File exists, overwrite?", name,
 										"GOMBOK", "Yes", "No" ) == 1 )
 					continue;
-				Ptop->save( nev );
-				strcpy( State->editfilenev, nev );
+				Ptop->save( name );
+				strcpy( State->editfilename, name );
 				Valtozott = 0;
 				return 1;
 			}
 			if( lokkolhato && boxban( ujx, ujy, boxsavelock ) ) {
 				// Lockoltan mentjuk el:
-				if( nev[0] == 0 )
+				if( name[0] == 0 )
 					continue;
 				// Most mentunk:
-				// Eloallitjuk nevet:
-				strcat( nev, ".lev" );
-				if( strcmpi( nev, State->editfilenev ) == 0 ) {
+				// Eloallitjuk nameet:
+				strcat( name, ".lev" );
+				if( strcmpi( name, State->editfilename ) == 0 ) {
 					dialog( "You must give a name that is different from the name of the edited file!" );
 					return 0;
 				}
@@ -665,14 +665,14 @@ int tolt_save_as( int lokkolhato ) {
 
 										"GOMBOK", "Yes", "No" ) == 1 )
 						return 0;
-				if( access( nev, 0 ) == 0 )
-					if( dialog( "File exists, overwrite?", nev,
+				if( access( name, 0 ) == 0 )
+					if( dialog( "File exists, overwrite?", name,
 										"GOMBOK", "Yes", "No" ) == 1 )
 						return 0;
 				Ptop->lezart = 1;
-				Ptop->save( nev );
+				Ptop->save( name );
 				Ptop->lezart = 0;
-				//strcpy( State->editfilenev, nev );
+				//strcpy( State->editfilename, name );
 				return 1;
 			}
 		}
@@ -691,7 +691,7 @@ void change_level_name( void ) {
 	push(); // Itt levesszuk egeret es nem is tesszuk vissza vegeig:
 
 	invalidateegesz();
-	// Itt most be kell olvasnunk egy nevet:
+	// Itt most be kell olvasnunk egy nameet:
 	int x1 = 50;
 	int y1 = 200;
 	int x2 = 600;
@@ -706,14 +706,14 @@ void change_level_name( void ) {
 	Pabc2->writekozep( Pscr8, (x2+x1)/2, 220, "Type in the name of the level and press ENTER, or press ESC to cancel!" );
 
 	mk_emptychar();
-	char nev[100];
-	strcpy( nev, Ptop->levelname );
+	char name[100];
+	strcpy( name, Ptop->levelname );
 	int i = 0;
 	while( 1 ) {
 		blt8( Pscr8, Editbuffer, x1+1, y1+30, x1+1, y1+30, x2-1, y2-1 );
-		Pabc2->write( Pscr8, 300, 250, nev );
+		Pabc2->write( Pscr8, 300, 250, name );
 		char tmp[40];
-		strcpy( tmp, nev );
+		strcpy( tmp, name );
 		tmp[i] = 0;
 		Pabc2->write( Pscr8, 300+Pabc1->len( tmp ), 255, "-" );
 		int c = mk_getextchar();
@@ -722,9 +722,9 @@ void change_level_name( void ) {
 			return;
 		}
 		if( c == MK_ENTER ) {
-			if( nev[0] == 0 )
+			if( name[0] == 0 )
 				continue;
-			strcpy( Ptop->levelname, nev );
+			strcpy( Ptop->levelname, name );
 			Valtozott = 1;
 			pop();
 			return;
@@ -733,37 +733,37 @@ void change_level_name( void ) {
 			( c >= 'a' && c <= 'z' ) ||
 			( c >= '0' && c <= '9' ) ||
 			c == ' ' ) {
-			if( strlen( nev ) >= LEVELNAMEHOSSZ )
+			if( strlen( name ) >= LEVELNAMEHOSSZ )
 				continue;
 			// c-t beillesztjuk i. helyre:
-			int hossz = strlen( nev );
+			int hossz = strlen( name );
 			for( int j = hossz; j >= i; j-- )
-				nev[j+1] = nev[j];
-			nev[i] = c;
+				name[j+1] = name[j];
+			name[i] = c;
 			i++;
 		}
 		if( c == MK_BACKSPACE ) {
 			// Torles:
-			if( nev[0] == 0 || i <= 0 )
+			if( name[0] == 0 || i <= 0 )
 				continue;
 			// Kiszedjuk i-1-edik helyrol karaktert:
-			int hossz = strlen( nev );
+			int hossz = strlen( name );
 			for( int j = i-1; j < hossz; j++ )
-				nev[j] = nev[j+1];
+				name[j] = name[j+1];
 			i--;
 		}
 		if( c == MK_DEL ) {
 			// Torles:
-			if( nev[0] == 0 || i >= strlen( nev ) )
+			if( name[0] == 0 || i >= strlen( name ) )
 				continue;
 			// Kiszedjuk i-1-edik helyrol karaktert:
-			int hossz = strlen( nev );
+			int hossz = strlen( name );
 			for( int j = i; j < hossz; j++ )
-				nev[j] = nev[j+1];
+				name[j] = name[j+1];
 		}
 		if( c == MK_LEFT && i > 0 )
 			i--;
-		if( c == MK_RIGHT && i < strlen( nev ) )
+		if( c == MK_RIGHT && i < strlen( name ) )
 			i++;
 	}
 }

@@ -1,9 +1,9 @@
 #include	"all.h"
 
-kiskep::kiskep( char* pic8nev ) {
+kiskep::kiskep( char* pic8name ) {
 	tomb = NULL;
 	pic8* ppic = NULL;
-	{ ppic = NEW(pic8*) pic8( pic8nev ); }
+	{ ppic = NEW(pic8*) pic8( pic8name ); }
 
 	lyuk = ppic->gpixel( 0, 0 );
 

@@ -84,7 +84,7 @@ public:
 	void hatterszamitas( double tartxsize, double tartysize );
 };
 
-void pleasewait( char* nev );
+void pleasewait( char* name );
 
 extern kornyezet* Korny; // teljes.cpp-ben van inicializalva.
 
@@ -95,17 +95,17 @@ void dialog320( char* text0, char* text1 = NULL, char* text2 = NULL,
 
 
 /* Ez volt regen:
-extern char Palyanevek[PALYASZAM][MAXRUBRIKAHOSSZ-5];
+extern char Palyanameek[PALYASZAM][MAXRUBRIKAHOSSZ-5];
 extern int Leiroazonositotomb[PALYASZAM];
-extern char Palyatextnevtomb[PALYASZAM][20]; */
+extern char Palyatextnametomb[PALYASZAM][20]; */
 
-extern char Leironevtomb[5][20];
+extern char Leironametomb[5][20];
 
 struct leveltomb_s {
 	int ujpalya;
 	int leiroazonosito;
 	char description[MAXRUBRIKAHOSSZ];
-	char filenev[12];
+	char filename[12];
 };
 
 extern leveltomb_s Leveltomb[100];

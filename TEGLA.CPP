@@ -3,7 +3,7 @@
 //static int Kep[25][25];
 
 //static void kirajzkocka( int x, int y, int fold );
-//static void kirajzszakasz( vekt2 r, vekt2 v );
+//static void kirajzszakasz( vector2 r, vector2 v );
 
 static void sorki( int x1, int x2, int y, int szin, pic8f* ppic8f ) {
 	#ifdef TEST
@@ -27,7 +27,7 @@ static void sorki( int x1, int x2, int y, int szin, pic8f* ppic8f ) {
 }
 
 // Csak teszthez kell, kirajzolja oldalakat:
-/*static void teglaoldalak( vekt2 A, vekt2 B, vekt2 C, vekt2 D ) {
+/*static void teglaoldalak( vector2 A, vector2 B, vector2 C, vector2 D ) {
 	kirajzszakasz( A, B-A );
 	kirajzszakasz( B, C-B );
 	kirajzszakasz( C, D-C );
@@ -73,7 +73,7 @@ static void reszletki( double y0, double yv, double ax0, double am,
 	}
 }
 
-void tegla( vekt2 r, vekt2 v, vekt2 v2fel, int szin, pic8f* ppic8f ) {
+void tegla( vector2 r, vector2 v, vector2 v2fel, int szin, pic8f* ppic8f ) {
 	if( abs( v ) < 0.1 )
 		return;
 	#ifdef TEST
@@ -83,17 +83,17 @@ void tegla( vekt2 r, vekt2 v, vekt2 v2fel, int szin, pic8f* ppic8f ) {
 	// v-nek felfele kell mutatnia:
 	if( v.y < 0 ) {
 		r = r+v;
-		v = Vekt2null-v;
+		v = vector2null-v;
 	}
 	// v2fel-nek felfele kell mutatnia:
 	if( v2fel.y < 0 ) {
-		v2fel = Vekt2null-v2fel;
+		v2fel = vector2null-v2fel;
 	}
 	// ABCD pontok eloallitasa:
-	vekt2 A = r+v+v2fel;
-	vekt2 B = r+v-v2fel;
-	vekt2 D = r+v2fel;
-	vekt2 C = r-v2fel;
+	vector2 A = r+v+v2fel;
+	vector2 B = r+v-v2fel;
+	vector2 D = r+v2fel;
+	vector2 C = r-v2fel;
 
 	//teglaoldalak( A, B, C, D );
 
@@ -101,7 +101,7 @@ void tegla( vekt2 r, vekt2 v, vekt2 v2fel, int szin, pic8f* ppic8f ) {
 	// B-nek kell D felett lennie:
 	if( B.y < D.y ) {
 		// Csere B, D:
-		vekt2 tmp2 = B;
+		vector2 tmp2 = B;
 		B = D;
 		D = tmp2;
 	}
@@ -146,7 +146,7 @@ void tegla( vekt2 r, vekt2 v, vekt2 v2fel, int szin, pic8f* ppic8f ) {
 	}
 }
 
-static void kirajzszakasz( vekt2 r, vekt2 v ) {
+static void kirajzszakasz( vector2 r, vector2 v ) {
 	setcolor( ColorFG );
 	double s = 15;
 	r.x = 100+s/2+s*r.x + 0.5;
@@ -179,7 +179,7 @@ static void kirajzszakasz( vekt2 r, vekt2 v ) {
 
 		if( i == 3 )
 			semmi();
-		tegla( vekt2( 12, 12 ), vekt2( 7*cos( alfa ), 7*sin( alfa ) ), 3, 1 );
+		tegla( vector2( 12, 12 ), vector2( 7*cos( alfa ), 7*sin( alfa ) ), 3, 1 );
 
 		for( x = 0; x < 25; x++ ) {
 			for( int y = 0; y < 25; y++ ) {

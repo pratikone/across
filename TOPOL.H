@@ -10,7 +10,7 @@ class gyuru {
 	int lefoglaltmaxpont;
 public:
 	int pontszam;
-	vekt2* ponttomb;
+	vector2* ponttomb;
 
 	// Fuggvenyek:
 	gyuru( void );
@@ -26,12 +26,12 @@ public:
 	int beszur( int k ); // k pont utan beszur egyet ugyanolyan koordokkal
 	void torol( int k );
 	double legkozpont( double x, double y, int* pk );
-	int metszesszam( vekt2 r1, vekt2 v1 );
+	int metszesszam( vector2 r1, vector2 v1 );
 	// Ez csak akkor tekinti metszesnek, ha nem csak eppen erintik egymast:
-	int metszeshely( vekt2 r1, vekt2 v1, int kihagy, vekt2* pmetszes );
+	int metszeshely( vector2 r1, vector2 v1, int kihagy, vector2* pmetszes );
 	// akkor ad igazat, ha korbejaraskor poligon belseje bal oldalon van;
 	int pozitivkorjaras( void );
-	vekt2 sulypont( void );
+	vector2 sulypont( void );
 	// Beadott px1, stb-bol indul ki:
 	void getminmax( double* px1, double* py1, double* px2, double* py2 );
 	double belyegszamitas( void );
@@ -46,7 +46,7 @@ extern int Maxkerek_sarvari; // 8
 
 class kerek {
 public:
-	vekt2 r;
+	vector2 r;
 	int tipus;
 
 	kerek( double x, double y, int tipus );
@@ -72,13 +72,13 @@ public:
 	char levelname[LEVELNAMEHOSSZ+1];
 
 	topol( void );
-	topol( char* filenev, int kulso ); // kulso: qopen vagy nem
+	topol( char* filename, int kulso ); // kulso: qopen vagy nem
 	~topol( void );
 	gyuru* legkozpont( double x, double y, int* pk, double* ptav = NULL );
 	kerek* legkozkerek( double x, double y, double* ptav = NULL );
-	void save( char* filenev );
+	void save( char* filename );
 	void kirajzol( void );
-	int levegoben( gyuru* pgy, vekt2* pr = NULL ); // pgy levegoben van-e. Akkor folddarab
+	int levegoben( gyuru* pgy, vector2* pr = NULL ); // pgy levegoben van-e. Akkor folddarab
 	void getminmax( double* px1, double* py1, double* px2, double* py2,
 									int kerekkel );
 
@@ -87,13 +87,13 @@ public:
 	void checklevelforsarvari( void );
 };
 
-unsigned long getbelyeg( char* nev );
-// Igazzal ter vissza, ha megvan nev;
-int getbelyegheznev( unsigned long belyeg, char* nev );
+unsigned long getbelyeg( char* name );
+// Igazzal ter vissza, ha megvan name;
+int getbelyeghezname( unsigned long belyeg, char* name );
 
 // Csak external file-hoz:
 // Ha NULL, akkor valami baj volt vele:
-char* getlevelname( char* nev );
+char* getlevelname( char* name );
 
 // Belso belyegszamitasokhoz kell:
 /*unsigned long double2belyeg( double* px );

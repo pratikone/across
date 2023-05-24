@@ -15,7 +15,7 @@ void cheatplayer( void ) {
 
 	jatekos* pjat = &State->jatekosok[0];
 	pjat->sikerespalyakszama = hanypalya;
-	strcpy( pjat->nev, "Cheat" );
+	strcpy( pjat->name, "Cheat" );
 	pjat->jelenlegipalya = 0;
 
 

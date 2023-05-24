@@ -1,6 +1,6 @@
 #include    "all.h"
 
-vekt2 Fejr( 0, 0 );
+vector2 Fejr( 0, 0 );
 
 double  Hatarx1,
         Hatarx2,
@@ -26,23 +26,23 @@ static void forditkepet( pic8* ppic ) {
 }
 
 // v1 iranyabol v2 fele interpolal:
-static vekt2 interpolal( vekt2 v1, vekt2 v2, double x ) {
-    vekt2 vissza = v1+(v2-v1)*x;
+static vector2 interpolal( vector2 v1, vector2 v2, double x ) {
+    vector2 vissza = v1+(v2-v1)*x;
     return vissza;
 }
 
 // Meg nem affin koordok:
-static void kidoboz( vekt2 a, vekt2 b, pic8* ppic8, double szelesseg,
+static void kidoboz( vector2 a, vector2 b, pic8* ppic8, double szelesseg,
         kiskep* pk, double tulloga, double tullogb, int tukor = 0 ) {
-    vekt2 vegys = egys( b-a );
+    vector2 vegys = egys( b-a );
     b = b + vegys*tullogb;
     a = a - vegys*tulloga;
-    vekt2 v = b-a;
-    vekt2 v2fel;
+    vector2 v = b-a;
+    vector2 v2fel;
     if( tukor )
-        v2fel = forgatas90fokkal( vegys ) * szelesseg;
+        v2fel = rotateby90degrees( vegys ) * szelesseg;
     else
-        v2fel = forgatasminusz90fokkal( vegys ) * szelesseg;
+        v2fel = rotatebyminus90degrees( vegys ) * szelesseg;
     a = a-v2fel;
 
     a.x *= Aranyx;
@@ -56,9 +56,9 @@ static void kidoboz( vekt2 a, vekt2 b, pic8* ppic8, double szelesseg,
 
 // sugar meg nincs megszorozva:
 // Meg nem affin koordok:
-static void kidobozkerek( vekt2 r, double sugar, double alfa,
+static void kidobozkerek( vector2 r, double sugar, double alfa,
         pic8* ppicbuffer, kiskep* pk, int tukor = 0 ) {
-    vekt2 vfel( cos( alfa ) * sugar, sin( alfa ) * sugar );
+    vector2 vfel( cos( alfa ) * sugar, sin( alfa ) * sugar );
     if( tukor )
         kidoboz( r+vfel, r-vfel, ppicbuffer, sugar, pk, 0.0, 0.0, tukor );
     else
@@ -67,12 +67,12 @@ static void kidobozkerek( vekt2 r, double sugar, double alfa,
 
 
 static double Mx = -1, My = -1;
-static vekt2 Mi, Mj, Mr;
+static vector2 Mi, Mj, Mr;
 
 static void kitag( pic8* ppic8, kiskep* pk, int x1, int y1, int x2, int y2 ) {
-    vekt2 r = Mi*(x1-Mx) + Mj*(My-y1) + Mr;
-    vekt2 u = Mi*(x2-x1);
-    vekt2 v = Mj*(y1-y2);
+    vector2 r = Mi*(x1-Mx) + Mj*(My-y1) + Mr;
+    vector2 u = Mi*(x2-x1);
+    vector2 v = Mj*(y1-y2);
 
     r.x *= Aranyx;
     r.y *= Aranyy;
@@ -157,13 +157,13 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
 
 
     // Kiszamoljuk kepernyo bal also sarkat:
-    vekt2 motorkozep = Kor1.r;
+    vector2 motorkozep = Kor1.r;
 
-    vekt2 sarok( motorkozep.x-(Mo_bal+baljobb*Mo_dx),
+    vector2 sarok( motorkozep.x-(Mo_bal+baljobb*Mo_dx),
                 motorkozep.y-Mo_y );
-    /*vekt2 sarok( motorkozep.x-(Motorhelyex0+baljobb*Motorhelyedx),
+    /*vector2 sarok( motorkozep.x-(Motorhelyex0+baljobb*Motorhelyedx),
                 motorkozep.y-Motorhelyey );*/
-    vekt2 origo = pst->origo;
+    vector2 origo = pst->origo;
 
     int x2 = (sarok-origo).x*Aranyx;
     int y2 = (sarok-origo).y*Aranyy;
@@ -184,8 +184,8 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
     // Rarakjuk palyat:
     pleiro->pratesz->teddra( x2, y2, ppicbuffer, Korny->st.pmfugg );
 
-    vekt2 vsarok( 0, 0 );
-    vekt2 vmotorhelye;
+    vector2 vsarok( 0, 0 );
+    vector2 vmotorhelye;
     // View ablak abszolut leptekben mert elso es utolso koordja, hogy
     // ehhez tudjunk viszonyitani, el kell osztani erteket Configt.zoom-mal:
     int vx1 = -100, vy1 = -100, vx2 = -100, vy2 = -100;
@@ -194,7 +194,7 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
                             Config.zoom*double(Config.viewxsize)/320.0;
     vmotorhelye.y = Motorhelyey*Config.zoom*double(Config.viewysize)/200.0;
     */
-    //vekt2 sarok( motorkozep.x-(xdbal+baljobb*xddx),
+    //vector2 sarok( motorkozep.x-(xdbal+baljobb*xddx),
     //  motorkozep.y-ydsize*0.32 );
     vmotorhelye.x = (Mo_bal+baljobb*Mo_dx)*
                             Config.zoom*double(Config.viewxsize)/sx;
@@ -249,7 +249,7 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
             continue;
         targytipus* ptt = &pleiro->ptt->targytipusok[pt->szam];
         // Egesz koordinatak kiszamolasa:
-        vekt2 rrr = spritehely( psz, pt, t )-origo;
+        vector2 rrr = spritehely( psz, pt, t )-origo;
         int xkozep = rrr.x*Aranyx;
         int ykozep = rrr.y*Aranyy;
         // Potty kirajzolasa View ablakba:
@@ -280,8 +280,8 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
     }
 
     // Most jon motoros kirajzolasa:
-    vekt2 p_k1 = (Kor2.r-sarok);
-    vekt2 p_k2 = (Kor4.r-sarok);
+    vector2 p_k1 = (Kor2.r-sarok);
+    vector2 p_k2 = (Kor4.r-sarok);
 
     int elsokerekrogton = 1;
     int hatsokerekrogton = 1;
@@ -299,9 +299,9 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
     if( hatsokerekrogton )
         kidobozkerek( p_k2, Kor4.sugar, Kor4.alfa, ppicbuffer, pleiro->pkiskerek );
 
-    vekt2 kozep = Kor1.r-sarok;
-    vekt2 jobbra = vekt2( cos( Kor1.alfa ), sin( Kor1.alfa ) );
-    vekt2 fel = forgatas90fokkal( jobbra );
+    vector2 kozep = Kor1.r-sarok;
+    vector2 jobbra = vector2( cos( Kor1.alfa ), sin( Kor1.alfa ) );
+    vector2 fel = rotateby90degrees( jobbra );
 
     if( vanforgas ) {
         //if( forgas > 0.2 )
@@ -311,8 +311,8 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
     }
 
     if( Hatra ) {
-        jobbra = Vekt2null - jobbra;
-        vekt2 tmpv = p_k1;
+        jobbra = vector2null - jobbra;
+        vector2 tmpv = p_k1;
         p_k1 = p_k2;
         p_k2 = tmpv;
     }
@@ -321,20 +321,20 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
     double malfa = 0.62;
     double mmeret = 0.0045;
     Mi = jobbra*(mmeret*cos(malfa))+fel*(mmeret*sin(malfa));
-    Mj = forgatas90fokkal( Mi );
+    Mj = rotateby90degrees( Mi );
     if( Hatra )
-        Mj = Vekt2null - Mj;
+        Mj = vector2null - Mj;
     Mr = kozep;
 
     // Elso felfuggesztes:
-    //vekt2 p_fogantyu = Mi*(330-Mx) + Mj*(My-335) + Mr;
-    vekt2 p_fogantyu = Mi*(336-Mx) + Mj*(My-335) + Mr;
+    //vector2 p_fogantyu = Mi*(330-Mx) + Mj*(My-335) + Mr;
+    vector2 p_fogantyu = Mi*(336-Mx) + Mj*(My-335) + Mr;
     p_fogantyu = interpolal( p_k1, p_fogantyu, 1.235 );
     kidoboz( p_k1, p_fogantyu, ppicbuffer, 0.06,
         pleiro->pkiselsorud, 0.05, 0.03 );
 
     // Hatso felfuggesztes:
-    vekt2 p_darab2 = Mi*(370-Mx) + Mj*(My-520) + Mr;
+    vector2 p_darab2 = Mi*(370-Mx) + Mj*(My-520) + Mr;
     kidoboz( p_darab2, p_k2, ppicbuffer, 0.06,
         pleiro->pkishatsorud, 0.0, 0.1 );
 
@@ -357,9 +357,9 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
                 ppicbuffer, pleiro->pkisfej );
 
     // Kar ket reszletben:
-    //vekt2 p_vall = Mi*(540-Mx) + Mj*(My-324) + Mr;
-    vekt2 p_vall = Mi*(532-Mx) + Mj*(My-320) + Mr;
-    vekt2 p_kezfej = p_fogantyu;
+    //vector2 p_vall = Mi*(540-Mx) + Mj*(My-324) + Mr;
+    vector2 p_vall = Mi*(532-Mx) + Mj*(My-320) + Mr;
+    vector2 p_kezfej = p_fogantyu;
 
     // Ugras belekombinalasa kar kirajzolasaba:
     // p_kezfej-et mozditjuk el szukseges mertekben:
@@ -406,7 +406,7 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
             }
         }
         // alfa es hosszit alapjan p_kezfej forgatasa es nyujtasa vall korul:
-        vekt2 kar = p_kezfej-p_vall;
+        vector2 kar = p_kezfej-p_vall;
         if( !Hatra )
             kar.forgatas( -alfa );
         else
@@ -418,7 +418,7 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
     double alkarhossz = 0.385;
     //double felkarhossz = 0.45;
     double felkarhossz = 0.41;
-    vekt2 p_konyok;
+    vector2 p_konyok;
     if( Hatra )
         p_konyok = ketkormetszete( p_kezfej, p_vall,
                                         alkarhossz, felkarhossz );
@@ -453,7 +453,7 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
     if( !elsokerekrogton || !hatsokerekrogton ) {
         if( Hatra ) {
             // Visszacserelem kerekek koordjait:
-            vekt2 tmpv = p_k1;
+            vector2 tmpv = p_k1;
             p_k1 = p_k2;
             p_k2 = tmpv;
         }
@@ -465,12 +465,12 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
 
     // torlendo:
     // Be kell meg allitani affinitast!:
-    /*vekt2 r_p( 141.564, 94.6185 );
-    vekt2 u_p( -8.5157, 12.1406 );
-    vekt2 v_p( -11.4608, -5.58251 );
+    /*vector2 r_p( 141.564, 94.6185 );
+    vector2 u_p( -8.5157, 12.1406 );
+    vector2 v_p( -11.4608, -5.58251 );
     Affinitas = 1;
-    vekt2 irany = vekt2( 45.6169, -17.0599 );
-    vekt2 tmpkozep = vekt2( 100, 100 );
+    vector2 irany = vector2( 45.6169, -17.0599 );
+    vector2 tmpkozep = vector2( 100, 100 );
     setaffinitas( tmpkozep, irany, 0.204 );
     dobozki( pleiro->ppicbuffer, pleiro->pkisa, u_p, v_p, r_p );
     Affinitas = 0;
@@ -517,14 +517,14 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
         Legkozment = 0;
         int i = 0;
         while( 1 ) {
-            char filenev[20];
+            char filename[20];
             if( i < 10 )
-                sprintf( filenev, "snap0%d.pcx", i );
+                sprintf( filename, "snap0%d.pcx", i );
             else
-                sprintf( filenev, "snap%d.pcx", i );
-            if( access( filenev, 0 ) != 0 ) {
+                sprintf( filename, "snap%d.pcx", i );
+            if( access( filename, 0 ) != 0 ) {
                 forditkepet( ppicbuffer );
-                ppicbuffer->save( filenev, pleiro->pal->tomb );
+                ppicbuffer->save( filename, pleiro->pal->tomb );
                 forditkepet( ppicbuffer );
                 break;
             }

@@ -18,7 +18,7 @@ void kinyom( int ertek ); // Csak teszt celokra!
 extern long L;
 
 extern kor Kor1, Kor2, Kor4;
-extern vekt2 Fejr; // Kor1-bol Kor12Fejr fuggveny allitja elo (leptet.h)!
+extern vector2 Fejr; // Kor1-bol Kor12Fejr fuggveny allitja elo (leptet.h)!
 
 extern szakaszok *Pszak, *Pszakt;
 

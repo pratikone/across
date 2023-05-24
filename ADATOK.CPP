@@ -11,7 +11,7 @@ double Magassag = 2, Szelesseg = 0.1;
 
 double Drsugar, Drtang, Sr;
 
-vekt2 P_alap1, P_alap2, P_alap3, P_alap4, P_alap6;
+vector2 P_alap1, P_alap2, P_alap3, P_alap4, P_alap6;
 double Fejsugar;
 
 double Ketmaxsugar, Spritemaxsugar;
@@ -45,52 +45,52 @@ void initadatok( void ) {
 	Sr = 1000.0;  // rudban mozgasi ellenallas: F/v [N*s/m]
 
 	// Kor1:
-	strcpy( Kor1.nev, "Test elso" );
+	strcpy( Kor1.name, "Test elso" );
 	Kor1.alfa = 0.0;
 	Kor1.omega = 0.0;
 	Kor1.sugar = 0.3;
 	Kor1.m = 200; // 100;
 	// theta = m * r*r;
 	Kor1.theta = 200.0*0.55*0.55;
-	Kor1.r = vekt2( 2.75, 3.6 );
-	Kor1.v = vekt2( 0, 0 );
+	Kor1.r = vector2( 2.75, 3.6 );
+	Kor1.v = vector2( 0, 0 );
 	//Kor1.utoljaraleert = 0;
 
 	// Kor2:
-	strcpy( Kor2.nev, "Kerek elso" );
+	strcpy( Kor2.name, "Kerek elso" );
 	Kor2.alfa = 0.0;
 	Kor2.omega = 0.0;
 	Kor2.sugar = 0.4;
 	Kor2.m = 10;
 	Kor2.theta = 0.32;
-	Kor2.r = vekt2( 1.9, 3.0 );
-	Kor2.v = vekt2( 0, 0 );
+	Kor2.r = vector2( 1.9, 3.0 );
+	Kor2.v = vector2( 0, 0 );
 	//Kor2.utoljaraleert = 0;
 
 	// Kor4:
-	strcpy( Kor4.nev, "Kerek hatso" );
+	strcpy( Kor4.name, "Kerek hatso" );
 	Kor4.alfa = 0.0;
 	Kor4.omega = 0.0;
 	Kor4.sugar = 0.4;
 	Kor4.m = 10;
 	Kor4.theta = 0.32;
-	Kor4.r = vekt2( 3.6, 3.0 );
-	Kor4.v = vekt2( 0, 0 );
+	Kor4.r = vector2( 3.6, 3.0 );
+	Kor4.v = vector2( 0, 0 );
 	//Kor4.utoljaraleert = 0;
 
 	// MCGA kirajzolasos:
-	P_alap1 = vekt2( 0.2, 0.05 );
-	P_alap2 = vekt2( -0.6, -0.04 );
-	P_alap3 = vekt2( -0.05, 0.4 );
-	P_alap4 = vekt2( -0.3, -0.5 );
-	P_alap6 = vekt2( 0.0, 0.6 );
+	P_alap1 = vector2( 0.2, 0.05 );
+	P_alap2 = vector2( -0.6, -0.04 );
+	P_alap3 = vector2( -0.05, 0.4 );
+	P_alap4 = vector2( -0.3, -0.5 );
+	P_alap6 = vector2( 0.0, 0.6 );
 	Fejsugar = 0.238; // 0.26;
 
 
 	Spritemaxsugar = 0.5;
 	Ketmaxsugar = Spritemaxsugar + Kor4.sugar;
 
-	vekt2 vtmp = Kor2.r-Kor1.r;
+	vector2 vtmp = Kor2.r-Kor1.r;
 	Kord2x = vtmp.x;
 	Kord2y = vtmp.y;
 	vtmp = Kor4.r-Kor1.r;

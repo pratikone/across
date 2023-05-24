@@ -17,7 +17,7 @@ int Ucsoloadszakasz_lezart = 0;
 	xdim = 1;
 	ydim = 1;
 	cellameret = 1.0;
-	origo = vekt2( 0, 0 );
+	origo = vector2( 0, 0 );
 	nextnode = NULL;
 	pelsocsomag = NULL;
 	csomagbanbetelt = 0;
@@ -41,7 +41,7 @@ szakaszok::szakaszok( FILE* h, int targyas ) {
 	xdim = 1;
 	ydim = 1;
 	cellameret = 1.0;
-	origo = vekt2( 0, 0 );
+	origo = vector2( 0, 0 );
 	nextnode = NULL;
 	pelsocsomag = NULL;
 	csomagbanbetelt = 0;
@@ -139,7 +139,7 @@ szakaszok::szakaszok( FILE* h, int targyas ) {
 		}
 		if( !balfold ) {
 			tomb[i].vv.r = tomb[i].vv.r + tomb[i].vv.v;
-			tomb[i].vv.v = Vekt2null - tomb[i].vv.v;
+			tomb[i].vv.v = vector2null - tomb[i].vv.v;
 		}
 
 		// Targy beolvasasa:
@@ -158,7 +158,7 @@ szakaszok::szakaszok( topol* ptop, int targyas ) {
 	xdim = 1;
 	ydim = 1;
 	cellameret = 1.0;
-	origo = vekt2( 0, 0 );
+	origo = vector2( 0, 0 );
 	nextnode = NULL;
 	pelsocsomag = NULL;
 	csomagbanbetelt = 0;
@@ -181,7 +181,7 @@ szakaszok::szakaszok( topol* ptop, int targyas ) {
 				hiba( "szakaszok::szakaszok-ban szam >= Szakaszmaxszam (ker)!" );
 			tomb[szam].vv.r = pker->r;
 			tomb[szam].vv.r.y = -tomb[szam].vv.r.y; // fejjel lefele
-			tomb[szam].vv.v = vekt2( 0.0, 0.0 );
+			tomb[szam].vv.v = vector2( 0.0, 0.0 );
 
 			{ tomb[szam].ptargy = NEW(targy*) targy; }
 			if( !tomb[szam].ptargy )
@@ -210,7 +210,7 @@ szakaszok::szakaszok( topol* ptop, int targyas ) {
 				if( szam >= Szakaszmaxszam )
 					hiba( "szakaszok::szakaszok-ban z >= Szakaszmaxszam!" );
 
-				vekt2 r1, r2;
+				vector2 r1, r2;
 				if( j < pgy->pontszam - 1 ) {
 					r1 = pgy->ponttomb[j];
 					r2 = pgy->ponttomb[j+1];
@@ -266,7 +266,7 @@ void szakaszok::save( FILE* h, int targyas ) {
 	}
 }
 
-/*void szakaszok::add( vekt2 r, vekt2 v, int targyas ) {
+/*void szakaszok::add( vector2 r, vector2 v, int targyas ) {
 	if( szam >= maxszam ) {
 		hiba( "Nincs eleg hely uj szakasz hozzaadasahoz!" );
 		return;
@@ -377,8 +377,8 @@ void szakaszok::beindexelvonalat( vonal* pv, double maxtav ) {
 		hiba( "Vonal hossza tul kicsi!" );
 	pv->egyseg = egys( pv->v );
 
-	vekt2 v = pv->v;
-	vekt2 r = pv->r - origo;
+	vector2 v = pv->v;
+	vector2 r = pv->r - origo;
 
 	v = v*(1/cellameret);
 	r = r*(1/cellameret);
@@ -398,7 +398,7 @@ void szakaszok::beindexelvonalat( vonal* pv, double maxtav ) {
 	if( v.x < 0 ) {
 		// Vegpont csere:
 		r = r+v;
-		v = Vekt2null-v;
+		v = vector2null-v;
 	}
 	// Most v x-pozitiv iranyba mutat:
 	// Kiszamoljuk y = m*x + y0 fuggveny parametereit:
@@ -492,7 +492,7 @@ void szakaszok::rendez( double maxtav ) {
 	}
 
 	// Beallitja kezdopontot:
-	origo = vekt2( minx, miny );
+	origo = vector2( minx, miny );
 	double xsized = maxx-minx;
 	double ysized = maxy-miny;
 
@@ -529,7 +529,7 @@ void szakaszok::rendez( double maxtav ) {
 	}
 }
 
-void szakaszok::felsorolasreset( vekt2 r ) {
+void szakaszok::felsorolasreset( vector2 r ) {
 	if( !tertomb )
 		hiba( "szakaszok::felsorolasreset-ban !tertomb!" );
 	r = (r-origo)*(1/cellameret);
@@ -593,7 +593,7 @@ int szakaszok::setallaktiv( int targytipusszam, targytomb* ptt ) {
 				hiba( "Palyan ket kezdo is van!" );
 			voltkezdo = 1;
 			tomb[i].ptargy->aktiv = 0;
-			vekt2 diff = tomb[i].vv.r - Kor2.r;
+			vector2 diff = tomb[i].vv.r - Kor2.r;
 			Kor1.r = Kor1.r + diff;
 			Kor2.r = Kor2.r + diff;
 			Kor4.r = Kor4.r + diff;
@@ -662,18 +662,18 @@ int szakaszok::getsorszam( szakasz* pszakasz ) {
 	return -1;
 }
 
-void loadszakaszok( char* nev, int kulso, szakaszok** ppszak,
+void loadszakaszok( char* name, int kulso, szakaszok** ppszak,
 						szakaszok** ppszakt ) {
 	if( *ppszak || *ppszakt )
 		hiba( "loadszakaszok-ban *ppszak || *ppszakt!" );
 
 	FILE* h = NULL;
 	if( kulso )
-		h = fopen( nev, "rt" );
+		h = fopen( name, "rt" );
 	else
-		h = qopen( nev, "rt" );
+		h = qopen( name, "rt" );
 	if( !h )
-		hiba( "Nem tudta megnyitni file-t!: ", nev );
+		hiba( "Nem tudta megnyitni file-t!: ", name );
 
 	// Eldontese hogy regi vagy uj tipusu file-e:
 	int ujtipus = 0;
@@ -690,11 +690,11 @@ void loadszakaszok( char* nev, int kulso, szakaszok** ppszak,
 
 	// Beolvasas:
 	if( ujtipus ) {
-		topol* ptop = new topol( nev, kulso );
+		topol* ptop = new topol( name, kulso );
 		if( ptop->hibas )
 			uzenet( "This level file has some topology errors.",
 					"If you can load it to the editor you may be able to correct these errors.",
-					nev );
+					name );
 
 		// Most megnezzuk hogy nincs-e tul sok pontja palyanak:
 		if( kulso )
@@ -708,19 +708,19 @@ void loadszakaszok( char* nev, int kulso, szakaszok** ppszak,
 	else {
 		if( kulso )
 			hiba( "iopvwoiuvfriuo" );
-		h = qopen( nev, "rt" );
+		h = qopen( name, "rt" );
 		{ *ppszak = NEW(szakaszok*) szakaszok( h, 0 ); }
 		{ *ppszakt = NEW(szakaszok*) szakaszok( h, 1 ); }
 		qclose( h );
 	}
 }
 
-void saveszakaszok( char* nev, szakaszok* pszak, szakaszok* pszakt ) {
+void saveszakaszok( char* name, szakaszok* pszak, szakaszok* pszakt ) {
 	char tmp[30] = "..\\files\\";
-	strcat( tmp, nev );
+	strcat( tmp, name );
 	FILE* h = fopen( tmp, "wt" );
 	if( !h )
-		hiba( "Nem tudta megnyitni file-t!: ", nev );
+		hiba( "Nem tudta megnyitni file-t!: ", name );
 	pszak->save( h, 0 );
 	pszakt->save( h, 1 );
 	fclose( h );

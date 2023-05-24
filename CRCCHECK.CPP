@@ -12,12 +12,12 @@ enum { FILE_IS_MISSING = 10, FILE_HAS_CHANGED, FILE_NAME_CHANGED, ACROSS_EXE, RE
 void check_kommand( const char* komline ) {
 	if( Beallitas )
 		return;
-	const char* nevmutato = &komline[strlen( komline ) - 10];
+	const char* namemutato = &komline[strlen( komline ) - 10];
 
-	/*FILE* h = fopen( "nev.txt", "wt" );
+	/*FILE* h = fopen( "name.txt", "wt" );
 	if( !h )
 		hiba( "uigruovvruvrvriruvr" );
-	fprintf( h, "Nev: <%s>", nevmutato );
+	fprintf( h, "name: <%s>", namemutato );
 	fclose( h ); */
 
 	char tmp[12];
@@ -33,14 +33,14 @@ void check_kommand( const char* komline ) {
 	tmp[9] = 'e';
 	tmp[4] = 's';
 
-	if( strcmpi( nevmutato, tmp ) == 0 ) {
+	if( strcmpi( namemutato, tmp ) == 0 ) {
 		for( int i = 0; i < 11; i++ )
 			tmp[i] = ' ';
 		return;
 	}
 	for( int i = 0; i < 11; i++ )
 		tmp[i] = ' ';
-	// Nem stimmel kommand line nev:
+	// Nem stimmel kommand line name:
 	Crchiba = 3;
 	Crcellenorizve = 1;
 }
@@ -163,15 +163,15 @@ static char* titstring( int azonosito, int masodikbuff = 0 ) {
 }
 
 // Valodi file-t nez:
-static unsigned long getcrc( char* nev_p, long ellenorzohossz ) {
-	char nev[40];
-	strcpy( nev, nev_p );
-	FILE* h = fopen( nev, "rb" );
+static unsigned long getcrc( char* name_p, long ellenorzohossz ) {
+	char name[40];
+	strcpy( name, name_p );
+	FILE* h = fopen( name, "rb" );
 	if( !h )
 		return 0;
 	long hossz = filelength( fileno( h ) );
 	if( hossz != ellenorzohossz && !Beallitas ) {
-		//uzenet( "File size has changed!: ", nev );
+		//uzenet( "File size has changed!: ", name );
 		Crchiba = 1;
 		return 0;
 	}

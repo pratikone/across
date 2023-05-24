@@ -1,6 +1,6 @@
 #include	"all.h"
 
-vekt2 Fejr( 0, 0 );
+vector2 Fejr( 0, 0 );
 
 static int Elso640 = 1;
 static int Gmode640;
@@ -40,12 +40,12 @@ void close640( void ) {
 }
 
 // v1 iranyabol v2 fele interpolal:
-static vekt2 interpolal( vekt2 v1, vekt2 v2, double x ) {
-	vekt2 vissza = v1+(v2-v1)*x;
+static vector2 interpolal( vector2 v1, vector2 v2, double x ) {
+	vector2 vissza = v1+(v2-v1)*x;
 	return vissza;
 }
 
-static void vonalki( vekt2 p1, vekt2 p2 ) {
+static void vonalki( vector2 p1, vector2 p2 ) {
 	vonalki( p1.x, p1.y, p2.x, p2.y );
 }
 
@@ -54,14 +54,14 @@ static int K1x = 200, K1y = 200, K2x = 200, K2y = 200,
 static double Alfa1 = 0, Alfa2 = 0, Alfa4 = 0;
 static double X0 = 0, Y0 = 0;
 
-static vekt2 P_0, P_1, P_2, P_3, P_4, P_5,
+static vector2 P_0, P_1, P_2, P_3, P_4, P_5,
 				P_6, P_7, P_8, P_9, P_10, P_11, P_12, P_k1, P_k2;
 
 static double T = 0;
 
 void kirajzol640( double t, targytomb* pttt, double ugrasnagysag ) {
 	// Kiszamoljuk kepernyo bal also sarkat:
-	vekt2 motorkozep = Kor1.r;
+	vector2 motorkozep = Kor1.r;
 	double x0 = motorkozep.x-4.0;
 	double y0 = motorkozep.y-2.4;
 
@@ -93,26 +93,26 @@ void kirajzol640( double t, targytomb* pttt, double ugrasnagysag ) {
 	kiteljeskerek( K4x, K4y, Kor4.sugar*Arany, Alfa4 );
 
 	// Most jon motoros kirajzolasa:
-	vekt2 sarok = vekt2(x0,y0);
-	vekt2 p_k1 = (Kor2.r-sarok)*Arany;
-	vekt2 p_k2 = (Kor4.r-sarok)*Arany;
+	vector2 sarok = vector2(x0,y0);
+	vector2 p_k1 = (Kor2.r-sarok)*Arany;
+	vector2 p_k2 = (Kor4.r-sarok)*Arany;
 
-	vekt2 kozep = (Kor1.r-sarok)*Arany;
-	vekt2 jobbra = vekt2( cos( Kor1.alfa ), sin( Kor1.alfa ) )*Arany;
-	vekt2 fel = forgatas90fokkal( jobbra );
-	vekt2 p_1 = P_alap1.x*jobbra+P_alap1.y*fel+kozep;
-	vekt2 p_2 = P_alap2.x*jobbra+P_alap2.y*fel+kozep;
-	vekt2 p_3 = P_alap3.x*jobbra+P_alap3.y*fel+kozep;
-	vekt2 p_4 = P_alap4.x*jobbra+P_alap4.y*fel+kozep;
-	vekt2 p_6 = P_alap6.x*jobbra+P_alap6.y*fel+kozep;
+	vector2 kozep = (Kor1.r-sarok)*Arany;
+	vector2 jobbra = vector2( cos( Kor1.alfa ), sin( Kor1.alfa ) )*Arany;
+	vector2 fel = rotateby90degrees( jobbra );
+	vector2 p_1 = P_alap1.x*jobbra+P_alap1.y*fel+kozep;
+	vector2 p_2 = P_alap2.x*jobbra+P_alap2.y*fel+kozep;
+	vector2 p_3 = P_alap3.x*jobbra+P_alap3.y*fel+kozep;
+	vector2 p_4 = P_alap4.x*jobbra+P_alap4.y*fel+kozep;
+	vector2 p_6 = P_alap6.x*jobbra+P_alap6.y*fel+kozep;
 
-	vekt2 p_0 = interpolal( p_2, p_1, 1.4 );
-	vekt2 p_7 = interpolal( p_2, p_1, 2.2 );
-	vekt2 p_8 = interpolal( p_k1, p_2, 1.3 );
-	vekt2 p_9 = interpolal( p_4, p_k2, 0.4 );
-	vekt2 p_10 = interpolal( p_2, p_9, 0.5 );
-	vekt2 p_11 = interpolal( p_9, p_k2, 0.3 );
-	vekt2 p_12 = interpolal( p_7, p_9, 1.08 );
+	vector2 p_0 = interpolal( p_2, p_1, 1.4 );
+	vector2 p_7 = interpolal( p_2, p_1, 2.2 );
+	vector2 p_8 = interpolal( p_k1, p_2, 1.3 );
+	vector2 p_9 = interpolal( p_4, p_k2, 0.4 );
+	vector2 p_10 = interpolal( p_2, p_9, 0.5 );
+	vector2 p_11 = interpolal( p_9, p_k2, 0.3 );
+	vector2 p_12 = interpolal( p_7, p_9, 1.08 );
 
 	setcolor( ColorBG ); vonalki( P_12, P_9 );
 	setcolor( ColorFG ); vonalki( p_12, p_9 );
@@ -148,7 +148,7 @@ void kirajzol640( double t, targytomb* pttt, double ugrasnagysag ) {
 	setcolor( ColorBG ); vonalki( P_3, P_6 );
 	setcolor( ColorFG ); vonalki( p_3, p_6 );
 
-	vekt2 p_5 = (Fejr-sarok)*Arany;
+	vector2 p_5 = (Fejr-sarok)*Arany;
 
 	setcolor( ColorBG ); kiteljeskerek( P_5.x, P_5.y, Fejsugar*Arany );
 	setcolor( ColorFG ); kiteljeskerek( p_5.x, p_5.y, Fejsugar*Arany );
@@ -195,7 +195,7 @@ void kirajzol640( double t, targytomb* pttt, double ugrasnagysag ) {
 		targy* pt = psz->ptargy;
 		targytipus* ptt = &pttt->targytipusok[pt->szam];
 		setcolor( ColorBG );
-		vekt2 r = spritehely( psz, pt, T );
+		vector2 r = spritehely( psz, pt, T );
 		kiteljeskerek( (r.x-X0)*Arany, (r.y-Y0)*Arany, ptt->sugar*Arany );
 		setcolor( ColorFG );
 		if( !pt->aktiv )

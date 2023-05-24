@@ -73,16 +73,16 @@ static void replay( void ) {
 	// rubrika mindig 'Randomizer':
 	int szamuk = 1;
 	while( !done && szamuk < MAXRUBRIKASZAM ) {
-		char* nev = Korny->rubrikak[szamuk];
-		strcpy( nev, ffblk.name );
+		char* name = Korny->rubrikak[szamuk];
+		strcpy( name, ffblk.name );
 		// Leveszi kiterjesztest:
 		int i = 0;
-		while( nev[i] != '.' ) {
-			if( !nev[i] )
-				hiba( "replay-ban nincs pont nevben!: ", nev );
+		while( name[i] != '.' ) {
+			if( !name[i] )
+				hiba( "replay-ban nincs pont nameben!: ", name );
 			i++;
 		}
-		nev[i] = 0;
+		name[i] = 0;
 
 		done = _dos_findnext( &ffblk );
 		szamuk++;
@@ -147,7 +147,7 @@ static void replay( void ) {
 				}
 				elozoelottipl = elozopl;
 				elozopl = pl;
-				// Nev eloallitasa:
+				// name eloallitasa:
 				char tmp[30];
 				strcpy( tmp, Korny->rubrikak[pl+1] );
 				strcat( tmp, ".rec" );
@@ -201,20 +201,20 @@ static void demo( void ) {
 		demoszam = 2;
 	#ifdef W_95
 		hiba( "Demoban most nem lehet!" );
-		char demonevek[14][14] = { "w4.rew",
+		char demonameek[14][14] = { "w4.rew",
 								   "w10.rew",
 								   "w15.rew",
 								   "w17.rew",
 								   "w23.rew"
 								 };
    #else
-		/*char demonevek[14][14] = { "dw17.rec",
+		/*char demonameek[14][14] = { "dw17.rec",
 								   "dw20.rec",
 								   "dw21.rec",
 								   "dw23.rec",
 								   "dw25.rec"
 								 }; */
-		char demonevek[14][14] = { "2.rec",
+		char demonameek[14][14] = { "2.rec",
 								   "22.rec",
 								   "10.rec"
 								 };
@@ -227,7 +227,7 @@ static void demo( void ) {
 			demo = rand()%demoszam;
 		elozoelotti = elozodemo;
 		elozodemo = demo;
-		Korny->prec->load( demonevek[demo], 1 );
+		Korny->prec->load( demonameek[demo], 1 );
 		int level = Korny->prec->getlevel();
 		palyabe( level, 1 );
 		int parmcga = 1;
@@ -244,7 +244,7 @@ static void demo( void ) {
 			demo = rand()%demoszam;
 		elozoelotti = elozodemo;
 		elozodemo = demo;
-		Korny->prec->load( demonevek[demo], 1 );
+		Korny->prec->load( demonameek[demo], 1 );
 		Kellobjectrendezni = !Korny->prec->regi;
 		ervenytlenitpalya();
 		int level = Korny->prec->getlevel();

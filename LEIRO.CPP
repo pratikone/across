@@ -3,16 +3,16 @@
 int Displaysizex = 320, Displaysizey = 200;
 
 void palyaleiro::foldbeolv_ratesz( int leiroindex ) {
-	char foldnev[20] = "";
+	char foldname[20] = "";
 	switch( leiroindex ) {
 		case 0:
-			strcpy( foldnev, "4_fold1.pcx" );
+			strcpy( foldname, "4_fold1.pcx" );
 			break;
 		case 1:
-			strcpy( foldnev, "4_fold2.pcx" );
+			strcpy( foldname, "4_fold2.pcx" );
 			break;
 		case 2:
-			strcpy( foldnev, "4_fold3.pcx" );
+			strcpy( foldname, "4_fold3.pcx" );
 			break;
 		default:
 			hiba( "foldbeolv-ban nincs meg leiroindex!" );
@@ -20,12 +20,12 @@ void palyaleiro::foldbeolv_ratesz( int leiroindex ) {
 
 	pic8* pfoldkis;
 	if( leiroindex != 0 ) {
-		{ pfoldkis = NEW(pic8*) pic8( foldnev ); }
+		{ pfoldkis = NEW(pic8*) pic8( foldname ); }
 	}
 	else {
 		// Eloszor teljes meretu kepet olvassuk be:
 		pic8* pfoldnagy;
-		{ pfoldnagy = NEW(pic8*) pic8( foldnev ); }
+		{ pfoldnagy = NEW(pic8*) pic8( foldname ); }
 		// Lekicsinyitjuk:
 		int kellmeret = 80;
 		int kxsize = kellmeret*Aranyx/50.0;
@@ -67,19 +67,19 @@ void palyaleiro::foldbeolv_ratesz( int leiroindex ) {
 	}
 }
 
-static void loadnev( char* text, FILE* h ) {
+static void loadname( char* text, FILE* h ) {
 	char sor[200];
 	if( fgets( sor, 190, h ) == NULL )
 		hiba( "Nem tudott olvasni sort filebol!" );
 	char tmp[200];
 	if( sscanf( sor, "%s", tmp ) != 1 )
-		hiba( "loadnev-ben nem tudta feldolgozni sort!: ", sor );
-	if( strlen( tmp ) > FILENEVHOSSZ )
-		hiba( "loadnev-ben nev tul hosszu!: ", tmp );
+		hiba( "loadname-ben nem tudta feldolgozni sort!: ", sor );
+	if( strlen( tmp ) > FILEnameHOSSZ )
+		hiba( "loadname-ben name tul hosszu!: ", tmp );
 	strcpy( text, tmp );
 }
 
-palyaleiro::palyaleiro( char* nev ) {
+palyaleiro::palyaleiro( char* name ) {
 	pal = NULL;
 	ptt = NULL;
 	pvpic8f = NULL;
@@ -110,84 +110,84 @@ palyaleiro::palyaleiro( char* nev ) {
 	foldxalapsize = 0;
 
 	int leiroindex = -1;
-	if( strcmp( nev, "leir1.lei" ) == 0 )
+	if( strcmp( name, "leir1.lei" ) == 0 )
 		leiroindex = 0;
-	if( strcmp( nev, "leir2.lei" ) == 0 )
+	if( strcmp( name, "leir2.lei" ) == 0 )
 		leiroindex = 1;
-	if( strcmp( nev, "leir3.lei" ) == 0 )
+	if( strcmp( name, "leir3.lei" ) == 0 )
 		leiroindex = 2;
 	if( leiroindex < 0 )
-		hiba( "palyaleiro::palyaleiro-ban nem talalta meg nevet!: ", nev );
+		hiba( "palyaleiro::palyaleiro-ban nem talalta meg nameet!: ", name );
 
 
-	FILE* h = qopen( nev, "rt" );
+	FILE* h = qopen( name, "rt" );
 	if( !h )
-		hiba( "Nem tudta megnyitni palyaleirot!: ", nev );
+		hiba( "Nem tudta megnyitni palyaleirot!: ", name );
 
 
 
 	{ pvpic8f = NEW(pic8f*) pic8f( Config.viewxsize, Config.viewysize ); }
 	{ pviewbuffer = NEW(pic8*) pic8( Config.viewxsize, Config.viewysize ); }
 
-	filenev tmp;
-	loadnev( tmp, h );
+	filename tmp;
+	loadname( tmp, h );
 	{ ptt = NEW(targytomb*) targytomb( tmp ); }
 
 	// EG:
-	loadnev( tmp, h );
+	loadname( tmp, h );
 	{ peg = NEW(pic8*) pic8( tmp ); }
 	pcxtopal( tmp, &pal );
 	// FELHO:
-	loadnev( tmp, h );
+	loadname( tmp, h );
 	// Nagy felho:
 	if( State->res > 2 ) {
-		loadnev( tmp, h ); // Nagy felbontasban nagy felho felulir
+		loadname( tmp, h ); // Nagy felbontasban nagy felho felulir
 	}
 	else {
-		filenev tmp2;
-		loadnev( tmp2, h ); // Kis felbontasban nagy felho elveszik
+		filename tmp2;
+		loadname( tmp2, h ); // Kis felbontasban nagy felho elveszik
 	}
 	{ pfelho = NEW(pic8*) pic8( tmp ); }
 	unsigned char szin = pfelho->gpixel( 0, 0 );
 	spriteosit( pfelho, szin );
 	// FOLD:
-	//loadnev( tmp, h ); fold neve most be van huzalozva:
+	//loadname( tmp, h ); fold namee most be van huzalozva:
 	foldbeolv_ratesz( leiroindex );
 
 	// Kerek:
-	loadnev( tmp, h );
+	loadname( tmp, h );
 	{ pkiskerek = NEW(kiskep*) kiskep( tmp ); }
 	// A:
-	loadnev( tmp, h );
+	loadname( tmp, h );
 	{ pkisa = NEW(kiskep*) kiskep( tmp ); }
 	// B:
-	loadnev( tmp, h );
+	loadname( tmp, h );
 	{ pkisb = NEW(kiskep*) kiskep( tmp ); }
 	// C:
-	loadnev( tmp, h );
+	loadname( tmp, h );
 	{ pkisc = NEW(kiskep*) kiskep( tmp ); }
 	// D:
-	loadnev( tmp, h );
+	loadname( tmp, h );
 	{ pkisd = NEW(kiskep*) kiskep( tmp ); }
 	// E:
-	loadnev( tmp, h );
+	loadname( tmp, h );
 	{ pkise = NEW(kiskep*) kiskep( tmp ); }
 	// Lyukindexeket a-bol atmasoljuk:
 	pkisb->lyuk = pkisc->lyuk = pkisd->lyuk = pkise->lyuk = pkisa->lyuk;
 	// Elsorud:
-	loadnev( tmp, h );
+	loadname( tmp, h );
 	{ pkiselsorud = NEW(kiskep*) kiskep( tmp ); }
 	// Hatsorud:
-	loadnev( tmp, h );
+	loadname( tmp, h );
 	{ pkishatsorud = NEW(kiskep*) kiskep( tmp ); }
 	// Alkar:
-	loadnev( tmp, h );
+	loadname( tmp, h );
 	{ pkisalkar = NEW(kiskep*) kiskep( tmp ); }
 	// Alkar:
-	loadnev( tmp, h );
+	loadname( tmp, h );
 	{ pkisfelkar = NEW(kiskep*) kiskep( tmp ); }
 	// Fej:
-	loadnev( tmp, h );
+	loadname( tmp, h );
 	{ pkisfej = NEW(kiskep*) kiskep( tmp ); }
 
 	// View indexek:
@@ -203,7 +203,7 @@ palyaleiro::palyaleiro( char* nev ) {
 
 	int magicnumber = loadint( h );
 	if( magicnumber != 17322 )
-		hiba( "leiroban nem stimmel magic number!: ", nev );
+		hiba( "leiroban nem stimmel magic number!: ", name );
 
 	qclose( h );
 }

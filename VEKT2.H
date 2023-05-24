@@ -1,27 +1,27 @@
 
 // #define TEST eseten plusz teszteket vegez!
 
-class vekt2 {
+class vector2 {
 public:
 	double x, y;
-	vekt2( void );
-	vekt2( double, double );
-	vekt2 operator + ( vekt2 );
-	vekt2 operator - ( vekt2 );
-	double operator * ( vekt2 );
-	double operator % ( vekt2 ); // Vektorialis szorzas.
+	vector2( void );
+	vector2( double, double );
+	vector2 operator + ( vector2 );
+	vector2 operator - ( vector2 );
+	double operator * ( vector2 );
+	double operator % ( vector2 ); // vector multiplicaiton.
 	void normal( void );
 	void forgatas( double alfa );
 };
 
-vekt2 operator * ( double, vekt2 );
-vekt2 operator * ( vekt2, double );
-double abs( vekt2 );
-vekt2 egys( vekt2 );
-vekt2 forgatas90fokkal( vekt2 );
-vekt2 forgatasminusz90fokkal( vekt2 );
+vector2 operator * ( double, vector2 );
+vector2 operator * ( vector2, double );
+double abs( vector2 );
+vector2 egys( vector2 );
+vector2 rotateby90degrees( vector2 );
+vector2 rotatebyminus90degrees( vector2 );
 
-// Sajat negyzetgyok:
+// Square
 double gyok( double x );
 
 // KULONBOZO SZAMITASOK:
@@ -29,30 +29,30 @@ double gyok( double x );
 // Az r1-bol indulo v1 vektor altal es az r2-bol indulo v2 altal
 // meghatarozott ket egyenes metszespontjanak visszaadasa:
 // Parhuzamosok eseten hiba( char* ); fv.-t hivja meg.
-vekt2 crossingpoint( vekt2 r1, vekt2 v1, vekt2 r2, vekt2 v2 );
+vector2 crossingpoint( vector2 r1, vector2 v1, vector2 r2, vector2 v2 );
 // Pont szakasztol valo tavolsagat szamolja ki:
 // (Szakasz hossza vsz hossza).
-double pontszakasztav( vekt2 rpont, vekt2 rsz, vekt2 vsz );
+double pontszakasztav( vector2 rpont, vector2 rsz, vector2 vsz );
 // Pont egyenestol valo tavolsagat szamolja ki:
-double pontegyenestav( vekt2 rpont, vekt2 rsz, vekt2 vsz );
+double pontegyenestav( vector2 rpont, vector2 rsz, vector2 vsz );
 // Visszaadja ket kor metszetet, r1-bol r2-be bal oldalon (Ganyolt):
-vekt2 ketkormetszete( vekt2 r1, vekt2 r2, double l1, double l2 );
+vector2 ketkormetszete( vector2 r1, vector2 r2, double l1, double l2 );
 
 // Igaz, ha az r1-bol indulo v1 vektor es az r2-bol indulo v2 vektor
 // metszi egymast:
-int vektormetszes( vekt2 r1, vekt2 v1, vekt2 r2, vekt2 v2 );
+int vektormetszes( vector2 r1, vector2 v1, vector2 r2, vector2 v2 );
 // Ez csak akkor tekinti metszesnek, ha nem csak eppen erintik egymast:
-int vektormetszes2( vekt2 r1, vekt2 v1, vekt2 r2, vekt2 v2 );
+int vektormetszes2( vector2 r1, vector2 v1, vector2 r2, vector2 v2 );
 // Ez mar akkor is metszesnek tekinti, ha kozel vannak egymashoz:
-int vektormetszes3( vekt2 r1, vekt2 v1, vekt2 r2, vekt2 v2 );
+int vektormetszes3( vector2 r1, vector2 v1, vector2 r2, vector2 v2 );
 
-// Igazzal ter vissza, ha metszi kort egyenes:
-// Ket metszespont kozul a v iranyaba haladva az elsot adja vissza:
-int egyeneskormetszes( vekt2 r, vekt2 v, vekt2 r_kor, double sugar, vekt2* pmetszet );
+// Returns true if it intersects a straight line:
+// Takes two intersection points and returns the first one in the v direction:
+int intersection( vector2 r, vector2 v, vector2 r_kor, double sugar, vector2* pmetszet );
 
-extern vekt2 Vekt2i, Vekt2j, Vekt2k, Vekt2null;
+extern vector2 vector2i, vector2j, vector2k, vector2null;
 extern double Pi;
 
 // Ezt meg kell irni hozza:
-// Uzenetet kuld peldaul 0-val valo osztas eseten (inverz matrix).
-//void hiba( char* message, char* text2 = NULL );
+// Sends a message, for example, in case of division by 0 (inverse matrix).
+//void error( char* message, char* text2 = NULL );

@@ -14,19 +14,19 @@ wav::wav( unsigned sizepar ) {
 	lefoglal();
 }
 
-static void nevwavtest( char* nev ) {
-	int i = strlen( nev ) - 1;
+static void namewavtest( char* name ) {
+	int i = strlen( name ) - 1;
 	while( i > 0 ) {
-		if( nev[i] == '.' ) {
+		if( name[i] == '.' ) {
 			// Most ponton all:
-			if( strcmpi( ".wav", &nev[i] ) == 0 )
+			if( strcmpi( ".wav", &name[i] ) == 0 )
 				return;
 			else
-				hiba( "nevrawtest-ben nincs .raw!" );
+				hiba( "namerawtest-ben nincs .raw!" );
 		}
 		i--;
 	}
-	hiba( "nevwavtest-ben nincs .wav!" );
+	hiba( "namewavtest-ben nincs .wav!" );
 }
 
 
@@ -47,13 +47,13 @@ struct wavheader {
 	long hossz;
 };
 
-wav::wav( char* nev, double maxamplitudo, int start, int ucsoutani ) {
+wav::wav( char* name, double maxamplitudo, int start, int ucsoutani ) {
 	tomb = NULL;
-	nevwavtest( nev );
+	namewavtest( name );
 	// Lemeri file hosszat:
-	FILE* h = qopen( nev, "rb" );
+	FILE* h = qopen( name, "rb" );
 	if( !h )
-		hiba( "Nem tudta megnyitni file-t: ", nev );
+		hiba( "Nem tudta megnyitni file-t: ", name );
 
 	wavheader header;
 	int negyvennegy = 44;
@@ -80,7 +80,7 @@ wav::wav( char* nev, double maxamplitudo, int start, int ucsoutani ) {
 	}
 
 	if( header.channel != 1 )
-		hiba( "Wav file nem mono!: ", nev );
+		hiba( "Wav file nem mono!: ", name );
 
 	if( bit16 ) {
 		// 16 bites uncompressed:
@@ -92,7 +92,7 @@ wav::wav( char* nev, double maxamplitudo, int start, int ucsoutani ) {
 		lefoglal();
 		qseek( h, start*2, SEEK_CUR );
 		if( fread( tomb, 1, size*2, h ) != size*2 )
-			hiba( "Nem sikerult beolvasni wav-ot!: ", nev );
+			hiba( "Nem sikerult beolvasni wav-ot!: ", name );
 	}
 	else {
 		// 8 bites uncompressed:
@@ -101,7 +101,7 @@ wav::wav( char* nev, double maxamplitudo, int start, int ucsoutani ) {
 		size = hossz;
 		lefoglal();
 		if( fread( tomb, 1, hossz, h ) != hossz )
-			hiba( "Nem sikerult beolvasni wav-ot!: ", nev );
+			hiba( "Nem sikerult beolvasni wav-ot!: ", name );
 		unsigned char* bytetomb = (unsigned char*)tomb;
 		for( int i = size-1; i >= 0; i-- ) {
 			tomb[i] = short((((short)(bytetomb[i]))-128)<<8);
@@ -129,12 +129,12 @@ wav::wav( char* nev, double maxamplitudo, int start, int ucsoutani ) {
 	}
 }
 
-void wav::save( char* nev ) {
-	nevwavtest( nev );
+void wav::save( char* name ) {
+	namewavtest( name );
 	// Lemeri file hosszat:
-	FILE* h = fopen( nev, "wb" );
+	FILE* h = fopen( name, "wb" );
 	if( !h )
-		hiba( "Nem tudta megnyitni file-t: ", nev );
+		hiba( "Nem tudta megnyitni file-t: ", name );
 	if( fwrite( tomb, 1, size*2, h ) != size*2 )
 			hiba( "Nem sikerult irni wav-ot wav::save-ben!" );
 	fclose( h );

@@ -7,7 +7,7 @@ static LRESULT CALLBACK _export WndProc( HWND hWnd, UINT iMessage, WPARAM wParam
 static HINSTANCE ghInstance = 0;
 HWND GhWnd = 0;
 
-static char szAppName[100] = "sz_nev";
+static char szAppName[100] = "sz_name";
 static char szCaption[100] = "sz_cap";
 
 static int GameLoop = 0;

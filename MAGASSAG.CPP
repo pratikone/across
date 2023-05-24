@@ -68,11 +68,11 @@ void magassag::torolhatok( void ) {
 void magassag::addszakasz( szakasz* psz, int felso ) {
 	// Itt adunk be neki egy uj szakaszt:
 	// Balrol jobbra mutasson:
-	vekt2 v = psz->vv.v;
-	vekt2 r = psz->vv.r;
+	vector2 v = psz->vv.v;
+	vector2 r = psz->vv.r;
 	if( v.x < 0 ) {
 		r = r+v;
-		v = Vekt2null-v;
+		v = vector2null-v;
 	}
 	// Nem fuggoleges-e?:
 	if( v.x < 0.01 )
@@ -209,7 +209,7 @@ int magassag::gethat( int* pfelso, int* py ) {
 	return 1;
 }
 
-vekt2 magassagokeloallitasa( szakaszok* pszakok,
+vector2 magassagokeloallitasa( szakaszok* pszakok,
 							magassag** ppmviz,
 							magassag** ppmfugg ) {
 	// Megkeresi burkolokat:
@@ -243,7 +243,7 @@ vekt2 magassagokeloallitasa( szakaszok* pszakok,
 		psz = pszakok->getnextszak();
 	}
 
-	vekt2 origo = vekt2( minx-400/Aranyx, miny-300/Aranyy );
+	vector2 origo = vector2( minx-400/Aranyx, miny-300/Aranyy );
 	// Egy kis veletlenites!:
 	origo.x += 0.0000145839857463;
 	origo.y += 0.0000295874632574;
@@ -263,7 +263,7 @@ vekt2 magassagokeloallitasa( szakaszok* pszakok,
 	if( !psz )
 		hiba( "Nincs egyetlen szakasz sem definialva!" );
 	while( psz ) {
-		vekt2 fold = forgatas90fokkal( psz->vv.v );
+		vector2 fold = rotateby90degrees( psz->vv.v );
 		// Vizszintes iranyu elintezes:
 		szakasz sz;
 		sz.vv.r = psz->vv.r-origo;
@@ -431,7 +431,7 @@ void kitoltcsikot( magassag* pm, int x, int ystart, int ysize,
 	}
 }
 
-void kirajzszakasz( vekt2 r, vekt2 v ) {
+void kirajzszakasz( vector2 r, vector2 v ) {
 	setcolor( ColorFG );
 	double s = 15;
 	r.x = 100+s/2+s*r.x + 0.5;
@@ -446,25 +446,25 @@ void kirajzszakasz( vekt2 r, vekt2 v ) {
 	{ szakaszok* pszakok = NEW(szakaszok*) szakaszok(); }
 	if( !pszakok )
 		uzenet( "memory!" );
-	//pszakok->add( vekt2( 0.0001839765243, 0.0001539765243 ), vekt2( 0.0, 0.0000001 ) );
+	//pszakok->add( vector2( 0.0001839765243, 0.0001539765243 ), vector2( 0.0, 0.0000001 ) );
 
-	pszakok->add( vekt2( 0.51, 10.5 ), vekt2( 10, -9 ) );
-	pszakok->add( vekt2( 0.51, 10.5 ), vekt2( 10, 9 ), 1 );
-	pszakok->add( vekt2( 20.51, 10.5 ), vekt2( -10, -9 ), 1 );
-	pszakok->add( vekt2( 20.51, 10.5 ), vekt2( -10, 9 ) );
+	pszakok->add( vector2( 0.51, 10.5 ), vector2( 10, -9 ) );
+	pszakok->add( vector2( 0.51, 10.5 ), vector2( 10, 9 ), 1 );
+	pszakok->add( vector2( 20.51, 10.5 ), vector2( -10, -9 ), 1 );
+	pszakok->add( vector2( 20.51, 10.5 ), vector2( -10, 9 ) );
 
-	pszakok->add( vekt2( 6, 10 ), vekt2( 4, 4 ) );
-	pszakok->add( vekt2( 6, 10 ), vekt2( 4, -4 ), 1 );
-	pszakok->add( vekt2( 14, 10 ), vekt2( -4, 4 ), 1 );
-	pszakok->add( vekt2( 14, 10 ), vekt2( -4, -4 ) );
+	pszakok->add( vector2( 6, 10 ), vector2( 4, 4 ) );
+	pszakok->add( vector2( 6, 10 ), vector2( 4, -4 ), 1 );
+	pszakok->add( vector2( 14, 10 ), vector2( -4, 4 ), 1 );
+	pszakok->add( vector2( 14, 10 ), vector2( -4, -4 ) );
 
-	//psz->add( vekt2( , ), vekt2( , ) );
+	//psz->add( vector2( , ), vector2( , ) );
 
 	pszakok->rendez();
 
 	magassag *pmviz, *pmfugg;
 
-	vekt2 origo = magassagokeloallitasa( pszakok, &pmviz, &pmfugg );
+	vector2 origo = magassagokeloallitasa( pszakok, &pmviz, &pmfugg );
 	ide kene hatterszamitas is!
 
 	int dx = -origo.x;
@@ -503,7 +503,7 @@ void kirajzszakasz( vekt2 r, vekt2 v ) {
 	if( !psz )
 		hiba( "Nincs egyetlen szakasz sem definialva!" );
 	while( psz ) {
-		vekt2 r = psz->r-origo-vekt2( dx, dy );
+		vector2 r = psz->r-origo-vector2( dx, dy );
 		kirajzszakasz( r, psz->v );
 
 		psz = pszakok->getnext();

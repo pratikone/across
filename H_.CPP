@@ -165,21 +165,21 @@ static int getparams( int* pcim, int* pirq, int* pdma ) {
 		hiba( "Nem tudott olvasni targyat!" );
 	fclose( h );
 
-	char tipusnev[20] = "";
-	if( sscanf( sor, "%s", tipusnev ) != 1 )
+	char tipusname[20] = "";
+	if( sscanf( sor, "%s", tipusname ) != 1 )
 		hiba( "Targyban nem tudta feldolgozni sort!: ", sor );
-	if( strcmpi( tipusnev, "none" ) == 0 ) {
+	if( strcmpi( tipusname, "none" ) == 0 ) {
 		Hangenabled = 0;
 		return 0;
 	}
-	if( strcmpi( tipusnev, "sb" ) != 0 )
+	if( strcmpi( tipusname, "sb" ) != 0 )
 		hiba( "Ismeretlen tipus setup.snd-ben!" );
 
 	*pcim = 0;
 	*pirq = 0;
 	*pdma = 0;
 	int szam = 0;
-	if( (szam=sscanf( sor, "%s %i %d %d", tipusnev, pcim, pirq, pdma )) != 4 )
+	if( (szam=sscanf( sor, "%s %i %d %d", tipusname, pcim, pirq, pdma )) != 4 )
 		hiba( "Targyban nem tudta feldolgozni sort!: ", sor );
 	szam++;
 	return 1;

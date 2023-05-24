@@ -179,24 +179,24 @@ static void ujrarajzol( int egesz ) {
 
 	Editbuffer->fillbox( Savx, Savy, 638, 478, Hatterindex );
 	Editbuffer->fillbox( 1, 1, 638, Savy-2, Hatterindex );
-	// Kiirjuk file nevet:
+	// Kiirjuk file nameet:
 	Pabc1->write( Editbuffer, 10, 15, "File name:" );
-	strupr( State->editfilenev );
+	strupr( State->editfilename );
 	int len = 0;
 	int xfile = 85;
-	if( State->editfilenev[0] == 0 ) {
+	if( State->editfilename[0] == 0 ) {
 		Pabc2->write( Editbuffer, xfile, 15, "UNNAMED" );
 		len = Pabc2->len( "UNNAMED" );
 	}
 	else {
-		Pabc2->write( Editbuffer, xfile, 15, State->editfilenev );
-		len = Pabc2->len( State->editfilenev );
+		Pabc2->write( Editbuffer, xfile, 15, State->editfilename );
+		len = Pabc2->len( State->editfilename );
 	}
 	if( Valtozott )
 		Pabc1->write( Editbuffer, xfile+len+5, 15, "(Changed)" );
 	else
 		Pabc1->write( Editbuffer, xfile+len+5, 15, "(Unchanged)" );
-	// Kiirjuk level nevet:
+	// Kiirjuk level nameet:
 	Pabc1->write( Editbuffer, 260, 15, "Level name:" );
 	Pabc2->write( Editbuffer, 340, 15, Ptop->levelname );
 	// Kiirjuk tool szoveget:
@@ -321,21 +321,21 @@ void editor( void ) {
 	// Beolvassuk file-t:
 	kivalasztkezdetit();
 
-	if( State->editfilenev[0] == 0 ) {
+	if( State->editfilename[0] == 0 ) {
 		Ptop = new topol;
 		Valtozott = 0;
 	}
 	else {
-		Ptop = new topol( State->editfilenev, 1 );
+		Ptop = new topol( State->editfilename, 1 );
 		if( Ptop->lezart ) {
 			char szoveg[40];
 			sprintf( szoveg, "The file '%s' is locked, you cannot edit it!",
-												State->editfilenev );
+												State->editfilename );
 			dialog( szoveg );
 			delete Ptop;
 			Ptop = new topol;
 			Valtozott = 0;
-			State->editfilenev[0] = 0;
+			State->editfilename[0] = 0;
 		}
 
 		// Most megnezzuk hogy nincs-e tul sok pontja palyanak:

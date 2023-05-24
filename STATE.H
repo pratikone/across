@@ -1,13 +1,13 @@
 
 #define MAXJATEKOS (50)
-#define JATEKOSNEVHOSSZ (14)
+#define JATEKOSnameHOSSZ (14)
 
 #define MAXPALYASZAM (90) // Ennyit soha nem er el
 
 extern int Palyaszam; // Ez fugg attol, hogy shareware, vagy regisztralt
 
 struct jatekos {
-	char nev[JATEKOSNEVHOSSZ+2];
+	char name[JATEKOSnameHOSSZ+2];
 	char skippedtomb[((MAXPALYASZAM/4)+1)*4];
 	long sikerespalyakszama;
 	long jelenlegipalya; // -1 eseten external files
@@ -18,7 +18,7 @@ struct jatekos {
 struct palyaidejei {
 	long idokszama;
 	long idok[MAXIDOK];
-	long nevindexek[MAXIDOK];
+	long nameindexek[MAXIDOK];
 };
 
 class state {
@@ -30,8 +30,8 @@ public:
 	short res;
 	double fakt;
 	double soundvolume;
-	char editfilenev[20];
-	char playextfilenev[20];
+	char editfilename[20];
+	char playextfilename[20];
 	state( void );
 	~state( void );
 	void save( void );

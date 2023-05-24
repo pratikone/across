@@ -7,7 +7,7 @@ class abc8 {
 	short tav;
 public:
 	int success;
-	abc8( char* nev );
+	abc8( char* name );
 	~abc8( void );
 	void write( pic8* pdest, int x, int y, char* text, int tav = -1000 );
 	void writekozep( pic8* pdest, int x, int y, char* text, int tav = -1000 );

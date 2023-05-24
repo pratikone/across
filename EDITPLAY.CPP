@@ -2,14 +2,14 @@
 
 void editplay( void ) {
 	invalidateegesz();
-	if( Valtozott || State->editfilenev[0] == 0 || Ptop->hibas )
+	if( Valtozott || State->editfilename[0] == 0 || Ptop->hibas )
 		if( !tolt_save( 0 ) )
 			return;
 
 	if( Ptop->hibas )
 		return;
 
-	palyabe( -1, getbelyeg( State->editfilenev ) );
+	palyabe( -1, getbelyeg( State->editfilename ) );
 	int parreplay = 0;
 	Korny->prec->erase( 1 );
 	lejatszo( Korny->pleiro, &Korny->st, Korny->prec, parreplay );

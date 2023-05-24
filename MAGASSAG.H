@@ -41,7 +41,7 @@ public:
 };
 
 
-vekt2 magassagokeloallitasa( szakaszok*, magassag**, magassag** );
+vector2 magassagokeloallitasa( szakaszok*, magassag**, magassag** );
 void kitoltcsikot( magassag* pm, int x, int ystart, int ysize,
 	unsigned char* tomb, unsigned char* tombeg, unsigned char* tombfold );
 void kitoltcsikot( magassag* pm, int x, int ystart, int ysize,

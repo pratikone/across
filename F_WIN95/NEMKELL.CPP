@@ -23,9 +23,9 @@ void bgitorol( void ) {
 	hiba( "Nem kene ide jonnie (bgitorol)!" );
 }
 
-int editor( char* nev, palyaleiro* pleiro ) {
+int editor( char* name, palyaleiro* pleiro ) {
 	hiba( "Nem kene ide jonnie (editor)!" );
-	nev++;
+	name++;
 	pleiro++;
 	return 1;
 }

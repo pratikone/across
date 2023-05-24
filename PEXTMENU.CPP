@@ -3,9 +3,9 @@
 //static void playextfile( long belyeg ) {
 //	palyabe( -1, belyeg );
 
-static long playextfile( char* filenev ) {
-	if( !palyabe( -1, 0, filenev ) )
-		hiba( "playextfile-ban !palyabe( -1, 0, filenev )!" );
+static long playextfile( char* filename ) {
+	if( !palyabe( -1, 0, filename ) )
+		hiba( "playextfile-ban !palyabe( -1, 0, filename )!" );
 	int parreplay = 0;
 	Korny->prec->erase( 0 );
 	long ido = lejatszo( Korny->pleiro, &Korny->st,
@@ -21,23 +21,23 @@ static long playextfile( char* filenev ) {
 		if( !belyegtomb )
 			hiba( "playextmenu-ben nincs eleg memoria belyegtomb-nek!" );
 	}
-	// Kiirjuk osszes lev file nevet ide:
+	// Kiirjuk osszes lev file nameet ide:
 	find_t ffblk;
 	int done;
 	done = _dos_findfirst( "*.lev", _A_NORMAL, &ffblk );
 	int szam = 0;
 	int kezdo = 0;
 	while( !done ) {
-		char* filenev = ffblk.name;
-		char* levelnev = getlevelname( filenev );
-		if( !levelnev ) {
+		char* filename = ffblk.name;
+		char* levelname = getlevelname( filename );
+		if( !levelname ) {
 			// Kiirunk egy hibauzenetet kepre:
 			blt8( Korny->picbuffer, Korny->ppic_load );
 			int y0 = 20;
 			int dy = 30;
 			Korny->pabc_load->writekozep( Korny->picbuffer, 160, y0+0*dy, "There was an error" );
 			Korny->pabc_load->writekozep( Korny->picbuffer, 160, y0+1*dy,  "loading the file:" );
-			Korny->pabc_load->writekozep( Korny->picbuffer, 160, y0+2*dy,  filenev );
+			Korny->pabc_load->writekozep( Korny->picbuffer, 160, y0+2*dy,  filename );
 			Korny->pabc_load->writekozep( Korny->picbuffer, 160, y0+3*dy,  "It is not a valid level file!" );
 			Korny->pabc_load->writekozep( Korny->picbuffer, 160, y0+4*dy,  "Press a key to continue!" );
 			lassufizre( Korny->picbuffer, Korny->pal_load );
@@ -47,13 +47,13 @@ static long playextfile( char* filenev ) {
 			continue;
 		}
 
-		if( strlen( levelnev ) > MAXRUBRIKAHOSSZ )
+		if( strlen( levelname ) > MAXRUBRIKAHOSSZ )
 			hiba( "mdvihgfpo!" );
-		strcpy( Korny->rubrikak[szam], levelnev );
+		strcpy( Korny->rubrikak[szam], levelname );
 
-		belyegtomb[szam] = getbelyeg( filenev );
+		belyegtomb[szam] = getbelyeg( filename );
 
-		if( strcmp( State->playextfilenev, filenev ) == 0 )
+		if( strcmp( State->playextfilename, filename ) == 0 )
 			kezdo = szam;
 
 		done = _dos_findnext( &ffblk );
@@ -62,7 +62,7 @@ static long playextfile( char* filenev ) {
 			done = 1;
 	}
 
-	// Feltoltottuk neveket, jon valasztas:
+	// Feltoltottuk nameeket, jon valasztas:
 	valaszt val;
 	val.szam = szam;
 	val.kur = kezdo;
@@ -80,19 +80,19 @@ static long playextfile( char* filenev ) {
 		if( eredmeny < 0 )
 			return;
 		val.kur = eredmeny;
-		getbelyegheznev( belyegtomb[eredmeny], State->playextfilenev );
+		getbelyeghezname( belyegtomb[eredmeny], State->playextfilename );
 		playextfile( belyegtomb[eredmeny] );
 	}
 } */
 
 // Igaz, ha ujra jatszik, hamis ha listat ker:
-static int afterplayext( char* filenev, long ido ) {
+static int afterplayext( char* filename, long ido ) {
 	int kurrens = 0;
 	while( 1 ) {
 		// Megirjuk tablat:
 		blt8( Korny->picbuffer, Korny->ppic_afterplaymenu );
 		Korny->pabc_afterplaymenu->writekozep( Korny->picbuffer, 160, 10,
-							   getlevelname( filenev ) );
+							   getlevelname( filename ) );
 		// Kiirjuk ha lockolt:
 		if( Ucsoloadszakasz_lezart )
 			Korny->pabc_afterplaymenu->write( Korny->picbuffer,
@@ -143,7 +143,7 @@ static int afterplayext( char* filenev, long ido ) {
 			continue;
 		}
 		if( eredmeny == 2 ) {
-			unsigned long belyeg = getbelyeg( filenev );
+			unsigned long belyeg = getbelyeg( filename );
 			saveplay( belyeg ); // Save play
 			continue;
 		}
@@ -155,14 +155,14 @@ static void abcberendez( int szam ) {
 	for( int i = 0; i < szam+3; i++ ) {
 		for( int j = 0; j < szam-1; j++ ) {
 			// Ha j es j+1 edik elem forditva van visszacsereljuk oket:
-			char* nev1 = Korny->rubrikak[j];
-			char* nev2 = Korny->rubrikak[j+1];
-			if( strcmp( nev1, nev2 ) > 0 ) {
+			char* name1 = Korny->rubrikak[j];
+			char* name2 = Korny->rubrikak[j+1];
+			if( strcmp( name1, name2 ) > 0 ) {
 				// Csere:
 				char tmp[20];
-				strcpy( tmp, nev1 );
-				strcpy( nev1, nev2 );
-				strcpy( nev2, tmp );
+				strcpy( tmp, name1 );
+				strcpy( name1, name2 );
+				strcpy( name2, tmp );
 			}
 		}
 	}
@@ -171,22 +171,22 @@ static void abcberendez( int szam ) {
 // Nincs h-ja, hanem prototype ki van irva play.cpp-ben:
 void playextmenu( void ) {
 	while( 1 ) {
-		// Kiirjuk osszes lev file nevet ide:
+		// Kiirjuk osszes lev file nameet ide:
 		find_t ffblk;
 		int done;
 		done = _dos_findfirst( "*.lev", _A_NORMAL, &ffblk );
 		int szam = 0;
 		while( !done ) {
-			char* filenev = ffblk.name;
-			//char* levelnev = getlevelname( filenev );
-			/*if( !levelnev ) {
+			char* filename = ffblk.name;
+			//char* levelname = getlevelname( filename );
+			/*if( !levelname ) {
 				// Kiirunk egy hibauzenetet kepre:
 				blt8( Korny->picbuffer, Korny->ppic_load );
 				int y0 = 20;
 				int dy = 30;
 				Korny->pabc_load->writekozep( Korny->picbuffer, 160, y0+0*dy, "There was an error" );
 				Korny->pabc_load->writekozep( Korny->picbuffer, 160, y0+1*dy,  "loading the file:" );
-				Korny->pabc_load->writekozep( Korny->picbuffer, 160, y0+2*dy,  filenev );
+				Korny->pabc_load->writekozep( Korny->picbuffer, 160, y0+2*dy,  filename );
 				Korny->pabc_load->writekozep( Korny->picbuffer, 160, y0+3*dy,  "It is not a valid level file!" );
 				Korny->pabc_load->writekozep( Korny->picbuffer, 160, y0+4*dy,  "Press a key to continue!" );
 				lassufizre( Korny->picbuffer, Korny->pal_load );
@@ -196,11 +196,11 @@ void playextmenu( void ) {
 				continue;
 			}
 
-			if( strlen( levelnev ) > MAXRUBRIKAHOSSZ )
+			if( strlen( levelname ) > MAXRUBRIKAHOSSZ )
 				hiba( "mdvihgfpo!" );
-			strcpy( Korny->rubrikak[szam], levelnev ); */
+			strcpy( Korny->rubrikak[szam], levelname ); */
 
-			strcpy( Korny->rubrikak[szam], filenev );
+			strcpy( Korny->rubrikak[szam], filename );
 
 			done = _dos_findnext( &ffblk );
 			szam++;
@@ -218,11 +218,11 @@ void playextmenu( void ) {
 			char tmp[50];
 			strcpy( tmp, Korny->rubrikak[i] );
 			//strcat( tmp, ".lev" );
-			if( strcmpi( tmp, State->playextfilenev ) == 0 )
+			if( strcmpi( tmp, State->playextfilename ) == 0 )
 				kezdo = i;
 		}
 
-		// Feltoltottuk neveket, jon valasztas:
+		// Feltoltottuk nameeket, jon valasztas:
 		valaszt val;
 		val.szam = szam;
 		val.kur = kezdo;
@@ -240,17 +240,17 @@ void playextmenu( void ) {
 		if( eredmeny < 0 )
 			return;
 
-		char filenev[20];
+		char filename[20];
 		if( strlen( Korny->rubrikak[eredmeny] ) > 15 )
 			hiba( "playextmenu-ben Korny->rubrikak[eredmeny] ) > 15!" );
-		strcpy( filenev, Korny->rubrikak[eredmeny] );
+		strcpy( filename, Korny->rubrikak[eredmeny] );
 
-		strcpy( State->playextfilenev, filenev );
+		strcpy( State->playextfilename, filename );
 
 		while( 1 ) {
-			long ido = playextfile( filenev );
+			long ido = playextfile( filename );
 			// Igaz, ha ujra jatszik, hamis ha listat ker:
-			if( !afterplayext( filenev, ido ) )
+			if( !afterplayext( filename, ido ) )
 				break;
 		}
 	}

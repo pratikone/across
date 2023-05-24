@@ -29,43 +29,43 @@ void kerek::kirajzol( void ) {
 	for( int i = 0; i < szegmensszam; i++ ) {
 		double alfa1 = i*elfordulas;
 		double alfa2 = (i+1)*elfordulas;
-		vekt2 r1( sugar*sin( alfa1 ), sugar*cos( alfa1 ) );
-		vekt2 r2( sugar*sin( alfa2 ), sugar*cos( alfa2 ) );
+		vector2 r1( sugar*sin( alfa1 ), sugar*cos( alfa1 ) );
+		vector2 r2( sugar*sin( alfa2 ), sugar*cos( alfa2 ) );
 		vonalrajz( r+r1, r+r2, 0 );
 	}
 
 	// Kis jel kor kozepere:
 	double meret = 0.02;
-	vonalrajz( r+vekt2( -meret, -meret ),  r+vekt2( meret, meret ), 0 );
-	vonalrajz( r+vekt2( meret, -meret ),  r+vekt2( -meret, meret ), 0 );
+	vonalrajz( r+vector2( -meret, -meret ),  r+vector2( meret, meret ), 0 );
+	vonalrajz( r+vector2( meret, -meret ),  r+vector2( -meret, meret ), 0 );
 
 	// Beleirjuk betut korbe:
 	if( tipus == T_CEL ) {
-		vonalrajz( r+vekt2( -0.15, 0.3 ),  r+vekt2( -0.15, -0.3 ), 0 );
-		vonalrajz( r+vekt2( -0.15, 0.3 ),  r+vekt2( 0.15, 0.3 ), 0 );
-		vonalrajz( r+vekt2( -0.15, -0.3 ), r+vekt2( 0.15, -0.3 ), 0 );
-		vonalrajz( r+vekt2( -0.15, 0.0 ),  r+vekt2( 0.1, 0.0 ), 0 );
+		vonalrajz( r+vector2( -0.15, 0.3 ),  r+vector2( -0.15, -0.3 ), 0 );
+		vonalrajz( r+vector2( -0.15, 0.3 ),  r+vector2( 0.15, 0.3 ), 0 );
+		vonalrajz( r+vector2( -0.15, -0.3 ), r+vector2( 0.15, -0.3 ), 0 );
+		vonalrajz( r+vector2( -0.15, 0.0 ),  r+vector2( 0.1, 0.0 ), 0 );
 		return;
 	}
 	if( tipus == T_KAJA ) {
-		vonalrajz( r+vekt2( -0.15, 0.3 ),  r+vekt2( -0.15, -0.3 ), 0 );
-		vonalrajz( r+vekt2( -0.15, -0.3 ), r+vekt2( 0.15, -0.3 ), 0 );
-		vonalrajz( r+vekt2( -0.15, 0.0 ),  r+vekt2( 0.1, 0.0 ), 0 );
+		vonalrajz( r+vector2( -0.15, 0.3 ),  r+vector2( -0.15, -0.3 ), 0 );
+		vonalrajz( r+vector2( -0.15, -0.3 ), r+vector2( 0.15, -0.3 ), 0 );
+		vonalrajz( r+vector2( -0.15, 0.0 ),  r+vector2( 0.1, 0.0 ), 0 );
 		return;
 	}
 	if( tipus == T_KEZDO ) {
-		vonalrajz( r+vekt2( 0.15, 0.3 ),  r+vekt2( 0.15, 0.0 ), 0 );
-		vonalrajz( r+vekt2( -0.15, -0.3 ),  r+vekt2( -0.15, 0.0 ), 0 );
+		vonalrajz( r+vector2( 0.15, 0.3 ),  r+vector2( 0.15, 0.0 ), 0 );
+		vonalrajz( r+vector2( -0.15, -0.3 ),  r+vector2( -0.15, 0.0 ), 0 );
 
-		vonalrajz( r+vekt2( -0.15, 0.3 ),  r+vekt2( 0.15, 0.3 ), 0 );
-		vonalrajz( r+vekt2( -0.15, -0.3 ), r+vekt2( 0.15, -0.3 ), 0 );
-		vonalrajz( r+vekt2( -0.15, 0.0 ),  r+vekt2( 0.15, 0.0 ), 0 );
+		vonalrajz( r+vector2( -0.15, 0.3 ),  r+vector2( 0.15, 0.3 ), 0 );
+		vonalrajz( r+vector2( -0.15, -0.3 ), r+vector2( 0.15, -0.3 ), 0 );
+		vonalrajz( r+vector2( -0.15, 0.0 ),  r+vector2( 0.15, 0.0 ), 0 );
 		return;
 	}
 	if( tipus == T_HALALOS ) {
-		vonalrajz( r+vekt2( -0.15, 0.3 ),  r+vekt2( -0.15, -0.3 ), 0 );
-		vonalrajz( r+vekt2( -0.15, 0.07 ),  r+vekt2( 0.15, -0.3 ), 0 );
-		vonalrajz( r+vekt2( Hal_eltol, 0.0 ),  r+vekt2( 0.15, 0.3 ), 0 );
+		vonalrajz( r+vector2( -0.15, 0.3 ),  r+vector2( -0.15, -0.3 ), 0 );
+		vonalrajz( r+vector2( -0.15, 0.07 ),  r+vector2( 0.15, -0.3 ), 0 );
+		vonalrajz( r+vector2( Hal_eltol, 0.0 ),  r+vector2( 0.15, 0.3 ), 0 );
 		return;
 	}
 	hiba( "iugiffiif" );
@@ -156,7 +156,7 @@ kerek* topol::legkozkerek( double x, double y, double* ptav ) {
 
 	double tav = 1000000.0;
 	kerek* pker = NULL;
-	vekt2 r( x, y );
+	vector2 r( x, y );
 	for( int i = 0; i < MAXKEREK; i++ ) {
 		if( kerektomb[i] ) {
 			double ujtav = abs( kerektomb[i]->r - r );
@@ -188,16 +188,16 @@ void topol::kirajzol( void ) {
 }
 
 // Igaz, ha bent van:
-int topol::levegoben( gyuru* pgy, vekt2* pr ) {
+int topol::levegoben( gyuru* pgy, vector2* pr ) {
 	if( (pgy && pr) || (!pgy && !pr) )
 		hiba( "topol::levegoben-ben paramok nem stimmelnek!" );
 
-	vekt2 r;
+	vector2 r;
 	if( pgy )
 		r = pgy->ponttomb[0];  //pgy->sulypont();
 	else
 		r = *pr;
-	vekt2 v = vekt2( 27654.475374565578, 37850.5364775 );
+	vector2 v = vector2( 27654.475374565578, 37850.5364775 );
 	// Vegigmegyunk az egeszen:
 	int metszes = 0;
 	for( int i = 0; i < MAXGYURU; i++ ) {
@@ -210,17 +210,17 @@ int topol::levegoben( gyuru* pgy, vekt2* pr ) {
 		return 0;
 }
 
-topol::topol( char* filenev, int kulso ) {
+topol::topol( char* filename, int kulso ) {
 	hibas = 0;
 	lezart = 0;
 
 	FILE* h = NULL;
 	if( kulso )
-		h = fopen( filenev, "rb" );
+		h = fopen( filename, "rb" );
 	else
-		h = qopen( filenev, "rb" );
+		h = qopen( filename, "rb" );
 	if( !h )
-		hiba( "topol::topol-ban nem tudta nyitni file-t!: ", filenev );
+		hiba( "topol::topol-ban nem tudta nyitni file-t!: ", filename );
 
 	for( int i = 0; i < MAXGYURU; i++ )
 			ptomb[i] = NULL;
@@ -232,17 +232,17 @@ topol::topol( char* filenev, int kulso ) {
 	if( fread( tmp, 1, 5, h ) != 5 )
 		hiba( "Nem tudott olvasni txt file-bol!" );
 	if( strncmp( tmp, "POT", 3 ) != 0 )
-		hiba( "topol::topol( char* filenev )-ben nem stimmel eleje!" );
+		hiba( "topol::topol( char* filename )-ben nem stimmel eleje!" );
 
 	unsigned long belyeg_l = 0;
 	double belyeg = 0;
 	int verzio = tmp[4] - '0' + 10*(tmp[3] - '0');
 
 	if( verzio > 6 )
-		uzenet( "Level file's version is too new!: ", filenev );
+		uzenet( "Level file's version is too new!: ", filename );
 
 	if( verzio < 6 )
-		uzenet( "Corrupt level file!: ", filenev );
+		uzenet( "Corrupt level file!: ", filename );
 
 	/*if( verzio == 1 ) {
 		// Ezt az agat ki kell majd torolni veglegesbol, mivel
@@ -295,7 +295,7 @@ topol::topol( char* filenev, int kulso ) {
 		#ifdef SARVARI
 			if( sarvarertek + double(belyeg_l) <= 20000.0 )
 				uzenet( "Sorry, this level file can only be played with the registered version!:\n",
-													filenev );
+													filename );
 		#endif
 
 		// Beolvassuk hogy hibas-e:
@@ -379,7 +379,7 @@ topol::topol( char* filenev, int kulso ) {
 		#ifdef SARVARI
 			if( sarvarertek + belyeg <= 20000.0 )
 				uzenet( "Sorry, this level file can only be loaded into the registered version!:\n",
-													filenev );
+													filename );
 		#endif
 
 		// Beolvassuk hogy hibas-e:
@@ -405,7 +405,7 @@ topol::topol( char* filenev, int kulso ) {
 		//lezart = 0; // Ha ez nincs kikomentezve, unlockol minden file-t
 	}
 
-	// Beolvassuk level nevet:
+	// Beolvassuk level nameet:
 	fread( levelname, 1, LEVELNAMEHOSSZ+1, h );
 	levelname[LEVELNAMEHOSSZ] = 0; // Ez csak biztonsagert
 
@@ -454,7 +454,7 @@ topol::topol( char* filenev, int kulso ) {
 	if( verzio == 6 ) {
 		double szamitottbelyeg = belyegszamitas();
 		if( fabs( szamitottbelyeg - belyeg ) > 0.01 )
-			uzenet( "Corrupt .LEV file!: ", filenev );
+			uzenet( "Corrupt .LEV file!: ", filename );
 	}
 }
 
@@ -476,7 +476,7 @@ static long longosit( double belyeg ) {
 	return belyeg_l;
 }
 
-void topol::save( char* filenev ) {
+void topol::save( char* filename ) {
 	// Mivel ezzel meg valtoztathatunk polygonokon
 	// (polygon korbejaras megvaltoztatas, egymason fekvo pontok
 	// megszuntetese, tul hegyes szogek eltolasa), ezert ezt elore tesszuk:
@@ -488,9 +488,9 @@ void topol::save( char* filenev ) {
 	}
 
 
-	FILE* h = fopen( filenev, "wb" );
+	FILE* h = fopen( filename, "wb" );
 	if( !h )
-		hiba( "topol::save-ben nem tudta nyitni file-t!: ", filenev );
+		hiba( "topol::save-ben nem tudta nyitni file-t!: ", filename );
 
 	fwrite( "POT06", 1, 5, h );
 
@@ -528,7 +528,7 @@ void topol::save( char* filenev ) {
 		lezartertek = 23090.0 + s_random( 6310 ) - belyeg;
 	fwrite( &lezartertek, 1, sizeof( hibaertek ), h );
 
-	// Kiirjuk level nevet:
+	// Kiirjuk level nameet:
 	fwrite( levelname, 1, LEVELNAMEHOSSZ+1, h );
 
 	// Kimentjuk gyuruket elejetol kezdve 100 byte utan:
@@ -650,8 +650,8 @@ void topol::checklevelforsarvari( void ) {
 
 
 // Barmilyen hiba eseten 1-el ter vissza:
-unsigned long getbelyeg( char* nev ) {
-	FILE* h = fopen( nev, "rb" );
+unsigned long getbelyeg( char* name ) {
+	FILE* h = fopen( name, "rb" );
 	if( !h )
 		return 1;
 	unsigned long l = 0;
@@ -665,14 +665,14 @@ unsigned long getbelyeg( char* nev ) {
 	return l;
 }
 
-// Igazzal ter vissza, ha megvan nev;
-int getbelyegheznev( unsigned long belyeg, char* nev ) {
+// Igazzal ter vissza, ha megvan name;
+int getbelyeghezname( unsigned long belyeg, char* name ) {
 	find_t ffblk;
 	int done = _dos_findfirst( "*.lev", _A_NORMAL, &ffblk );
 	while( !done ) {
 		if( getbelyeg( ffblk.name ) == belyeg ) {
-			// Megvan level file neve:
-			strcpy( nev, ffblk.name );
+			// Megvan level file namee:
+			strcpy( name, ffblk.name );
 			return 1;
 		}
 
@@ -683,10 +683,10 @@ int getbelyegheznev( unsigned long belyeg, char* nev ) {
 
 // Csak external file-hoz:
 // Ha NULL, akkor valami baj volt vele:
-char* getlevelname( char* nev ) {
+char* getlevelname( char* name ) {
 	static char levelnamebuffer[LEVELNAMEHOSSZ+4] = "";
 
-	FILE* h = fopen( nev, "rb" );
+	FILE* h = fopen( name, "rb" );
 	if( !h )
 		return NULL;
 

@@ -1,7 +1,7 @@
 #include	"all.h"
 
-static int gombszakasz( vekt2 r, double sugar, vonal* pv, vekt2* pt ) {
-	vekt2 rel = r-pv->r;
+static int gombszakasz( vector2 r, double sugar, vonal* pv, vector2* pt ) {
+	vector2 rel = r-pv->r;
 	double pozicio = rel*pv->egyseg;
 	if( pozicio < 0 ) {
 		if( abs( r-pv->r ) < sugar ) {
@@ -21,7 +21,7 @@ static int gombszakasz( vekt2 r, double sugar, vonal* pv, vekt2* pt ) {
 			return 0;
 		}
 	}
-	vekt2 n = forgatas90fokkal( pv->egyseg );
+	vector2 n = rotateby90degrees( pv->egyseg );
 	double tav = rel*n;
 	if( tav < -sugar || tav > sugar )
 		return 0;
@@ -29,14 +29,14 @@ static int gombszakasz( vekt2 r, double sugar, vonal* pv, vekt2* pt ) {
 	return 1;
 }
 
-int talppontkereses( vekt2 r, double sugar, vekt2* pt1, vekt2* pt2 ) {
+int talppontkereses( vector2 r, double sugar, vector2* pt1, vector2* pt2 ) {
 	Pszak->felsorolasreset( r );
 	int talppontszam = 0;
 	vonal* pv = NULL;
 	//int vegignezett = 0; // tesztelesre!
 	while( (pv = Pszak->getnext()) != NULL ) {
 		//vegignezett++;
-		vekt2 t;
+		vector2 t;
 		if( gombszakasz( r, sugar, pv, &t ) ) {
 			if( talppontszam == 2 ) {
 				hiba( "Egyszerre kettonel tobb talppontszam is van" );

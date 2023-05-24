@@ -1,9 +1,9 @@
 #include	"all.h"
 
 // Nem engedi vonalon+egykicsi tovabb kereket!:
-static void helyigazitas( kor* pk, vekt2* pt ) {
+static void helyigazitas( kor* pk, vector2* pt ) {
 	double hossz = abs( pk->r - *pt );
-	vekt2 n = (pk->r-*pt)*(1.0/hossz);
+	vector2 n = (pk->r-*pt)*(1.0/hossz);
 	if( hossz < pk->sugar-Belsosav )
 		pk->r = pk->r + n*(pk->sugar-Belsosav-hossz);
 }
@@ -11,14 +11,14 @@ static void helyigazitas( kor* pk, vekt2* pt ) {
 static double Utodeshatar = 0.5;
 
 // Igazzal ter vissza, ha talppont tenylegesen az:
-static int talppontigazitas( kor* pk, vekt2* pt, vekt2 F ) {
+static int talppontigazitas( kor* pk, vector2* pt, vector2 F ) {
 	double hossz = abs( pk->r - *pt );
-	vekt2 n = (pk->r-*pt)*(1.0/hossz);
+	vector2 n = (pk->r-*pt)*(1.0/hossz);
 	if( n*pk->v > -Elszakadasisebhat && n*F > 0 )
 		// Nem talppont:
 		return 0;
 	// Sebesseg korrigalasa csak n-re meroleges komponensre:
-	vekt2 kulonbseg = n*pk->v*n;
+	vector2 kulonbseg = n*pk->v*n;
 	pk->v = pk->v - kulonbseg;
 	// Hang:
 	double ero = abs( kulonbseg );
@@ -32,10 +32,10 @@ static int talppontigazitas( kor* pk, vekt2* pt, vekt2 F ) {
 }
 
 // Igaz, ha talppont t1:
-static int biztostalppont( vekt2 t1, vekt2 t2, kor* pk, vekt2 F, double M ) {
+static int biztostalppont( vector2 t1, vector2 t2, kor* pk, vector2 F, double M ) {
 	double hossz = abs( pk->r - t2 );
-	vekt2 n = (pk->r-t2)*(1.0/hossz);
-	vekt2 n90 = forgatas90fokkal( n );
+	vector2 n = (pk->r-t2)*(1.0/hossz);
+	vector2 n90 = rotateby90degrees( n );
 	double Mtm = M + hossz*n90*F;
 	if( (t1-t2)*n90*Mtm < 0 )
 		return 0;
@@ -43,9 +43,9 @@ static int biztostalppont( vekt2 t1, vekt2 t2, kor* pk, vekt2 F, double M ) {
 		return 1;
 }
 
-void beallit( kor* pk, vekt2 F, double M, double dt, int kelltalppont ) {
+void beallit( kor* pk, vector2 F, double M, double dt, int kelltalppont ) {
 	int talppontszam = 0;
-	vekt2 t1, t2;
+	vector2 t1, t2;
 	if( kelltalppont )
 		talppontszam = talppontkereses( pk->r, pk->sugar, &t1, &t2 );
 
@@ -92,21 +92,21 @@ void beallit( kor* pk, vekt2 F, double M, double dt, int kelltalppont ) {
 		double beta = M/pk->theta;
 		pk->omega += beta*dt;
 		pk->alfa += pk->omega*dt;
-		vekt2 a = F*(1.0/pk->m);
+		vector2 a = F*(1.0/pk->m);
 		pk->v = pk->v + a*dt;
 		pk->r = pk->r + pk->v*dt;
 		return;
 	}
 	if( talppontszam == 2 ) {
 		// Kerek meg van fogva:
-		pk->v = Vekt2null;
+		pk->v = vector2null;
 		pk->omega = 0;
 		return;
 	}
 	// Egy talppont korul fordul el kerek:
 	double hossz = abs( pk->r-t1 );
-	vekt2 n = (pk->r-t1)*(1.0/hossz);
-	vekt2 n90 = forgatas90fokkal( n );
+	vector2 n = (pk->r-t1)*(1.0/hossz);
+	vector2 n90 = rotateby90degrees( n );
 	pk->omega = pk->v*n90*(1.0/pk->sugar);
 	M += F*n90*pk->sugar; // M-hez hozzajon meg ero is, mivel talpponthoz
 						  // vonatkoztatjuk!

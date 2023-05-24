@@ -3,7 +3,7 @@
 static int Hibaismeretlenkar = 0;
 
  
-abc8::abc8( char* nev ) {
+abc8::abc8( char* name ) {
 	success = 0;
 	tav = 0;
 	ppsprite = NULL;
@@ -22,25 +22,25 @@ abc8::abc8( char* nev ) {
 	}
 	for( i = 0; i < 256; i++ )
 		ytomb[i] = 0;
-	FILE* h = qopen( nev, "rb" );
+	FILE* h = qopen( name, "rb" );
 	if( !h ) {
-		hiba( "Nem tudta megnyitni abc konstruktor file-t!: ", nev );
+		hiba( "Nem tudta megnyitni abc konstruktor file-t!: ", name );
 		return;
 	}
 	char tmp[20];
 	if( fread( tmp, 4, 1, h ) != 1 ) {
-		hiba( "Nem tudja olvasni abc-t!: ", nev );
+		hiba( "Nem tudja olvasni abc-t!: ", name );
 		qclose( h );
 		return;
 	}
 	if( strcmp( tmp, "RA1" ) != 0 ) {
-		hiba( "Nem ervenyes abc file elso negy byte alapjan!: ", nev );
+		hiba( "Nem ervenyes abc file elso negy byte alapjan!: ", name );
 		qclose( h );
 		return;
 	}
 	short darabszam = 0;
 	if( fread( &darabszam, 2, 1, h ) != 1 ) {
-		hiba( "Nem tudja olvasni abc-t!: ", nev );
+		hiba( "Nem tudja olvasni abc-t!: ", name );
 		qclose( h );
 		return;
 	}
@@ -49,33 +49,33 @@ abc8::abc8( char* nev ) {
 	for( int kkk = 0; kkk < darabszam; kkk++ ) {
 		// Sorban beolvassa betuk spritejait:
 		if( fread( tmp, 7, 1, h ) != 1 ) {
-			hiba( "Nem tudja olvasni abc-t!: ", nev );
+			hiba( "Nem tudja olvasni abc-t!: ", name );
 			qclose( h );
 			return;
 		}
 		if( strcmp( tmp, "EGYMIX" ) != 0 ) {
-			hiba( "Nem talalta meg EGYMIX-et!: ", nev );
+			hiba( "Nem talalta meg EGYMIX-et!: ", name );
 			qclose( h );
 			return;
 		}
 		unsigned char c = -1;
 		if( fread( &c, 1, 1, h ) != 1 ) {
-			hiba( "Nem tudja olvasni abc-t!: ", nev );
+			hiba( "Nem tudja olvasni abc-t!: ", name );
 			qclose( h );
 			return;
 		}
 		if( fread( &ytomb[c], 2, 1, h ) != 1 ) {
-			hiba( "Nem tudja olvasni abc-t!: ", nev );
+			hiba( "Nem tudja olvasni abc-t!: ", name );
 			qclose( h );
 			return;
 		}
 		if( ppsprite[c] ) {
-			hiba( "Egy karakter ketszer van meg abc file-ban!: ", nev );
+			hiba( "Egy karakter ketszer van meg abc file-ban!: ", name );
 			return;
 		}
 		{ ppsprite[c] = NEW(pic8*) pic8( ".spr", h ); }
 		if( !ppsprite[c]->success ) {
-			hiba( "Nem tudta beolvasni SPRITE-ot abc file-bol!: ", nev );
+			hiba( "Nem tudta beolvasni SPRITE-ot abc file-bol!: ", name );
 			return;
 		}
 	}

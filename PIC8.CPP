@@ -131,7 +131,7 @@ pic8::pic8( int xsizep, int ysizep, unsigned char** ppc ) {
 	success = 1;
 }
 
-pic8::pic8( char* nev, FILE* h ) {
+pic8::pic8( char* name, FILE* h ) {
 	nemdestrukt = 0;
 	success = 0;
 	sormuttomb = NULL;
@@ -141,36 +141,36 @@ pic8::pic8( char* nev, FILE* h ) {
 	spritehossz = NULL;
 	crccheck();
 	// Kiterjesztes megkeresese:
-	int i = strlen( nev ) - 1;
+	int i = strlen( name ) - 1;
 	while( i >= 0 ) {
-		if( nev[i] == '.' ) {
-			if( strcmpi( nev+i, ".vox" ) == 0 ) {
-				voxbeolvas( nev );
+		if( name[i] == '.' ) {
+			if( strcmpi( name+i, ".vox" ) == 0 ) {
+				voxbeolvas( name );
 				return;
 			}
-			if( strcmpi( nev+i, ".mix" ) == 0 ) {
-				mixbeolvas( nev );
+			if( strcmpi( name+i, ".mix" ) == 0 ) {
+				mixbeolvas( name );
 				return;
 			}
-			if( strcmpi( nev+i, ".spr" ) == 0 ) {
-				spritebeolvas( nev, h );
+			if( strcmpi( name+i, ".spr" ) == 0 ) {
+				spritebeolvas( name, h );
 				return;
 			}
-			if( strcmpi( nev+i, ".pcx" ) == 0 ) {
-				pcxbeolvas( nev );
+			if( strcmpi( name+i, ".pcx" ) == 0 ) {
+				pcxbeolvas( name );
 				return;
 			}
-			hiba( "pic8 konstruktor nem ismeri kiterjesztest nevben!: ", nev );
+			hiba( "pic8 konstruktor nem ismeri kiterjesztest nameben!: ", name );
 			return;
 		}
 		i--;
 	}
-	hiba( "pic8 konstruktor nem talalt pontot nevben!: ", nev );
+	hiba( "pic8 konstruktor nem talalt pontot nameben!: ", name );
 }
 
 
 
-int pic8::save( char* nev, unsigned char* pal, FILE* h ) {
+int pic8::save( char* name, unsigned char* pal, FILE* h ) {
 	if( !success ) {
 		hiba( "pic8::save-ben nem success!" );
 		return 0;
@@ -181,26 +181,26 @@ int pic8::save( char* nev, unsigned char* pal, FILE* h ) {
 	}
 	// Kiterjesztes megkeresese:
 	int i = 0;
-	while( nev[i] ) {
-		if( nev[i] == '.' ) {
-			if( strcmpi( nev+i, ".vox" ) == 0 ) {
-				return voxsave( nev );
+	while( name[i] ) {
+		if( name[i] == '.' ) {
+			if( strcmpi( name+i, ".vox" ) == 0 ) {
+				return voxsave( name );
 			}
-			if( strcmpi( nev+i, ".spr" ) == 0 ) {
-				return spritesave( nev, h );
+			if( strcmpi( name+i, ".spr" ) == 0 ) {
+				return spritesave( name, h );
 			}
-			if( strcmpi( nev+i, ".pcx" ) == 0 ) {
-				return pcxsave( nev, pal );
+			if( strcmpi( name+i, ".pcx" ) == 0 ) {
+				return pcxsave( name, pal );
 			}
-			//if( strcmpi( nev+i, ".mix" ) == 0 ) {
-			//	return mixsave( nev );
+			//if( strcmpi( name+i, ".mix" ) == 0 ) {
+			//	return mixsave( name );
 			//}
-			hiba( "pic8::save-ben nem ismeri kiterjesztest nevben!: ", nev );
+			hiba( "pic8::save-ben nem ismeri kiterjesztest nameben!: ", name );
 			return 0;
 		}
 		i++;
 	}
-	hiba( "pic8::save-ben nem talalt pontot nevben!: ", nev );
+	hiba( "pic8::save-ben nem talalt pontot nameben!: ", name );
 	return 0;
 }
 
@@ -319,32 +319,32 @@ void pic8::fuggszegmens( int x, int y, int size, unsigned char szin ) {
 
 // VOX:
 
-void pic8::voxbeolvas( char* nev ) {
-	FILE* h = qopen( nev, "rb" );
+void pic8::voxbeolvas( char* name ) {
+	FILE* h = qopen( name, "rb" );
 	if( !h ) {
-		hiba( "pic8 voxbeolvaso nem tudta megnyitni file-t!: ", nev );
+		hiba( "pic8 voxbeolvaso nem tudta megnyitni file-t!: ", name );
 		return;
 	}
 	unsigned char c = 0;
 	if( fread( &c, 1, 1, h ) != 1 ) {
-		hiba( "Nem tudott olvasni file-bol!: ", nev );
+		hiba( "Nem tudott olvasni file-bol!: ", name );
 		qclose( h );
 		return;
 	}
 	if( c != 0x0c ) {
-		hiba( "VOX file elso karaktere nem 0x0c!: ", nev );
+		hiba( "VOX file elso karaktere nem 0x0c!: ", name );
 		qclose( h );
 		return;
 	}
 
 	xsize = ysize = -1;
 	if( fread( &xsize, 2, 1, h ) != 1 || fread( &ysize, 2, 1, h ) != 1 ) {
-		hiba( "Nem tudott olvasni VOX file-bol!: ", nev );
+		hiba( "Nem tudott olvasni VOX file-bol!: ", name );
 		qclose( h );
 		return;
 	}
 	if( xsize < 1 || ysize < 1 ) {
-		hiba( "Meretek kicsik VOX file-ban!: ", nev );
+		hiba( "Meretek kicsik VOX file-ban!: ", name );
 		qclose( h );
 		return;
 	}
@@ -356,7 +356,7 @@ void pic8::voxbeolvas( char* nev ) {
 	for( int y = 0; y < ysize; y++ ) {
 		// Egy sor beolvasasa:
 		if( fread( sormuttomb[y], xsize, 1, h ) != 1 ) {
-			hiba( "Nem tudott olvasni VOX file-bol!: ", nev );
+			hiba( "Nem tudott olvasni VOX file-bol!: ", name );
 			qclose( h );
 			return;
 		}
@@ -366,17 +366,17 @@ void pic8::voxbeolvas( char* nev ) {
 	success = 1;
 }
 
-int pic8::voxsave( char* nev ) {
-	FILE* h = fopen( nev, "wb" );
+int pic8::voxsave( char* name ) {
+	FILE* h = fopen( name, "wb" );
 	if( !h ) {
-		hiba( "pic8::voxsave-ben nem tudta megnyitni file-t!: ", nev );
+		hiba( "pic8::voxsave-ben nem tudta megnyitni file-t!: ", name );
 		return 0;
 	}
 	unsigned char c = 0x0c;
 	if( fwrite( &c, 1, 1, h ) != 1 ||
 		fwrite( &xsize, 2, 1, h ) != 1 ||
 		fwrite( &ysize, 2, 1, h ) != 1 ) {
-		hiba( "pic8::voxsave-ben nem tud irni file-ba!: ", nev );
+		hiba( "pic8::voxsave-ben nem tud irni file-ba!: ", name );
 		fclose( h );
 		return 0;
 	}
@@ -384,7 +384,7 @@ int pic8::voxsave( char* nev ) {
 	for( int y = 0; y < ysize; y++ ) {
 		// Egy sor kiirasa:
 		if( fwrite( sormuttomb[y], xsize, 1, h ) != 1 ) {
-			hiba( "Nem tudott irni VOX file-ba!: ", nev );
+			hiba( "Nem tudott irni VOX file-ba!: ", name );
 			fclose( h );
 			return 0;
 		}
@@ -395,32 +395,32 @@ int pic8::voxsave( char* nev ) {
 
 // MIX:
 
-void pic8::mixbeolvas( char* nev ) {
-	FILE* h = qopen( nev, "rb" );
+void pic8::mixbeolvas( char* name ) {
+	FILE* h = qopen( name, "rb" );
 	if( !h ) {
-		hiba( "pic8 mixbeolvaso tudta megnyitni file-t!: ", nev );
+		hiba( "pic8 mixbeolvaso tudta megnyitni file-t!: ", name );
 		return;
 	}
 	unsigned char c = 0;
 	if( fread( &c, 1, 1, h ) != 1 ) {
-		hiba( "Nem tudott olvasni file-bol!: ", nev );
+		hiba( "Nem tudott olvasni file-bol!: ", name );
 		qclose( h );
 		return;
 	}
 	if( c != 0x0d ) {
-		hiba( "MIX file elso karaktere nem 0x0d!: ", nev );
+		hiba( "MIX file elso karaktere nem 0x0d!: ", name );
 		qclose( h );
 		return;
 	}
 
 	xsize = ysize = -1;
 	if( fread( &xsize, 2, 1, h ) != 1 || fread( &ysize, 2, 1, h ) != 1 ) {
-		hiba( "Nem tudott olvasni MIX file-bol!: ", nev );
+		hiba( "Nem tudott olvasni MIX file-bol!: ", name );
 		qclose( h );
 		return;
 	}
 	if( xsize < 1 || ysize < 1 ) {
-		hiba( "Meretek kicsik MIX file-ban!: ", nev );
+		hiba( "Meretek kicsik MIX file-ban!: ", name );
 		qclose( h );
 		return;
 	}
@@ -431,7 +431,7 @@ void pic8::mixbeolvas( char* nev ) {
 	pic8* pm = NULL;
 	{ pm = NEW(pic8*) pic8( xsize, ysize ); }
 	if( !pm || !pm->success ) {
-		hiba( "Nem tudott letrhozni tmp pic8-at MIX file olvasasnal!: ", nev );
+		hiba( "Nem tudott letrhozni tmp pic8-at MIX file olvasasnal!: ", name );
 		if( pm )
 			DELETE pm; }
 		qclose( h );
@@ -441,14 +441,14 @@ void pic8::mixbeolvas( char* nev ) {
 	for( int y = 0; y < ysize; y++ ) {
 		// Egy maszk sor beolvasasa:
 		if( fread( pm->sormuttomb[y], xsize, 1, h ) != 1 ) {
-			hiba( "Nem tudott olvasni MIX file-bol!: ", nev );
+			hiba( "Nem tudott olvasni MIX file-bol!: ", name );
 			qclose( h );
 			DELETE pm; }
 			return;
 		}
 		// Egy sor beolvasasa:
 		if( fread( sormuttomb[y], xsize, 1, h ) != 1 ) {
-			hiba( "Nem tudott olvasni MIX file-bol!: ", nev );
+			hiba( "Nem tudott olvasni MIX file-bol!: ", name );
 			DELETE pm; }
 			qclose( h );
 			return;
@@ -468,36 +468,36 @@ void pic8::mixbeolvas( char* nev ) {
 	l++;
 } */
 
-void pic8::spritebeolvas( char* nev, FILE* h ) {
+void pic8::spritebeolvas( char* name, FILE* h ) {
 	int volth = 1;
 	if( !h ) {
 		volth = 0;
-		h = qopen( nev, "rb" );
+		h = qopen( name, "rb" );
 		if( !h ) {
-			hiba( "pic8 spritebeolvaso nem tudta megnyitni file-t!: ", nev );
+			hiba( "pic8 spritebeolvaso nem tudta megnyitni file-t!: ", name );
 			return;
 		}
 	}
 	unsigned char c = 0;
 	if( fread( &c, 1, 1, h ) != 1 ) {
-		hiba( "Nem tudott olvasni file-bol!: ", nev );
+		hiba( "Nem tudott olvasni file-bol!: ", name );
 		if( !volth ) qclose( h );
 		return;
 	}
 	if( c != 0x2d ) {
-		hiba( "SPRITE file elso karaktere nem 0x2d!: ", nev );
+		hiba( "SPRITE file elso karaktere nem 0x2d!: ", name );
 		if( !volth ) qclose( h );
 		return;
 	}
 
 	xsize = ysize = -1;
 	if( fread( &xsize, 2, 1, h ) != 1 || fread( &ysize, 2, 1, h ) != 1 ) {
-		hiba( "Nem tudott olvasni SPRITE file-bol!: ", nev );
+		hiba( "Nem tudott olvasni SPRITE file-bol!: ", name );
 		if( !volth ) qclose( h );
 		return;
 	}
 	if( xsize < 1 || ysize < 1 ) {
-		hiba( "Meretek kicsik SPRITE file-ban!: ", nev );
+		hiba( "Meretek kicsik SPRITE file-ban!: ", name );
 		if( !volth ) qclose( h );
 		return;
 	}
@@ -507,7 +507,7 @@ void pic8::spritebeolvas( char* nev, FILE* h ) {
 	for( int y = 0; y < ysize; y++ ) {
 		// Egy sor beolvasasa:
 		if( fread( sormuttomb[y], xsize, 1, h ) != 1 ) {
-			hiba( "Nem tudott olvasni SPRITE file-bol!: ", nev );
+			hiba( "Nem tudott olvasni SPRITE file-bol!: ", name );
 			if( !volth ) qclose( h );
 			return;
 		}
@@ -516,24 +516,24 @@ void pic8::spritebeolvas( char* nev, FILE* h ) {
 	// SPRITE reszek beolvasasa:
 	char tmp[10] = "";
 	if( fread( tmp, 7, 1, h ) != 1 ) {
-		hiba( "Nem tudott olvasni SPRITE file-bol!: ", nev );
+		hiba( "Nem tudott olvasni SPRITE file-bol!: ", name );
 		if( !volth ) qclose( h );
 		return;
 	}
 	if( strcmp( tmp, "SPRITE" ) != 0 ) {
-		hiba( "Sprite kulcsszo nem stimmel SPRITE file-ban!: ", nev );
+		hiba( "Sprite kulcsszo nem stimmel SPRITE file-ban!: ", name );
 		if( !volth ) qclose( h );
 		return;
 	}
 
 	spritehossz = -1;
 	if( fread( &spritehossz, 2, 1, h ) != 1 ) {
-		hiba( "Nem tudott olvasni SPRITE file-bol!: ", nev );
+		hiba( "Nem tudott olvasni SPRITE file-bol!: ", name );
 		if( !volth ) qclose( h );
 		return;
 	}
 	if( spritehossz < 1 ) {
-		hiba( "Sprite hossza tul rovid SPRITE file-ban!: ", nev );
+		hiba( "Sprite hossza tul rovid SPRITE file-ban!: ", name );
 		if( !volth ) qclose( h );
 		return;
 	}
@@ -542,12 +542,12 @@ void pic8::spritebeolvas( char* nev, FILE* h ) {
 	//dummy( l );
 	{ sprite = NEW(unsigned char*) unsigned char[spritehossz]; }
 	if( !sprite ) {
-		hiba( "Nincs eleg hely SPRITE beolvasoban!: ", nev );
+		hiba( "Nincs eleg hely SPRITE beolvasoban!: ", name );
 		if( !volth ) qclose( h );
 		return;
 	}
 	if( fread( sprite, spritehossz, 1, h ) != 1 ) {
-		hiba( "Nem tudott olvasni SPRITE file-bol sprite-ot!: ", nev );
+		hiba( "Nem tudott olvasni SPRITE file-bol sprite-ot!: ", name );
 		if( !volth ) qclose( h );
 		return;
 	}
@@ -556,13 +556,13 @@ void pic8::spritebeolvas( char* nev, FILE* h ) {
 	success = 1;
 }
 
-int pic8::spritesave( char* nev, FILE* h ) {
+int pic8::spritesave( char* name, FILE* h ) {
 	int volth = 1;
 	if( !h ) {
 		volth = 0;
-		h = fopen( nev, "wb" );
+		h = fopen( name, "wb" );
 		if( !h ) {
-			hiba( "pic8::spritesave-ben nem tudta megnyitni file-t!: ", nev );
+			hiba( "pic8::spritesave-ben nem tudta megnyitni file-t!: ", name );
 			return 0;
 		}
 	}
@@ -570,7 +570,7 @@ int pic8::spritesave( char* nev, FILE* h ) {
 	if( fwrite( &c, 1, 1, h ) != 1 ||
 		fwrite( &xsize, 2, 1, h ) != 1 ||
 		fwrite( &ysize, 2, 1, h ) != 1 ) {
-		hiba( "pic8::spritesave-ben nem tud irni file-ba!: ", nev );
+		hiba( "pic8::spritesave-ben nem tud irni file-ba!: ", name );
 		if( !volth ) fclose( h );
 		return 0;
 	}
@@ -578,7 +578,7 @@ int pic8::spritesave( char* nev, FILE* h ) {
 	for( int y = 0; y < ysize; y++ ) {
 		// Egy sor kiirasa:
 		if( fwrite( sormuttomb[y], xsize, 1, h ) != 1 ) {
-			hiba( "Nem tudott irni SPRITE file-ba!: ", nev );
+			hiba( "Nem tudott irni SPRITE file-ba!: ", name );
 			if( !volth ) fclose( h );
 			return 0;
 		}
@@ -588,7 +588,7 @@ int pic8::spritesave( char* nev, FILE* h ) {
 	if( fwrite( "SPRITE", 7, 1, h ) != 1 ||
 		fwrite( &spritehossz, 2, 1, h ) != 1 ||
 		fwrite( sprite, spritehossz, 1, h ) != 1 ) {
-		hiba( "Nem tudott irni SPRITE file-ba!: ", nev );
+		hiba( "Nem tudott irni SPRITE file-ba!: ", name );
 		if( !volth ) fclose( h );
 		return 0;
 	}
@@ -614,19 +614,19 @@ struct	pcxdescriptor {
 	unsigned char	Padding[127-70+1];
 };
 
-void pic8::pcxbeolvas( char* nev ) {
+void pic8::pcxbeolvas( char* name ) {
 	// Gany:
 	success = 1;
 
-	FILE* h = qopen( nev, "rb" );
+	FILE* h = qopen( name, "rb" );
 	if( !h ) {
-		hiba( "Nem nyilik PCX file!: ", nev );
+		hiba( "Nem nyilik PCX file!: ", name );
 		success = 0;
 		return;
 	}
 	pcxdescriptor   desc;
 	if( fread( &desc, sizeof( desc ), 1, h ) != 1 ) {
-		hiba( "Nem olvas PCX file-bol!: ", nev );
+		hiba( "Nem olvas PCX file-bol!: ", name );
 		qclose( h );
 		success = 0;
 		return;
@@ -702,10 +702,10 @@ static int numberofrepeats( pic8* ppic, int x, int y, int xsize ) {
 	return db;
 }
 
-int	pic8::pcxsave( char *nev, unsigned char* pal ) {
-	FILE* h = fopen( nev, "wb" );
+int	pic8::pcxsave( char *name, unsigned char* pal ) {
+	FILE* h = fopen( name, "wb" );
 	if( !h ) {
-		hiba( "pcxsave-ben nem nyilik file!: ", nev );
+		hiba( "pcxsave-ben nem nyilik file!: ", name );
 		return 0;
 	}
 	pcxdescriptor	desc;
@@ -723,7 +723,7 @@ int	pic8::pcxsave( char *nev, unsigned char* pal ) {
 	desc.BytesPerScanLine	= xsize;
 	desc.PaletteInf			= 1;
 	if( fwrite( &desc, sizeof( desc ), 1, h ) != 1 ) {
-		hiba( "pcxsave-ben sikertelen iras!: ", nev );
+		hiba( "pcxsave-ben sikertelen iras!: ", name );
 		fclose( h );
 		return 0;
 	}
@@ -736,13 +736,13 @@ int	pic8::pcxsave( char *nev, unsigned char* pal ) {
 					i = 63;
 				unsigned char controll = (unsigned char)(i+192);
 				if( fwrite( &controll, 1, 1, h ) != 1 ) {
-					hiba( "pcxsave-ben nem ir!: ", nev );
+					hiba( "pcxsave-ben nem ir!: ", name );
 					fclose( h );
 					return 0;
 				}
 				unsigned char szin = gpixel( x, y );
 				if( fwrite( &szin, 1, 1, h ) != 1 ) {
-					hiba( "pcxsave-ben nem ir!: ", nev );
+					hiba( "pcxsave-ben nem ir!: ", name );
 					fclose( h );
 					return 0;
 				}
@@ -752,7 +752,7 @@ int	pic8::pcxsave( char *nev, unsigned char* pal ) {
 				unsigned char szin = gpixel( x, y );
 				if( szin < 64 ) {
 					if( fwrite( &szin, 1, 1, h ) != 1 ) {
-						hiba( "pcxsave-ben nem ir!: ", nev );
+						hiba( "pcxsave-ben nem ir!: ", name );
 						fclose( h );
 						return 0;
 					}
@@ -760,13 +760,13 @@ int	pic8::pcxsave( char *nev, unsigned char* pal ) {
 				else {
 					unsigned char controll = 193;
 					if( fwrite( &controll, 1, 1, h ) != 1 ) {
-						hiba( "pcxsave-ben nem ir!: ", nev );
+						hiba( "pcxsave-ben nem ir!: ", name );
 						fclose( h );
 						return 0;
 					}
 					szin = gpixel( x, y );
 					if( fwrite( &szin, 1, 1, h ) != 1 ) {
-						hiba( "pcxsave-ben nem ir!: ", nev );
+						hiba( "pcxsave-ben nem ir!: ", name );
 						fclose( h );
 						return 0;
 					}
@@ -777,7 +777,7 @@ int	pic8::pcxsave( char *nev, unsigned char* pal ) {
 	}
 	unsigned char magikus = 0x0c;
 	if( fwrite( &magikus, 1, 1, h ) != 1 ) {
-		hiba( "pcxsave-ben nem ir!: ", nev );
+		hiba( "pcxsave-ben nem ir!: ", name );
 		fclose( h );
 		return 0;
 	}
@@ -786,7 +786,7 @@ int	pic8::pcxsave( char *nev, unsigned char* pal ) {
 		for( int i = 0; i < 768; i++ ) {
 			unsigned char c = (unsigned char)(pal[i]<<2);
 			if( fwrite( &c, 1, 1, h ) != 1 ) {
-				hiba( "pcxsave-ben nem ir!: ", nev );
+				hiba( "pcxsave-ben nem ir!: ", name );
 				fclose( h );
 				return 0;
 			}
@@ -798,7 +798,7 @@ int	pic8::pcxsave( char *nev, unsigned char* pal ) {
 			unsigned char c = (unsigned char)i;
 			for( int j = 0; j < 3; j++ ) {
 				if( fwrite( &c, 1, 1, h ) != 1 ) {
-					hiba( "pcxsave-ben nem ir!: ", nev );
+					hiba( "pcxsave-ben nem ir!: ", name );
 					fclose( h );
 					return 0;
 				}
@@ -1004,33 +1004,33 @@ void blt8( pic8* pd, pic8* ps, int x, int y,
 	}
 } */
 
-int pcxtopal( char* nev, unsigned char* pal ) {
+int pcxtopal( char* name, unsigned char* pal ) {
 		// Paletta beolvasasa:
-	FILE* h = qopen( nev, "rb" );
+	FILE* h = qopen( name, "rb" );
 	if( !h ) {
-		hiba( "pcxtopal-ban nem tudta megnyitni file-t!: ", nev );
+		hiba( "pcxtopal-ban nem tudta megnyitni file-t!: ", name );
 		return 0;
 	}
 	long l = -769;
 	if( qseek( h, l, SEEK_END ) != 0 ) {
-		hiba( "Nem tud visszalepni palettahoz 768-at PCX-ben!: ", nev );
+		hiba( "Nem tud visszalepni palettahoz 768-at PCX-ben!: ", name );
 		qclose( h );
 		return 0;
 	}
 	char c;
 	l = fread( &c, 1, 1, h );
 	if( l != 1 ) {
-		hiba( "Nem tud olvasni PCX-ben!:", nev );
+		hiba( "Nem tud olvasni PCX-ben!:", name );
 		qclose( h );
 		return 0;
 	}
 	if( c != 0x0c ) {
-		hiba( "Nem 0x0C a paletta elotti byte PCX-ben!: ", nev );
+		hiba( "Nem 0x0C a paletta elotti byte PCX-ben!: ", name );
 		qclose( h );
 		return 0;
 	}
 	if( fread( pal, 768, 1, h ) != 1 ) {
-		hiba( "Nem tud olvasni PCX-ben!: ", nev );
+		hiba( "Nem tud olvasni PCX-ben!: ", name );
 		qclose( h );
 		return 0;
 	}
@@ -1040,9 +1040,9 @@ int pcxtopal( char* nev, unsigned char* pal ) {
 	return 1;
 }
 
-int pcxtopal( char* nev, ddpal** ppddpal ) {
+int pcxtopal( char* name, ddpal** ppddpal ) {
 	unsigned char pal[768];
-	pcxtopal( nev, pal );
+	pcxtopal( name, pal );
 	{ *ppddpal = NEW(ddpal*) ddpal( pal ); }
 	return 1;
 }

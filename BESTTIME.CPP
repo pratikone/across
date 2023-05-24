@@ -52,9 +52,9 @@ void levelbesttimes( int level ) {
 	if( pidok->idokszama == 0 )
 		return;
 	for( int i = 0; i < pidok->idokszama; i++ ) {
-		jatekos* pjatekos = &State->jatekosok[int(pidok->nevindexek[i])];
+		jatekos* pjatekos = &State->jatekosok[int(pidok->nameindexek[i])];
 		Korny->pabc_leveltimes->write( Korny->picbuffer, 30, 40+i*(SM+9),
-														pjatekos->nev );
+														pjatekos->name );
 		char tmp[30];
 		ido2string( pidok->idok[i], tmp );
 		Korny->pabc_leveltimes->write( Korny->picbuffer, 200, 40+i*(SM+9), tmp );
@@ -104,18 +104,18 @@ void besttimes( void ) {
 			int vanido = 1;
 			if( pidok->idokszama == 0 )
 				vanido = 0;
-			jatekos* pjatekos = &State->jatekosok[int(pidok->nevindexek[0])];
+			jatekos* pjatekos = &State->jatekosok[int(pidok->nameindexek[0])];
 			// Sorszam 1-tol:
 			itoa( i+1, Korny->rubrikak[i], 10 );
 			strcat( Korny->rubrikak[i], " " );
-			// Level neve:
+			// Level namee:
 			strcat( Korny->rubrikak[i], getleveldescription( i ) );
 			strcat( Korny->rubrikak[i], " " );
 			while( Korny->pabc_times->len( Korny->rubrikak[i], -1 ) < 184 )
 				strcat( Korny->rubrikak[i], " " );
-			// Jatekos neve:
+			// Jatekos namee:
 			if( vanido )
-				strcat( Korny->rubrikak[i], pjatekos->nev );
+				strcat( Korny->rubrikak[i], pjatekos->name );
 			else
 				strcat( Korny->rubrikak[i], "-" );
 

@@ -40,7 +40,7 @@ class targytomb {
 public:
 	int targytipusszam;
 	targytipus *targytipusok;
-	targytomb( char* nev );
+	targytomb( char* name );
 	~targytomb( void );
 };
 

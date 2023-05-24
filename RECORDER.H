@@ -43,8 +43,8 @@ public:
 	int getlevel( void );
 	// demo eseten resource file-bol nyit:
 	// belyeg-et adja vissza, vagy 0-at:
-	long load( char* nev, int demo );
-	void save( char* nev, long belyeg );
+	long load( char* name, int demo );
+	void save( char* name, long belyeg );
 };
 
 

@@ -46,7 +46,7 @@ static void titkoswrite( void* mut, int hossz, FILE* h ) {
 static long Magicnumber_state_s = 123432111l;
 static long Magicnumber_state_r = 123432222l;
 
-static char Statenev[] = "state.dat";
+static char Statename[] = "state.dat";
 
 state::state( void ) {
 	memset( palyakidejei, 0, sizeof( palyakidejei ) );
@@ -58,12 +58,12 @@ state::state( void ) {
 	soundvolume = 1.0;
 	// Itt hagyni kell fopen-t!!!!!!!!!!!!!!!!!!!!:
 	//#ifndef VEGLEGES
-	if( access( Statenev, 0 ) != 0 )
+	if( access( Statename, 0 ) != 0 )
 		return;
 	//#endif
-	FILE* h = fopen( Statenev, "rb" );
+	FILE* h = fopen( Statename, "rb" );
 	if( !h )
-		hiba( "Nem nyilik state file!: ", Statenev );
+		hiba( "Nem nyilik state file!: ", Statename );
 
 	titkosread( palyakidejei, sizeof( palyakidejei ), h );
 	titkosread( jatekosok, sizeof( jatekosok ), h );
@@ -79,13 +79,13 @@ state::state( void ) {
 	titkosread( &tmp, 2, h );
 	soundvolume = tmp*0.001;
 
-	titkosread( &editfilenev, 20, h );
+	titkosread( &editfilename, 20, h );
 
 	// Magic number:
 	long magicnumber = 0;
 	if( fread( &magicnumber, 1, sizeof( long ), h ) !=
 					sizeof( long ) )
-		hiba( "Nem megy beolvasas state file-ba!: ", Statenev );
+		hiba( "Nem megy beolvasas state file-ba!: ", Statename );
 	if( Sarvari ) {
 		if( magicnumber != Magicnumber_state_s )
 			uzenet( "Corrupt STATE.DAT file!" );
@@ -104,9 +104,9 @@ state::~state( void ) {
 
 void state::save( void ) {
 	// Itt hagyni kell fopen-t!!!!!!!!!!!!!!!!!!!!:
-	FILE* h = fopen( Statenev, "wb" );
+	FILE* h = fopen( Statename, "wb" );
 	if( !h )
-		uzenet( "Could not open for write file!: ", Statenev );
+		uzenet( "Could not open for write file!: ", Statename );
 
 	titkoswrite( palyakidejei, sizeof( palyakidejei ), h );
 	titkoswrite( jatekosok, sizeof( jatekosok ), h );
@@ -119,14 +119,14 @@ void state::save( void ) {
 	tmp = 1000*soundvolume;
 	titkoswrite( &tmp, 2, h );
 
-	titkoswrite( &editfilenev, 20, h );
+	titkoswrite( &editfilename, 20, h );
 
 	long magicnumber = Magicnumber_state_r;
 	if( Sarvari )
 		magicnumber = Magicnumber_state_s;
 	if( fwrite( &magicnumber, 1, sizeof( long ), h ) !=
 					sizeof( long ) )
-		hiba( "Nem megy beolvasas state file-ba!: ", Statenev );
+		hiba( "Nem megy beolvasas state file-ba!: ", Statename );
 
 	fclose( h );
 }

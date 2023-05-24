@@ -1,9 +1,9 @@
 
-#define NEVHOSSZ (30)
+#define nameHOSSZ (30)
 
 struct kor {
-	char nev[NEVHOSSZ];
+	char name[nameHOSSZ];
 	double alfa, omega, sugar, m, theta;
-	vekt2 r, v;
+	vector2 r, v;
 	//int    utoljaraleert;
 };

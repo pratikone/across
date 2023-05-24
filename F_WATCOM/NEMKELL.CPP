@@ -1,7 +1,7 @@
 #include    "all.h"
 
-int editor( char* nev, palyaleiro* pleiro ) {
-	nev++;
+int editor( char* name, palyaleiro* pleiro ) {
+	name++;
 	pleiro++;
 	hiba( "Ide nem johet (editor)!" );
 	return  0;

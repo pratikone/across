@@ -2,10 +2,10 @@
 
 static int Egybol = 1;
 
-static char Nagyfilenev[] = "across.res";
+static char Nagyfilename[] = "across.res";
 
 struct fileleiro {
-	char nev[16];
+	char name[16];
 	long kezdet, hossz;
 };
 
@@ -51,9 +51,9 @@ void initqopen( void ) {
 	{ Leirotomb = NEW(fileleiro*) fileleiro[FILESZAM]; }
 	if( !Leirotomb )
 		uzenet( "initqopen-ben memory!" );
-	FILE* h = fopen( Nagyfilenev, "rb" );
+	FILE* h = fopen( Nagyfilename, "rb" );
 	if( !h )
-		uzenet( "Missing file!: ", Nagyfilenev );
+		uzenet( "Missing file!: ", Nagyfilename );
 
 	if( fread( &Fileszam, 1, 4, h ) != 4 )
 		hiba( "initqopen-ben nem sikerult olvasni!" );
@@ -86,7 +86,7 @@ void becsomagol( void ) {
 	if( !Leirotomb )
 		uzenet( "becsomagol-ban memory!" );
 	char tmp[30] = "..\\";
-	strcat( tmp, Nagyfilenev );
+	strcat( tmp, Nagyfilename );
 	FILE* h = fopen( tmp, "wb" );
 	if( !h )
 		hiba( "becsomagol-ban nem sikerult megnyitni!" );
@@ -114,7 +114,7 @@ void becsomagol( void ) {
 			hiba( "becsomagolban tul sok file!" );
 		if( strlen( ffblk.name ) > 12 )
 			hiba( "ffblk.name ) > 12!" );
-		strcpy( Leirotomb[kov].nev, ffblk.name );
+		strcpy( Leirotomb[kov].name, ffblk.name );
 		Leirotomb[kov].kezdet = ftell( h );
 
 		// File bemasolasa:
@@ -159,22 +159,22 @@ static int Indextomb[MAXNYITVA];
 
 static int Nyitva = 0;
 
-FILE* qopen( char* nev, char* paramok ) {
+FILE* qopen( char* name, char* paramok ) {
 	if( !Qopeninited )
 		hiba( "qopen initqopen nelkul!" );
 	if( Nyitva  == MAXNYITVA )
 		hiba( "qopen-ben Nyitva == MAXNYITVA!" );
 	if( strcmp( paramok, "rb" ) != 0 && strcmp( paramok, "rt" ) )
-		hiba( "qopen-ben sem rb, sem rt!: ", nev );
+		hiba( "qopen-ben sem rb, sem rt!: ", name );
 
 	if( Egybol ) {
 		for( int i = 0; i < Fileszam; i++ ) {
-			if( strcmpi( nev, Leirotomb[i].nev ) == 0 ) {
-				Htomb[Nyitva] = fopen( Nagyfilenev, paramok );
+			if( strcmpi( name, Leirotomb[i].name ) == 0 ) {
+				Htomb[Nyitva] = fopen( Nagyfilename, paramok );
 				Indextomb[Nyitva] = i;
 				if( !Htomb[Nyitva] )
 					hiba( "Nem sikerult nagy tombot megnyitni!: ",
-													Nagyfilenev );
+													Nagyfilename );
 				if( fseek( Htomb[Nyitva], Leirotomb[i].kezdet, SEEK_SET ) != 0 )
 					hiba( "Nem mukodik fseek qopen-ben!" );
 
@@ -182,15 +182,15 @@ FILE* qopen( char* nev, char* paramok ) {
 				return Htomb[Nyitva-1];
 			}
 		}
-		hiba( "qopen nem talalta meg nagyfileban file-t!: ", nev );
+		hiba( "qopen nem talalta meg nagyfileban file-t!: ", name );
 		return NULL;
 	}
 	else {
 		Nyitva++;
 		char tmp[30] = "..\\files\\";
-		if( strlen( nev ) > 12 || nev[0] == '.' )
-			hiba( "Hibas nev qopen-ben!: ", nev );
-		strcat( tmp, nev );
+		if( strlen( name ) > 12 || name[0] == '.' )
+			hiba( "Hibas name qopen-ben!: ", name );
+		strcat( tmp, name );
 		return fopen( tmp, paramok );
 	}
 }

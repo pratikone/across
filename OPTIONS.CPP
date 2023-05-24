@@ -413,7 +413,7 @@ void options( void ) {
 
 		// Jatekos valasztas:
 		jatekos* pj = &State->jatekosok[State->jatekos];
-		sprintf( Korny->rubrikak[3], "Player:   %s", pj->nev );
+		sprintf( Korny->rubrikak[3], "Player:   %s", pj->name );
 
 		// Help szoveget is kiiratjuk:
 		strcpy( Korny->rubrikak[4], "Help" );
