@@ -1,6 +1,6 @@
 #include	"all.h"
 
-int Vonalcsakeditbe = 0; // vonalrajzolashoz
+int LINEcsakeditbe = 0; // LINEdrawolashoz
 
 int Savx = 107;
 int Savy = 36;
@@ -13,7 +13,7 @@ static double Maxxmeret = 170.0;
 static double Ratio = double((Fxsize-Savx-1))/(Fysize-Savy-1);
 static double Maxymeret = Maxxmeret/Ratio;
 
-static vector2 Dw1( -10.0, -10.0 ); // Dw1 a savnelkuli kep bal-felso sarka
+static vector2 Dw1( -10.0, -10.0 ); // Dw1 a savnelkuli kep bal-ffirst sarka
 static vector2 Dw2( -10.0+20.0*Ratio, 10.0 );
 
 static double Nagyitas = 1.0; // (Fxsize-Savx-1)/(Dw2.x-Dw1.x), zoom allitja
@@ -49,8 +49,8 @@ int konvy( vector2 v ) {
 	return konvy_d2i( v.y );
 }
 
-static vector2 Vonalkozep;
-static double Vonalsugar = 1.0; // Egy kicsit nagyobb  tenyleges sugarnal
+static vector2 LINEkozep;
+static double LINEsugar = 1.0; // Egy kicsit nagyobb  tenyleges sugarnal
 
 static double Xsizemin = 0.017;
 
@@ -84,10 +84,10 @@ void zoom( vector2 kozep, double xsize ) {
 	Dw1.y += dy;
 	Dw2.x += dx;
 	Dw2.y += dy;
-	// Beallitjuk meg vonalrajzolohoz szukseges paramokat:
-	Vonalkozep = (Dw1+Dw2)*0.5;
+	// Beallitjuk meg LINEdrawolohoz szukseges paramokat:
+	LINEkozep = (Dw1+Dw2)*0.5;
 	// Kicsit nagyobbra vesszuk:
-	Vonalsugar = (Dw2.x-Dw1.x)*sqrt(2.0)/2.0 * 1.01;
+	LINEsugar = (Dw2.x-Dw1.x)*sqrt(2.0)/2.0 * 1.01;
 }
 
 void zoomout( void ) {
@@ -137,38 +137,38 @@ void kitolt( void ) {
 	zoomin_double( x1, y1, x2, y2 );
 }
 
-// VONAL VONAL VONAL VONAL VONAL VONAL VONAL VONAL VONAL VONAL VONAL VONAL
-// VONAL VONAL VONAL VONAL VONAL VONAL VONAL VONAL VONAL VONAL VONAL VONAL
-// VONAL VONAL VONAL VONAL VONAL VONAL VONAL VONAL VONAL VONAL VONAL VONAL
-// VONAL VONAL VONAL VONAL VONAL VONAL VONAL VONAL VONAL VONAL VONAL VONAL
+// LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE
+// LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE
+// LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE
+// LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE LINE
 
 
-void vonalrajz( vector2 p1, vector2 p2, int szaggatott ) {
+void LINEdraw( vector2 p1, vector2 p2, int szaggatott ) {
 	if( abs( p2-p1 ) < 0.00000001 )
 		return;
-	// Eloszor is levagjuk p1-p2 szakaszt, ha kilog Vonalkozep es Vonalsugar
+	// Eloszor is levagjuk p1-p2 szakaszt, ha kilog LINEkozep es LINEsugar
 	// altal meghatarozott korbol:
 	int p1kilog = 0;
-	if( abs( p1-Vonalkozep ) > Vonalsugar * 0.999 )
+	if( abs( p1-LINEkozep ) > LINEsugar * 0.999 )
 		p1kilog = 1;
 	int p2kilog = 0;
-	if( abs( p2-Vonalkozep ) > Vonalsugar * 0.999 )
+	if( abs( p2-LINEkozep ) > LINEsugar * 0.999 )
 		p2kilog = 1;
 	if( p1kilog && p2kilog ) {
-		if( pontszakasztav( Vonalkozep, p1, p2-p1 ) / Vonalsugar > 0.998 )
+		if( dot( LINEkozep, p1, p2-p1 ) / LINEsugar > 0.998 )
 			return;
 	}
 	// Most mar biztos hogy legalabb belelog korbe szakasz
 	if( p1kilog ) {
 		vector2 ujp1;
-		if( !intersection( p1, p2-p1, Vonalkozep, Vonalsugar, &ujp1 ) )
-			hiba( "vonal-ban !intersection!" );
+		if( !intersection( p1, p2-p1, LINEkozep, LINEsugar, &ujp1 ) )
+			error( "LINE-ban !intersection!" );
 		p1 = ujp1;
 	}
 	if( p2kilog ) {
 		vector2 ujp2;
-		if( !intersection( p2, p1-p2, Vonalkozep, Vonalsugar, &ujp2 ) )
-			hiba( "vonal-ban !intersection!" );
+		if( !intersection( p2, p1-p2, LINEkozep, LINEsugar, &ujp2 ) )
+			error( "LINE-ban !intersection!" );
 		p2 = ujp2;
 	}
 	// Most mar minden pont jo kozel van
@@ -191,9 +191,9 @@ void vonalrajz( vector2 p1, vector2 p2, int szaggatott ) {
 		y2 = tmp;
 	} */
 	if( fabs( x2-x1 ) > fabs( y2-y1 ) ) {
-		// Vonal inkabb vizszintes:
+		// LINE inkabb vizszintes:
 		if( x2 == x1 )
-			hiba( "vonal-ban x2 == x1!" );
+			error( "LINE-ban x2 == x1!" );
 
 		int forditott = 0;
 		if( x2 < x1 ) {
@@ -225,15 +225,15 @@ void vonalrajz( vector2 p1, vector2 p2, int szaggatott ) {
 				unsigned char szin = Editbuffer->gpixel( x, y );
 				szin += 128;
 				Editbuffer->ppixel( x, y, szin );
-				if( !Vonalcsakeditbe )
+				if( !LINEcsakeditbe )
 					Pscr8->ppixel( x, y, szin );
 			}
 		}
 	}
 	else {
-		// Vonal inkabb fuggoleges:
+		// LINE inkabb fuggoleges:
 		if( y2 == y1 )
-			hiba( "vonal-ban y2 == y1!" );
+			error( "LINE-ban y2 == y1!" );
 
 		int forditott = 0;
 		if( y2 < y1 ) {
@@ -265,7 +265,7 @@ void vonalrajz( vector2 p1, vector2 p2, int szaggatott ) {
 				unsigned char szin = Editbuffer->gpixel( x, y );
 				szin += 128;
 				Editbuffer->ppixel( x, y, szin );
-				if( !Vonalcsakeditbe )
+				if( !LINEcsakeditbe )
 					Pscr8->ppixel( x, y, szin );
 			}
 		}
@@ -274,7 +274,7 @@ void vonalrajz( vector2 p1, vector2 p2, int szaggatott ) {
 
 double getzoomvalue( void ) {
 	if( fabs(Dw2.x-Dw1.x) == 0.0 )
-		hiba( "getzoomvalue-ban 0-val osztas!" );
+		error( "getzoomvalue-ban 0-val osztas!" );
 	return Maxxmeret/fabs(Dw2.x-Dw1.x);
 }
 
@@ -287,7 +287,7 @@ double display_double_kozeltav( void ) {
 /*void saveallapot( void ) {
 	FILE* h = fopen( "display.sta", "wb" );
 	if( !h )
-		hiba( "Nem nyilik display.sta!" );
+		error( "No nyilik display.sta!" );
 
 	fwrite( &Dw1.x, 1, sizeof( Dw1.x ), h );
 	fwrite( &Dw2.x, 1, sizeof( Dw2.x ), h );
@@ -296,15 +296,15 @@ double display_double_kozeltav( void ) {
 
 	fwrite( &Nagyitas, 1, sizeof( Nagyitas ), h );
 	fwrite( &Nagyitas_rec, 1, sizeof( Nagyitas_rec ), h );
-	fwrite( &Vonalkozep, 1, sizeof( Vonalkozep ), h );
-	fwrite( &Vonalsugar, 1, sizeof( Vonalsugar ), h );
+	fwrite( &LINEkozep, 1, sizeof( LINEkozep ), h );
+	fwrite( &LINEsugar, 1, sizeof( LINEsugar ), h );
 
 	fclose( h );
 }
 void loadallapot( void ) {
 	FILE* h = fopen( "display.sta", "rb" );
 	if( !h )
-		hiba( "Nem nyilik display.sta!" );
+		error( "No nyilik display.sta!" );
 
 	fread( &Dw1.x, 1, sizeof( Dw1.x ), h );
 	fread( &Dw2.x, 1, sizeof( Dw2.x ), h );
@@ -313,8 +313,8 @@ void loadallapot( void ) {
 
 	fread( &Nagyitas, 1, sizeof( Nagyitas ), h );
 	fread( &Nagyitas_rec, 1, sizeof( Nagyitas_rec ), h );
-	fread( &Vonalkozep, 1, sizeof( Vonalkozep ), h );
-	fread( &Vonalsugar, 1, sizeof( Vonalsugar ), h );
+	fread( &LINEkozep, 1, sizeof( LINEkozep ), h );
+	fread( &LINEsugar, 1, sizeof( LINEsugar ), h );
 
 	fclose( h );
 }*/

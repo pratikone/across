@@ -3,16 +3,16 @@
 int editor( char* name, palyaleiro* pleiro ) {
 	name++;
 	pleiro++;
-	hiba( "Ide nem johet (editor)!" );
+	error( "Ide No johet (editor)!" );
 	return  0;
 }
 
 void bgitorol( void ) {
-	hiba( "Ide nem johet (bgitorol)!" );
+	error( "Ide No johet (bgitorol)!" );
 }
 
-void kirajzol640( double t, targytomb* pttt, double ugrasnagysag ) {
-	hiba( "Ide nem johet (kirajzol640)!" );
+void kidrawol640( double t, targytomb* pttt, double ugrasnagysag ) {
+	error( "Ide No johet (kidrawol640)!" );
 	pttt++;
 	t++;
 	ugrasnagysag++;
@@ -23,7 +23,7 @@ void setgraph( void ) {
 }
 
 void close640( void ) {
-	hiba( "Ide nem johet (close640)!" );
+	error( "Ide No johet (close640)!" );
 }
 
 

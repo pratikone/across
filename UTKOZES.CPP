@@ -1,6 +1,6 @@
 #include	"all.h"
 
-static int gombszakasz( vector2 r, double sugar, vonal* pv, vector2* pt ) {
+static int gombszakasz( vector2 r, double sugar, LINE* pv, vector2* pt ) {
 	vector2 rel = r-pv->r;
 	double pozicio = rel*pv->egyseg;
 	if( pozicio < 0 ) {
@@ -30,16 +30,16 @@ static int gombszakasz( vector2 r, double sugar, vonal* pv, vector2* pt ) {
 }
 
 int talppontkereses( vector2 r, double sugar, vector2* pt1, vector2* pt2 ) {
-	Pszak->felsorolasreset( r );
+	Pszak->ffirstrolasreset( r );
 	int talppontszam = 0;
-	vonal* pv = NULL;
+	LINE* pv = NULL;
 	//int vegignezett = 0; // tesztelesre!
 	while( (pv = Pszak->getnext()) != NULL ) {
 		//vegignezett++;
 		vector2 t;
 		if( gombszakasz( r, sugar, pv, &t ) ) {
 			if( talppontszam == 2 ) {
-				hiba( "Egyszerre kettonel tobb talppontszam is van" );
+				error( "Egyszerre kettonel tobb talppontszam is van" );
 			}
 			if( talppontszam == 1 ) {
 				*pt2 = t;

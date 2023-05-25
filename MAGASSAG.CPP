@@ -6,16 +6,16 @@ double Magmaxelemszam = 16200;
 magassag::magassag( int xsizepar ) {
 	oszlopok = NULL;
 	pcur = NULL;
-	pelso = NULL;
+	pfirst = NULL;
 	kovelem = 0;
 	pcurhat = NULL;
 	xsize = xsizepar;
 
 	int ttmmpp = sizeof( ptrhat );
 	if( ttmmpp > 4 )
-		hiba( "magassag::magassag-ban ptrhat ) > 4!" );
+		error( "magassag::magassag-ban ptrhat ) > 4!" );
 	if( xsize > Magmaxelemszam )
-		hiba( "ertekkeszlet tul nagy magassag::magassagban!" );
+		error( "ertekkeszlet tul nagy magassag::magassagban!" );
 
 	// oszlopszamu mutato lefoglalasa:
 	{ oszlopok = NEW(ptrhat*) ptrhat[xsize]; }
@@ -24,12 +24,12 @@ magassag::magassag( int xsizepar ) {
 	for( int i = 0; i < xsize; i++ )
 		oszlopok[i] = NULL;
 
-	// Elso hat tomb lefoglalasa:
-	{ pelso = NEW(hattomb*) hattomb; }
-	pcur = pelso;
-	if( !pelso )
-		uzenet( "memory (pelso) magassag::magassagban!" );
-	pelso->pkov = NULL;
+	// first hat tomb lefoglalasa:
+	{ pfirst = NEW(hattomb*) hattomb; }
+	pcur = pfirst;
+	if( !pfirst )
+		uzenet( "memory (pfirst) magassag::magassagban!" );
+	pfirst->pkov = NULL;
 }
 
 magassag::~magassag( void ) {
@@ -57,7 +57,7 @@ hat* magassag::gethat( void ) {
 }
 
 void magassag::torolhatok( void ) {
-	pcur = pelso;
+	pcur = pfirst;
 	while( pcur ) {
 		hattomb* pkov = pcur->pkov;
 		DELETE pcur; }
@@ -65,7 +65,7 @@ void magassag::torolhatok( void ) {
 	}
 }
 
-void magassag::addszakasz( szakasz* psz, int felso ) {
+void magassag::addszakasz( szakasz* psz, int ffirst ) {
 	// Itt adunk be neki egy uj szakaszt:
 	// Balrol jobbra mutasson:
 	vector2 v = psz->vv.v;
@@ -74,19 +74,19 @@ void magassag::addszakasz( szakasz* psz, int felso ) {
 		r = r+v;
 		v = vector2null-v;
 	}
-	// Nem fuggoleges-e?:
+	// No fuggoleges-e?:
 	if( v.x < 0.01 )
 		return;
 	int x1 = r.x+1;
 	int x2 = r.x+v.x;
 	double kozelseg = 0.000001;
 	if( fabs( double( x1 )-(r.x+1) ) < kozelseg )
-			hiba( "Nagyon kozeli pont!" );
+			error( "Nagyon kozeli pont!" );
 	if( fabs( double( x2 )-(r.x+v.x) ) < kozelseg )
-			hiba( "Nagyon kozeli pont!" );
-	// Nem log-e ki:
+			error( "Nagyon kozeli pont!" );
+	// No log-e ki:
 	if( x1 < 0 || x2 >= xsize )
-		hiba( "Szakasz kilog ertekkeszletbol magassag::addszakasz-ban!" );
+		error( "Szakasz kilog ertekkeszletbol magassag::addszakasz-ban!" );
 	// Egyenes egyenletenek parameterei:
 	double m = v.y/v.x;
 	double dx1 = r.x;
@@ -97,11 +97,11 @@ void magassag::addszakasz( szakasz* psz, int felso ) {
 	for( int x = x1; x <= x2; x++ ) {
 		int y = m*x+a+1.0;
 		if( fabs( double(y)-m*x+a+1.0 ) < kozelseg )
-			hiba( "Nagyon kozeli pont!" );
+			error( "Nagyon kozeli pont!" );
 		// Hozzacsapjuk hatart oszlophoz:
 		hat* phat = gethat();
 		phat->y = y;
-		phat->felso = felso;
+		phat->ffirst = ffirst;
 		// Becsatoljuk sor vegere:
 		if( !oszlopok[x] ) {
 			oszlopok[x] = phat;
@@ -137,9 +137,9 @@ void magassag::rendezget( void ) {
 					int tmp = pfuto->y;
 					pfuto->y = pfuto->pkov->y;
 					pfuto->pkov->y = tmp;
-					tmp = pfuto->felso;
-					pfuto->felso = pfuto->pkov->felso;
-					pfuto->pkov->felso = tmp;
+					tmp = pfuto->ffirst;
+					pfuto->ffirst = pfuto->pkov->ffirst;
+					pfuto->pkov->ffirst = tmp;
 				}
 				pfuto = pfuto->pkov;
 			}
@@ -156,7 +156,7 @@ void magassag::rendezget( void ) {
 				if( pfuto->y == pfuto->pkov->y ) {
 					// Egy y-on fekszenek:
 					csinalt = 1;
-					if( pfuto->felso == pfuto->pkov->felso ) {
+					if( pfuto->ffirst == pfuto->pkov->ffirst ) {
 						// Kihagyjuk az egyiket:
 						pfuto->pkov = pfuto->pkov->pkov;
 					}
@@ -168,7 +168,7 @@ void magassag::rendezget( void ) {
 							pfuto = pfuto->pkov->pkov;
 						}
 						else {
-							// Lanc legelso ket elemet kell kihagyni:
+							// Lanc legfirst ket elemet kell kihagyni:
 							oszlopok[x] = pfuto->pkov->pkov;
 							pfuto = pfuto->pkov->pkov;
 						}
@@ -187,7 +187,7 @@ void magassag::rendezget( void ) {
 hat* magassag::getoszlopfirsthat( int x ) {
 	#ifdef TEST
 		if( x < 0 || x >= xsize )
-			hiba( "magassag::initoszlop-ban x < 0 || x >= xsize!" );
+			error( "magassag::initoszlop-ban x < 0 || x >= xsize!" );
 	#endif
 	return oszlopok[x];
 }
@@ -195,15 +195,15 @@ hat* magassag::getoszlopfirsthat( int x ) {
 void magassag::initoszlop( int x ) {
 	#ifdef TEST
 		if( x < 0 || x >= xsize )
-			hiba( "magassag::initoszlop-ban x < 0 || x >= xsize!" );
+			error( "magassag::initoszlop-ban x < 0 || x >= xsize!" );
 	#endif
 	pcurhat = oszlopok[x];
 }
 
-int magassag::gethat( int* pfelso, int* py ) {
+int magassag::gethat( int* pffirst, int* py ) {
 	if( !pcurhat )
 		return 0;
-	*pfelso = pcurhat->felso;
+	*pffirst = pcurhat->ffirst;
 	*py = pcurhat->y;
 	pcurhat = pcurhat->pkov;
 	return 1;
@@ -213,10 +213,10 @@ vector2 magassagokeloallitasa( szakaszok* pszakok,
 							magassag** ppmviz,
 							magassag** ppmfugg ) {
 	// Megkeresi burkolokat:
-	pszakok->felsorolasresetszak();
+	pszakok->ffirstrolasresetszak();
 	szakasz* psz = pszakok->getnextszak();
 	if( !psz )
-		hiba( "Nincs egyetlen szakasz sem definialva!" );
+		error( "Nincs egyetlen szakasz sem definialva!" );
 	double minx = psz->vv.r.x;
 	double maxx = psz->vv.r.x;
 	double miny = psz->vv.r.y;
@@ -258,10 +258,10 @@ vector2 magassagokeloallitasa( szakaszok* pszakok,
 		uzenet( "memory magassag!" );
 
 	// Magassagokba beeteti szakaszokat:
-	pszakok->felsorolasresetszak();
+	pszakok->ffirstrolasresetszak();
 	psz = pszakok->getnextszak();
 	if( !psz )
-		hiba( "Nincs egyetlen szakasz sem definialva!" );
+		error( "Nincs egyetlen szakasz sem definialva!" );
 	while( psz ) {
 		vector2 fold = rotateby90degrees( psz->vv.v );
 		// Vizszintes iranyu elintezes:
@@ -271,9 +271,9 @@ vector2 magassagokeloallitasa( szakaszok* pszakok,
 		sz.vv.r.y *= Aranyy;
 		sz.vv.v.x = psz->vv.v.x*Aranyx;
 		sz.vv.v.y = psz->vv.v.y*Aranyy;
-		int felso = fold.y < 0;
+		int ffirst = fold.y < 0;
 
-		(*ppmviz)->addszakasz( &sz, felso );
+		(*ppmviz)->addszakasz( &sz, ffirst );
 
 		// Fuggoleges iranyu elintezes:
 		// Felcsereli x es y tengelyt:
@@ -284,9 +284,9 @@ vector2 magassagokeloallitasa( szakaszok* pszakok,
 		sz.vv.v.x = sz.vv.v.y;
 		sz.vv.v.y = tmp;
 
-		felso = fold.x < 0;
+		ffirst = fold.x < 0;
 
-		(*ppmfugg)->addszakasz( &sz, felso );
+		(*ppmfugg)->addszakasz( &sz, ffirst );
 
 		psz = pszakok->getnextszak();
 	}
@@ -305,7 +305,7 @@ void kitoltcsikot( magassag* pm, int x, int ystart, int ysize,
 	int elozolevego = 0;
 	int y = 0;
 	pm->initoszlop( x );
-	// Addig megy, amig y el nem eri savot:
+	// Addig megy, amig y el No eri savot:
 	while( y <= ystart ) {
 		elozolevego = levego;
 		if( !pm->gethat( &levego, &y ) ) {
@@ -321,7 +321,7 @@ void kitoltcsikot( magassag* pm, int x, int ystart, int ysize,
 			char tmp[80];
 			sprintf( tmp, "kitoltcsikot-ban size < 1! y: %d, yucso: %d",
 						y, yucso );
-			hiba( tmp );
+			error( tmp );
 		}
 		#endif
 		if( elozolevego )
@@ -369,7 +369,7 @@ void kitoltcsikot( magassag* pm, int x, int ystart, int ysize,
 	int elozolevego = 0;
 	int y = 0;
 	pm->initoszlop( x );
-	// Addig megy, amig y el nem eri savot:
+	// Addig megy, amig y el No eri savot:
 	while( y <= ystart ) {
 		elozolevego = levego;
 		if( !pm->gethat( &levego, &y ) ) {
@@ -387,7 +387,7 @@ void kitoltcsikot( magassag* pm, int x, int ystart, int ysize,
 			/*char tmp[80];
 			sprintf( tmp, "kitoltcsikot(view)-ban size < 1! y: %d, yucso: %d",
 						y, yucso );
-			hiba( tmp ); */
+			error( tmp ); */
 		}
 		#endif
 		if( elozolevego )
@@ -410,7 +410,7 @@ void kitoltcsikot( magassag* pm, int x, int ystart, int ysize,
 		zoomset( tomb, yucso+1-ystart, viewelo, size, zoom );
 }
 
-/*static void kirajzkocka( int x, int y, int fold1, int fold2 ) {
+/*static void kidrawkocka( int x, int y, int fold1, int fold2 ) {
 	setcolor( ColorFG );
 	int s = 15;
 	int ox = 100+s*x;
@@ -431,7 +431,7 @@ void kitoltcsikot( magassag* pm, int x, int ystart, int ysize,
 	}
 }
 
-void kirajzszakasz( vector2 r, vector2 v ) {
+void kidrawszakasz( vector2 r, vector2 v ) {
 	setcolor( ColorFG );
 	double s = 15;
 	r.x = 100+s/2+s*r.x + 0.5;
@@ -480,7 +480,7 @@ void kirajzszakasz( vector2 r, vector2 v ) {
 			semmi();
 		kitoltcsikot( pmviz, dx+x, dy, 25, tomb );
 		for( int y = 0; y < 25; y++ ) {
-			kirajzkocka( x, y, tomb[y], 0 );
+			kidrawkocka( x, y, tomb[y], 0 );
 		}
 	}
 
@@ -492,19 +492,19 @@ void kirajzszakasz( vector2 r, vector2 v ) {
 			tomb[i] = 2;
 		kitoltcsikot( pmfugg, dy+y, dx, 25, tomb );
 		for( int x = 0; x < 25; x++ ) {
-			kirajzkocka( x, y, 0, tomb[x] );
+			kidrawkocka( x, y, 0, tomb[x] );
 		}
 	}
 
-	// Kirajzolja szakaszokat:
+	// Kidrawolja szakaszokat:
 
-	pszakok->felsorolasreset( -10000000.0, 10000000.0 );
+	pszakok->ffirstrolasreset( -10000000.0, 10000000.0 );
 	szakasz* psz = pszakok->getnext();
 	if( !psz )
-		hiba( "Nincs egyetlen szakasz sem definialva!" );
+		error( "Nincs egyetlen szakasz sem definialva!" );
 	while( psz ) {
 		vector2 r = psz->r-origo-vector2( dx, dy );
-		kirajzszakasz( r, psz->v );
+		kidrawszakasz( r, psz->v );
 
 		psz = pszakok->getnext();
 	}

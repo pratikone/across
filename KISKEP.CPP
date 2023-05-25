@@ -10,7 +10,7 @@ kiskep::kiskep( char* pic8name ) {
 	xsize = ppic->getxsize();
 	ysize = ppic->getysize();
 	if( xsize > 255 || ysize > 255 )
-		hiba( "kiskepben size > 255!" );
+		error( "kiskepben size > 255!" );
 	hossz = ysize*256l;
 	{ tomb = NEW(unsigned char*) unsigned char[unsigned(hossz)]; }
 	if( !tomb )

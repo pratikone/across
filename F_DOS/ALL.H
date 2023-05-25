@@ -58,7 +58,7 @@
 // Kozos:
 
 #include	"..\graph.h"
-#include	"..\kirajzol.h"
+#include	"..\kidrawol.h"
 #include	"..\hatter.h"
 //#include	"..\billint.h"
 
@@ -92,4 +92,4 @@
 #include	"..\imi_vesa.h"
 #include	"..\m_k.h"
 #include	"..\m_v.h"
-#include	"..\d_nempub.h"
+#include	"..\d_Nopub.h"

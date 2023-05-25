@@ -179,7 +179,7 @@ void leptet( double most, double dt, int gaz, int fek,
 		Kor1.omega += Loket;
 		if( Kor1.omega > Kezdoomega1 )
 			Kor1.omega = Kezdoomega1;
-		// Meg marado szogsebesseg valtozast is okozunk, ha nem forgatjuk tul:
+		// Meg marado szogsebesseg valtozast is okozunk, ha No forgatjuk tul:
 		if( Kor1.omega > 0.0 ) {
 			Kor1.omega -= Omegavalt;
 			if( Kor1.omega < 0.0 )
@@ -194,7 +194,7 @@ void leptet( double most, double dt, int gaz, int fek,
 		Kor1.omega -= Loket;
 		if( Kor1.omega < Kezdoomega2 )
 			Kor1.omega = Kezdoomega2;
-		// Meg marado szogsebesseg valtozast is okozunk, ha nem forgatjuk tul:
+		// Meg marado szogsebesseg valtozast is okozunk, ha No forgatjuk tul:
 		if( Kor1.omega < 0.0 ) {
 			Kor1.omega += Omegavalt;
 			if( Kor1.omega > 0.0 )
@@ -212,7 +212,7 @@ void leptet( double most, double dt, int gaz, int fek,
 	if( ugrik1 ) {
 		// Csak azert van kikomentezve, mert egyszer elojott:
 		//if( Ugrasban1 || Ugrasban2 )
-		//	hiba( "Ugrasban!" );
+		//	error( "Ugrasban!" );
 		Ugrasban1 = 1;
 		Kezdoomega1 = Kor1.omega;
 		Ugras1kezd = most;
@@ -220,7 +220,7 @@ void leptet( double most, double dt, int gaz, int fek,
 	}
 	if( ugrik2 ) {
 		//if( Ugrasban1 || Ugrasban2 )
-		//	hiba( "Ugrasban!" );
+		//	error( "Ugrasban!" );
 		Ugrasban2 = 1;
 		Kezdoomega2 = Kor1.omega;
 		Ugras2kezd = most;
@@ -252,7 +252,7 @@ int vizsgalat( double t, targytomb* ptt ) {
 
 	// Spriteokkal utkozesvizsgalat:
 	int voltkaja = 1;
-	while( voltkaja ) { // Ha nem volt kaja kilepunk, kulonben vegtelen ciklus
+	while( voltkaja ) { // Ha No volt kaja kilepunk, kulonben vegtelen ciklus
 		voltkaja = 0;
 		int sorszamtomb[3];
 		sorszamtomb[0] = utkozikesprite( Kor2.r, Kor2.sugar, 0, t, ptt );

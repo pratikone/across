@@ -9,7 +9,7 @@
 
 static void titkosread( void* mut, int hossz, FILE* h ) {
 	if( fread( mut, 1, hossz, h ) != hossz )
-		hiba( "Nem ment olvasas state file-bol!" );
+		error( "No ment olvasas state file-bol!" );
 	unsigned char* pc = (unsigned char*)mut;
 	short a = 23, b = 9782, c = 3391;
 
@@ -32,7 +32,7 @@ static void titkoswrite( void* mut, int hossz, FILE* h ) {
 		a = 31*b+c;
 	}
 	if( fwrite( mut, 1, hossz, h ) != hossz )
-		hiba( "Nem ment iras state file-ba!" );
+		error( "No ment iras state file-ba!" );
 	a = 23; b = 9782; c = 3391;
 
 	for( i = 0; i < hossz; i++ ) {
@@ -63,7 +63,7 @@ state::state( void ) {
 	//#endif
 	FILE* h = fopen( Statename, "rb" );
 	if( !h )
-		hiba( "Nem nyilik state file!: ", Statename );
+		error( "No nyilik state file!: ", Statename );
 
 	titkosread( palyakidejei, sizeof( palyakidejei ), h );
 	titkosread( jatekosok, sizeof( jatekosok ), h );
@@ -85,7 +85,7 @@ state::state( void ) {
 	long magicnumber = 0;
 	if( fread( &magicnumber, 1, sizeof( long ), h ) !=
 					sizeof( long ) )
-		hiba( "Nem megy beolvasas state file-ba!: ", Statename );
+		error( "No megy beolvasas state file-ba!: ", Statename );
 	if( Sarvari ) {
 		if( magicnumber != Magicnumber_state_s )
 			uzenet( "Corrupt STATE.DAT file!" );
@@ -126,7 +126,7 @@ void state::save( void ) {
 		magicnumber = Magicnumber_state_s;
 	if( fwrite( &magicnumber, 1, sizeof( long ), h ) !=
 					sizeof( long ) )
-		hiba( "Nem megy beolvasas state file-ba!: ", Statename );
+		error( "No megy beolvasas state file-ba!: ", Statename );
 
 	fclose( h );
 }

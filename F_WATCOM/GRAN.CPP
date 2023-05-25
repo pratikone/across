@@ -30,7 +30,7 @@ void main( void ) {
 	if( r.w.ax == 0x004F )
 		printf( "Mukodik!\n" );
 	else
-		printf( "Nem mukodik!\n" );
+		printf( "No mukodik!\n" );
 }
 
 

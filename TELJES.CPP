@@ -6,7 +6,7 @@ kornyezet* Korny = NULL;
 void cheatplayer( void ) {
 	// Egyetlen jatekosnak sem szabad lennie:
 	if( State->jatekosokszama != 0 )
-		hiba( "cheatplayer-ben mar van valaki bejegyezve!" );
+		error( "cheatplayer-ben mar van valaki bejegyezve!" );
 
 	State->jatekosokszama = 1;
 
@@ -22,7 +22,7 @@ void cheatplayer( void ) {
 	for( int i = 0; i < hanypalya; i++ ) {
 		palyaidejei* pidok = &State->palyakidejei[i];
 		if( pidok->idokszama != 0 )
-			hiba( "cheatplayer-ben bug!" );
+			error( "cheatplayer-ben bug!" );
 		pidok->idokszama = 1;
 		pidok->idok[0] = 180000l;
 	}
@@ -47,11 +47,11 @@ void teljes( void ) {
 		newjatekos();
 	else
 		jatekosvalasztas();
-	hiba( "Ide nem kellett volna jonnie!" );
+	error( "Ide No kellett volna jonnie!" );
 }
 
 void kilep( void ) {
-	hiba( "Kiir szoveg!" );
+	error( "Kiir text!" );
 }
 
 

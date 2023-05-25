@@ -61,7 +61,7 @@
 // Kozos:
 
 #include	"..\graph.h"
-#include	"..\kirajzol.h"
+#include	"..\kidrawol.h"
 //#include	"..\hatter.h"
 
 
@@ -118,7 +118,7 @@
 
 
 
-#include	"..\d_nempub.h"
+#include	"..\d_Nopub.h"
 
 
 

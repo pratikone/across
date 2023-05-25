@@ -5,5 +5,5 @@ int Vid640 = 0;
 
 char Semmi[] = "AAAAAAAAAAAAAAAAAAAA";
 
-char Semmmmi[] = "E p i c masodik es utani";
+char Semmmmi[] = "E p i c second es utani";
 

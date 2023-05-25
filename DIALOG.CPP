@@ -4,7 +4,7 @@ unsigned char Dialogszin = 215;
 unsigned char Dialogszelszin = 0;
 unsigned char Buttonszin = 217;
 
-void kirajzbox( pic8* ppic, int x1, int y1, int x2, int y2,
+void kidrawbox( pic8* ppic, int x1, int y1, int x2, int y2,
 			unsigned char felulet, unsigned char szele ) {
 	ppic->fillbox( x1, y1, x2, y2, felulet );
 	ppic->line( x1, y1, x2, y1, szele );
@@ -13,9 +13,9 @@ void kirajzbox( pic8* ppic, int x1, int y1, int x2, int y2,
 	ppic->line( x2, y1, x2, y2, szele );
 }
 
-void kirajzbox( pic8* ppic, box boxa, unsigned char felulet,
+void kidrawbox( pic8* ppic, box boxa, unsigned char felulet,
 									  unsigned char szele ) {
-	kirajzbox( ppic, boxa.x1, boxa.y1, boxa.x2, boxa.y2, felulet, szele );
+	kidrawbox( ppic, boxa.x1, boxa.y1, boxa.x2, boxa.y2, felulet, szele );
 }
 
 int boxban( int x, int y, box boxa ) {
@@ -53,7 +53,7 @@ int dialog( char* text1, char* text2, char* text3,
 		if( strcmp( texttomb[i], "GOMBOK" ) == 0 ) {
 			gombszam = textszam-i-1;
 			if( gombszam <= 0 )
-				hiba( "dialog-ban gombszam <= 0!" );
+				error( "dialog-ban gombszam <= 0!" );
 			textszam = i;
 			for( int j = 0; j < gombszam; j++ )
 				gombtomb[j] = texttomb[textszam+j+1];
@@ -73,7 +73,7 @@ int dialog( char* text1, char* text2, char* text3,
 
 
 	if( textszam < 1 )
-		hiba( "iuofrf" );
+		error( "iuofrf" );
 
 	// Beallitottuk tomboket!!!
 
@@ -92,11 +92,11 @@ int dialog( char* text1, char* text2, char* text3,
 	int y1 = 240-ysize/2;
 	int x2 = 320+xsize/2;
 	int y2 = 240+ysize/2;
-	kirajzbox( Editbuffer, x1, y1, x2, y2, Dialogszin, Dialogszelszin );
+	kidrawbox( Editbuffer, x1, y1, x2, y2, Dialogszin, Dialogszelszin );
 	for( i = 0; i < textszam; i++ )
 		Pabc2->writekozep( Editbuffer, 320, y1+22+i*dy, texttomb[i] );
 
-	// Kirajzoljuk gombokat is:
+	// Kidrawoljuk gombokat is:
 	int gx1tomb[15], gx2tomb[15], gy1 = y2-30, gy2 = y2-10;
 	int gdx = 80;
 	if( gombszam == 1 ) {
@@ -112,12 +112,12 @@ int dialog( char* text1, char* text2, char* text3,
 		gx1tomb[2] = 320+gdx;
 	}
 	if( gombszam > 3 )
-		hiba( "uofiufriufr" );
+		error( "uofiufriufr" );
 	for( i = 0; i < gombszam; i++ ) {
 		int xs = Pabc2->len( gombtomb[i] ) + 10;
 		gx2tomb[i] = gx1tomb[i] + xs/2;
 		gx1tomb[i] = gx1tomb[i] - xs/2;
-		kirajzbox( Editbuffer, gx1tomb[i], gy1, gx2tomb[i], gy2, Buttonszin, Dialogszelszin );
+		kidrawbox( Editbuffer, gx1tomb[i], gy1, gx2tomb[i], gy2, Buttonszin, Dialogszelszin );
 		Pabc2->writekozep( Editbuffer, (gx2tomb[i]+gx1tomb[i])/2, gy1+14, gombtomb[i] );
 	}
 

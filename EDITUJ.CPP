@@ -48,7 +48,7 @@ static void elintezegymousepixelt( int x , int y ) {
 	Pscr8->ppixel( x, y, szin );
 }
 
-static void egeretrajzolja( void ) {
+static void egeretdrawolja( void ) {
 	int sugar = 4;
 	for( int i = -sugar; i <= sugar; i++ ) {
 		if( Kozelvan ) {
@@ -67,19 +67,19 @@ static void egeretrajzolja( void ) {
 // Egeret leveszi kepernyorol:
 void push( void ) {
 	if( !Egerkint )
-		hiba( "push-ban !Egerkint!" );
+		error( "push-ban !Egerkint!" );
 	Egerkint = 0;
 
-	egeretrajzolja();
+	egeretdrawolja();
 }
 
 // Egeret felteszi kepernyore:
 void pop( void ) {
 	if( Egerkint )
-		hiba( "pop-ban Egerkint!" );
+		error( "pop-ban Egerkint!" );
 	Egerkint = 1;
 
-	egeretrajzolja();
+	egeretdrawolja();
 }
 
 // TOOLHELP TOOLHELP TOOLHELP TOOLHELP TOOLHELP TOOLHELP
@@ -87,24 +87,24 @@ void pop( void ) {
 // TOOLHELP TOOLHELP TOOLHELP TOOLHELP TOOLHELP TOOLHELP
 // TOOLHELP TOOLHELP TOOLHELP TOOLHELP TOOLHELP TOOLHELP
 
-static char Toolhelpszoveg[110] = "";
+static char Toolhelptext[110] = "";
 
 void toolhelp( char* text ) {
 	if( text ) {
 		if( strlen( text ) > 100 )
-			hiba( "toolhelp-ben strlen( text ) > 100!", text );
-		strcpy( Toolhelpszoveg, text );
+			error( "toolhelp-ben strlen( text ) > 100!", text );
+		strcpy( Toolhelptext, text );
 	}
 	int x1 = 1, y1 = 18, x2 = 638, y2 = Savy-2;
 	Editbuffer->fillbox( x1, y1, x2, y2, Hatterindex );
-	Pabc1->write( Editbuffer, 10, y1+12, Toolhelpszoveg );
+	Pabc1->write( Editbuffer, 10, y1+12, Toolhelptext );
 	blt8( Pscr8, Editbuffer, x1, y1, x1, y1, x2, y2 );
 }
 
-// KIRAJZOLASOK KIRAJZOLASOK KIRAJZOLASOK KIRAJZOLASOK KIRAJZOLASOK
-// KIRAJZOLASOK KIRAJZOLASOK KIRAJZOLASOK KIRAJZOLASOK KIRAJZOLASOK
-// KIRAJZOLASOK KIRAJZOLASOK KIRAJZOLASOK KIRAJZOLASOK KIRAJZOLASOK
-// KIRAJZOLASOK KIRAJZOLASOK KIRAJZOLASOK KIRAJZOLASOK KIRAJZOLASOK
+// KIdrawOLASOK KIdrawOLASOK KIdrawOLASOK KIdrawOLASOK KIdrawOLASOK
+// KIdrawOLASOK KIdrawOLASOK KIdrawOLASOK KIdrawOLASOK KIdrawOLASOK
+// KIdrawOLASOK KIdrawOLASOK KIdrawOLASOK KIdrawOLASOK KIdrawOLASOK
+// KIdrawOLASOK KIdrawOLASOK KIdrawOLASOK KIdrawOLASOK KIdrawOLASOK
 
 static int Kellredraw = 0;
 void invalidate( void ) {
@@ -116,10 +116,10 @@ void invalidateegesz( void ) {
 	Kellredrawegesz = 1;
 }
 
-static int Elsotool = 13, Toolszam = 8;
-static int Menuszam = Elsotool+Toolszam, Menudy = 20;
+static int firsttool = 13, Toolszam = 8;
+static int Menuszam = firsttool+Toolszam, Menudy = 20;
 
-static char Menuszovegek[21][15] = { // Masodik egy string hossza
+static char Menutextek[21][15] = { // second egy string hossza
 	"Exit",
 	"New",
 	"Open",
@@ -151,27 +151,27 @@ static void editbe_balmenu( void ) {
 	Editbuffer->line( 0, 479, 639, 479, Menulineszin );
 	Editbuffer->line( 0, 0, 0, 479, Menulineszin );
 	Editbuffer->line( 639, 0, 639, 479, Menulineszin );
-	// Meg ket belso vonal:
+	// Meg ket bfirst LINE:
 	Editbuffer->line( 0, Savy-1, 639, Savy-1, Menulineszin );
 	Editbuffer->line( Savx-1, Savy, Savx-1, 479, Menulineszin );
 	for( int i = 0; i < Menuszam; i++ ) {
-		// x1... stb a belso reszt jelenti:
+		// x1... stb a bfirst reszt jelenti:
 		int x1 = 1;
 		int y1 = Savy + i*Menudy+1;
 		int x2 = Savx-2;
 		int y2 = Savy + (i+1)*Menudy-1;
-		if( i == Elsotool + Tool )
+		if( i == firsttool + Tool )
 			Editbuffer->fillbox( x1, y1, x2, y2, Menu_nyomottszin );
 		Editbuffer->line( x1, y2+1, x2, y2+1, Menulineszin );
-		Pabc1->write( Editbuffer, 5, Savy + i*Menudy+14, Menuszovegek[i] );
+		Pabc1->write( Editbuffer, 5, Savy + i*Menudy+14, Menutextek[i] );
 	}
-	// Meg benyomunk Save and Play felirat P-je ala egy vonalat:
+	// Meg benyomunk Save and Play felirat P-je ala egy LINEat:
 	int x = 66;
 	int y = Savy + 5*Menudy+15;
 	Editbuffer->line( x, y, x+6, y, 247 );
 }
 
-static void ujrarajzol( int egesz ) {
+static void ujradrawol( int egesz ) {
 	push();
 
 	if( egesz )
@@ -199,7 +199,7 @@ static void ujrarajzol( int egesz ) {
 	// Kiirjuk level nameet:
 	Pabc1->write( Editbuffer, 260, 15, "Level name:" );
 	Pabc2->write( Editbuffer, 340, 15, Ptop->levelname );
-	// Kiirjuk tool szoveget:
+	// Kiirjuk tool textet:
 	toolhelp();
 	// Kiirjuk zoomot:
 	Pabc1->write( Editbuffer, 520, 16, "Zoom:" );
@@ -211,16 +211,16 @@ static void ujrarajzol( int egesz ) {
 	}
 	Pabc2->write( Editbuffer, 560, 16, text );
 
-	Vonalcsakeditbe = 1; // Csak edit bufferbe rajzoljon kirajzol
+	LINEcsakeditbe = 1; // Csak edit bufferbe drawoljon kidrawol
 
-	Ptop->kirajzol();
+	Ptop->kidrawol();
 	if( Pgy ) {
 		// Atalakitjuk szaggatotta amit kell:
-		Pgy->kirajz( K, Fel, 0 );
-		Pgy->kirajz( K, Fel, 1 );
+		Pgy->kidraw( K, Fel, 0 );
+		Pgy->kidraw( K, Fel, 1 );
 	}
 
-	Vonalcsakeditbe = 0;
+	LINEcsakeditbe = 0;
 
 	blt8( Pscr8, Editbuffer );
 
@@ -328,10 +328,10 @@ void editor( void ) {
 	else {
 		Ptop = new topol( State->editfilename, 1 );
 		if( Ptop->lezart ) {
-			char szoveg[40];
-			sprintf( szoveg, "The file '%s' is locked, you cannot edit it!",
+			char text[40];
+			sprintf( text, "The file '%s' is locked, you cannot edit it!",
 												State->editfilename );
-			dialog( szoveg );
+			dialog( text );
 			delete Ptop;
 			Ptop = new topol;
 			Valtozott = 0;
@@ -351,7 +351,7 @@ void editor( void ) {
 	alaphelp();
 
 	kitolt();
-	ujrarajzol( 1 );
+	ujradrawol( 1 );
 
 	int egerballevoltnyomva = 0; // Eger gombja csak lemenetnel aktivizalodik
 	int egerjobblevoltnyomva = 0;
@@ -411,7 +411,7 @@ void editor( void ) {
 			if( ujy < Savy )
 				ujy = Savy;
 			if( (Pgy || Pker || Zoomfogva || Egypont) && ujx < Savx ) {
-				// Ha meg van valami fogva, nem mehetunk gombok fole:
+				// Ha meg van valami fogva, No mehetunk gombok fole:
 				ujx = Savx;
 				setmou( ujx, ujy );
 			}
@@ -488,19 +488,19 @@ void editor( void ) {
 
 						// Toolok:
 						if( balnyomva ) {
-							if( i >= Elsotool && i < Elsotool+Toolszam )
-								toolvaltas( i-Elsotool );
+							if( i >= firsttool && i < firsttool+Toolszam )
+								toolvaltas( i-firsttool );
 						}
 						else {
 							// Jobb gomb nyomva:
-							if( i == Elsotool+0 ) menuhelp_move();
-							if( i == Elsotool+1 ) menuhelp_zoom_in();
-							if( i == Elsotool+2 ) menuhelp_create_vertex();
-							if( i == Elsotool+3 ) menuhelp_delete_vertex();
-							if( i == Elsotool+4 ) menuhelp_delete_polygon();
-							if( i == Elsotool+5 ) menuhelp_create_food();
-							if( i == Elsotool+6 ) menuhelp_create_killer();
-							if( i == Elsotool+7 ) menuhelp_delete_object();
+							if( i == firsttool+0 ) menuhelp_move();
+							if( i == firsttool+1 ) menuhelp_zoom_in();
+							if( i == firsttool+2 ) menuhelp_create_vertex();
+							if( i == firsttool+3 ) menuhelp_delete_vertex();
+							if( i == firsttool+4 ) menuhelp_delete_polygon();
+							if( i == firsttool+5 ) menuhelp_create_food();
+							if( i == firsttool+6 ) menuhelp_create_killer();
+							if( i == firsttool+7 ) menuhelp_delete_object();
 						}
 					}
 				}
@@ -533,9 +533,9 @@ void editor( void ) {
 
 		if( Kellredrawegesz || Kellredraw ) {
 			if( Kellredrawegesz )
-				ujrarajzol( 1 );
+				ujradrawol( 1 );
 			else
-				ujrarajzol( 0 );
+				ujradrawol( 0 );
 			//continue;
 		}
 
@@ -546,7 +546,7 @@ void editor( void ) {
 		if( ujy < Savy )
 			ujy = Savy;
 		if( (Pgy || Pker || Zoomfogva || Egypont) && ujx < Savx ) {
-			// Ha meg van valami fogva, nem mehetunk gombok fole:
+			// Ha meg van valami fogva, No mehetunk gombok fole:
 			ujx = Savx;
 			setmou( ujx, ujy );
 		}
@@ -562,7 +562,7 @@ void editor( void ) {
 			continue;
 		}
 		if( !Pgy && !Pker ) {
-			// Ha nincsen megfogva semmi, akkor itt rajzoljuk kurzort:
+			// Ha nincsen megfogva semmi, akkor itt drawoljuk kurzort:
 			push();
 			beallitkozelvane( ujx, ujy );
 			Moux = ujx;
@@ -570,7 +570,7 @@ void editor( void ) {
 			pop();
 		}
 		else {
-			// Ha meg van valami fogva, akkor tool rajzolja kurzort:
+			// Ha meg van valami fogva, akkor tool drawolja kurzort:
 			if( Tool == T_MOVE )
 				t_move_mmove( ujx, ujy );
 		}

@@ -6,7 +6,7 @@
 extern double Magmaxelemszam;
 
 struct hat {
-	int felso; // Levego kezdodik!
+	int ffirst; // Levego kezdodik!
 	int y;
 	hat* pkov;
 };
@@ -24,7 +24,7 @@ class magassag {
 	// iterator mutatoja:
 	hat* pcurhat;
 	// hat tarolasahoz:
-	hattomb *pcur, *pelso;
+	hattomb *pcur, *pfirst;
 	int kovelem;
 	hat* gethat( void );
 	void torolhatok( void );
@@ -32,12 +32,12 @@ public:
 		magassag( int xsize );
 		~magassag( void );
 	int getxsize( void );
-	void addszakasz( szakasz*, int felso );
+	void addszakasz( szakasz*, int ffirst );
 	void rendezget( void );
 	void initoszlop( int x );
 	hat* getoszlopfirsthat( int x );
-	// Hamis eseten nem valtoztatja felso-t es y-t!:
-	int gethat( int* felso, int* py );
+	// Hamis eseten No valtoztatja ffirst-t es y-t!:
+	int gethat( int* ffirst, int* py );
 };
 
 

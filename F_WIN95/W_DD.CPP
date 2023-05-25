@@ -7,7 +7,7 @@ LPDIRECTDRAWSURFACE     Pddsback = NULL;      // DirectDraw back surface
 static int Ddxsize = -1, Ddysize = -1;
 
 /*void uzenet( char* text1, char* text2, char* text3 ) {
-	hiba( text1, text2, text3 );
+	error( text1, text2, text3 );
 } */
 
 void ddfinish( void )
@@ -22,7 +22,7 @@ void ddfinish( void )
 	     // Get normal mode:
    	  /*HRESULT ddrval = Pdd->SetCooperativeLevel( GhWnd, 0 );
     	  if( ddrval != DD_OK )
-           hiba( "SetCooperativeLevel did not succeed!" );
+           error( "SetCooperativeLevel did not succeed!" );
         */
         Pdd->Release();
         Pdd = NULL;
@@ -30,13 +30,13 @@ void ddfinish( void )
 }
 
 static int Reswdd = 0;
-static int Elsosetresdd = 1;
+static int firstsetresdd = 1;
 
 void setresdd( int res ) {
 	if( Reswdd == res )
    	return;
 	if( res != 1 && res != 2 && res != 3 && res != 4 )
-   	hiba( "setresdd-ben res != 1 && res != 2 && res != 3 && res != 4!" );
+   	error( "setresdd-ben res != 1 && res != 2 && res != 3 && res != 4!" );
 	if( res == 1 ) {
 		Ddxsize = 320;
 	   Ddysize = 200;
@@ -54,14 +54,14 @@ void setresdd( int res ) {
 	   Ddysize = 480;
 	}
 
-   if( !Elsosetresdd ) {
+   if( !firstsetresdd ) {
    	// Torli elozo feluleteket:
       if( !Pddsprimary )
-      	hiba( "setresdd-ben Release elott !Pddsprimary!" );
+      	error( "setresdd-ben Release elott !Pddsprimary!" );
 		Pddsprimary->Release();
       Pddsprimary = NULL;
    }
-   Elsosetresdd = 0;
+   firstsetresdd = 0;
 
    // Set the video mode:
    HRESULT ddrval;
@@ -76,10 +76,10 @@ void setresdd( int res ) {
             	int err = i;
 		         char tmp[10];
       		   itoa( err, tmp, 10 );
-               hiba( "SetDisplayMode (setresdd) did not succeed, talalt!: ", tmp );
+               error( "SetDisplayMode (setresdd) did not succeed, talalt!: ", tmp );
 				}
         }
-        hiba( "SetDisplayMode (setresdd) did not succeed, nem talalt!" );
+        error( "SetDisplayMode (setresdd) did not succeed, No talalt!" );
 	 }
     Reswdd = res;
 
@@ -93,14 +93,14 @@ void setresdd( int res ) {
     ddsd.dwBackBufferCount = 1;
     ddrval = Pdd->CreateSurface( &ddsd, &Pddsprimary, NULL );
     if( ddrval != DD_OK )
-    		hiba( "CreateSurface did not succeed!" );
+    		error( "CreateSurface did not succeed!" );
 
 	 DDSCAPS ddscaps;
     ddscaps.dwCaps = DDSCAPS_BACKBUFFER;
     ddrval = Pddsprimary->GetAttachedSurface( &ddscaps, &Pddsback );
 
     if( ddrval != DD_OK )
-			hiba( "GetAttachedSurface did not succeed!" );
+			error( "GetAttachedSurface did not succeed!" );
 
 
    // Set the video mode:
@@ -111,11 +111,11 @@ void setresdd( int res ) {
            	int err = i;
 	         char tmp[10];
      		   itoa( err, tmp, 10 );
-	            hiba( "SetDisplayMode did not succeed, talalt!: ", tmp );
+	            error( "SetDisplayMode did not succeed, talalt!: ", tmp );
 			}
       }
 
-      hiba( "SetDisplayMode did not succeed, nem talalt!" );
+      error( "SetDisplayMode did not succeed, No talalt!" );
 	} */
 }
 
@@ -123,7 +123,7 @@ void ddinit( void ) {
     // create the main DirectDraw object:
     HRESULT ddrval = DirectDrawCreate( NULL, &Pdd, NULL );
     if( ddrval != DD_OK )
-        hiba( "DirectDrawCreate did not succeed!" );
+        error( "DirectDrawCreate did not succeed!" );
 
     // Get exclusive mode:
     ddrval = Pdd->SetCooperativeLevel( GhWnd,
@@ -133,7 +133,7 @@ void ddinit( void ) {
                                        DDSCL_FULLSCREEN |
                                        DDSCL_ALLOWMODEX );
     if( ddrval != DD_OK )
-        hiba( "SetCooperativeLevel did not succeed!" );
+        error( "SetCooperativeLevel did not succeed!" );
 
 	 setresdd( 3 );
 
@@ -145,10 +145,10 @@ void ddinit( void ) {
             	int err = i;
 		         char tmp[10];
       		   itoa( err, tmp, 10 );
-               hiba( "SetDisplayMode did not succeed, talalt!: ", tmp );
+               error( "SetDisplayMode did not succeed, talalt!: ", tmp );
 				}
         }
-        hiba( "SetDisplayMode did not succeed, nem talalt!" );
+        error( "SetDisplayMode did not succeed, No talalt!" );
 	 }
     Reswdd = 1;
     Ddxsize = 320, Ddysize = 200;
@@ -163,14 +163,14 @@ void ddinit( void ) {
     ddsd.dwBackBufferCount = 1;
     ddrval = Pdd->CreateSurface( &ddsd, &Pddsprimary, NULL );
     if( ddrval != DD_OK )
-    		hiba( "CreateSurface did not succeed!" );
+    		error( "CreateSurface did not succeed!" );
 
 	 DDSCAPS ddscaps;
     ddscaps.dwCaps = DDSCAPS_BACKBUFFER;
     ddrval = Pddsprimary->GetAttachedSurface( &ddscaps, &Pddsback );
 
     if( ddrval != DD_OK )
-			hiba( "GetAttachedSurface did not succeed!" );
+			error( "GetAttachedSurface did not succeed!" );
 	 */
 
 	// Itt meg azert lenullaza ket buffert:
@@ -188,10 +188,10 @@ void ddinit( void ) {
          	  	int err = i;
 	         	char tmp[10];
 	     		   itoa( err, tmp, 10 );
-   	         hiba( "Pddsback->Lock did not succeed, talalt!: ", tmp );
+   	         error( "Pddsback->Lock did not succeed, talalt!: ", tmp );
 				}
 	      }
-   	   hiba( "Pddsback->Lock did not succeed, nem talalt!" );
+   	   error( "Pddsback->Lock did not succeed, No talalt!" );
 		}
 
 		unsigned char* mut = (unsigned char*)ddsd.lpSurface;
@@ -202,7 +202,7 @@ void ddinit( void ) {
    	}
       ddrval = Pddsback->Unlock( NULL );
    	if( ddrval != DD_OK )
-	   	hiba( "Pddsback->Unlock did not succeed!" );
+	   	error( "Pddsback->Unlock did not succeed!" );
    	ddrval = DDERR_WASSTILLDRAWING;
 	   while( ddrval == DDERR_WASSTILLDRAWING )
 			ddrval = Pddsprimary->Flip( NULL, 0 );
@@ -212,10 +212,10 @@ void ddinit( void ) {
  	         	int err = i;
 		         char tmp[10];
      			   itoa( err, tmp, 10 );
-         	   hiba( "Pddsprimary->Flip did not succeed, talalt!: ", tmp );
+         	   error( "Pddsprimary->Flip did not succeed, talalt!: ", tmp );
 				}
    	   }
-      	hiba( "Pddsprimary->Flip did not succeed, nem talalt!" );
+      	error( "Pddsprimary->Flip did not succeed, No talalt!" );
 		}
 	}
    */
@@ -226,7 +226,7 @@ static int Bufflocked = 0;
 
 unsigned char** lockbackbuffer( int* pxs, int* pys ) {
 	if( Bufflocked )
-   	hiba( "lockbackbuffer-ben Bufflocked!" );
+   	error( "lockbackbuffer-ben Bufflocked!" );
 	Bufflocked = 1;
 
 	DDSURFACEDESC ddsd;
@@ -241,7 +241,7 @@ unsigned char** lockbackbuffer( int* pxs, int* pys ) {
          // is gone. The DIRECTDRAWSURFACE object representing this
          // surface should have Restore called on it.
          if( restored )
-         	hiba( "lockbackbuffer-ben tobbszor kene restore!" );
+         	error( "lockbackbuffer-ben tobbszor kene restore!" );
 
          ddrval = Pddsprimary->Restore();
          if( ddrval != DD_OK ) {
@@ -250,11 +250,11 @@ unsigned char** lockbackbuffer( int* pxs, int* pys ) {
            			int err = i;
 	   		      char tmp[10];
 		     		   itoa( err, tmp, 10 );
-            		hiba( "Pddsback->Restore did not succeed, talalt!: ",
+            		error( "Pddsback->Restore did not succeed, talalt!: ",
 									                  		tmp );
 					}
 		      }
-      		hiba( "Pddsback->Restore did not succeed, nem talalt!" );
+      		error( "Pddsback->Restore did not succeed, No talalt!" );
 			}
          restored = 1;
          ddrval = DDERR_WASSTILLDRAWING;
@@ -266,10 +266,10 @@ unsigned char** lockbackbuffer( int* pxs, int* pys ) {
            	int err = i;
 	         char tmp[10];
      		   itoa( err, tmp, 10 );
-            hiba( "Pddsback->Lock did not succeed, talalt!: ", tmp );
+            error( "Pddsback->Lock did not succeed, talalt!: ", tmp );
 			}
       }
-      hiba( "Pddsback->Lock did not succeed, nem talalt!" );
+      error( "Pddsback->Lock did not succeed, No talalt!" );
 	}
 
 	unsigned char* mut = (unsigned char*)ddsd.lpSurface;
@@ -285,12 +285,12 @@ unsigned char** lockbackbuffer( int* pxs, int* pys ) {
 
 void unlockbackbuffer( void ) {
 	if( !Bufflocked )
-   	hiba( "unlockbackbuffer-ben !Bufflocked!" );
+   	error( "unlockbackbuffer-ben !Bufflocked!" );
 	Bufflocked = 0;
 
 	HRESULT ddrval = Pddsback->Unlock( NULL );
    if( ddrval != DD_OK )
-   	hiba( "Pddsback->Unlock did not succeed!" );
+   	error( "Pddsback->Unlock did not succeed!" );
    ddrval = DDERR_WASSTILLDRAWING;
    while( ddrval == DDERR_WASSTILLDRAWING )
 		ddrval = Pddsprimary->Flip( NULL, 0 );
@@ -300,10 +300,10 @@ void unlockbackbuffer( void ) {
           	int err = i;
 	         char tmp[10];
      		   itoa( err, tmp, 10 );
-            hiba( "Pddsprimary->Flip did not succeed, talalt!: ", tmp );
+            error( "Pddsprimary->Flip did not succeed, talalt!: ", tmp );
 			}
       }
-      hiba( "Pddsprimary->Flip did not succeed, nem talalt!" );
+      error( "Pddsprimary->Flip did not succeed, No talalt!" );
 	}
 }
 
@@ -326,7 +326,7 @@ ddpal::ddpal( unsigned char* tomb ) {
 					                         &(LPDIRECTDRAWPALETTE)pddpal,
       		   			                NULL );
 	if( ddrval != DD_OK )
-			hiba( "CreatePalette did not succeed!" );
+			error( "CreatePalette did not succeed!" );
 }
 
 ddpal::~ddpal( void ) {
@@ -337,7 +337,7 @@ ddpal::~ddpal( void ) {
 void ddpal::set( void ) {
 	HRESULT ddrval = Pddsprimary->SetPalette( (LPDIRECTDRAWPALETTE)pddpal );
    if( ddrval != DD_OK )
-		hiba( "SetPalette did not succeed!" );
+		error( "SetPalette did not succeed!" );
 }
 
 

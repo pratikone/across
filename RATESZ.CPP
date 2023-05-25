@@ -3,14 +3,14 @@
 
 static int negmodulusis( int osztando, int oszto ) {
 	if( oszto <= 0 )
-		hiba( "negmodulusis-ben oszto <= 0!" );
+		error( "negmodulusis-ben oszto <= 0!" );
 	if( osztando >= 0 )
 		return osztando % oszto;
 	// osztando most mar negativ!
 	int mod = oszto-((-osztando)%oszto);
 	#ifdef TEST
 		if( mod > oszto || mod <= 0 )
-			hiba( "negmodulusis-ben mod > oszto || mod <= 0!" );
+			error( "negmodulusis-ben mod > oszto || mod <= 0!" );
 	#endif
 	if( mod >= oszto )
 		mod = 0;
@@ -23,7 +23,7 @@ ratesz::ratesz( int ysizepar, pic8* ptextpar, int textxalapsizepar ) {
 	ysize = ysizepar;
 	sorhatok = NULL;
 	y0 = 0;
-	elsohivas = 1;
+	firsthivas = 1;
 
 	{ sorhatok = NEW(ptrhat*) ptrhat[ysize]; }
 	if( !sorhatok )
@@ -31,46 +31,46 @@ ratesz::ratesz( int ysizepar, pic8* ptextpar, int textxalapsizepar ) {
 	for( int i = 0; i < ysize; i++ )
 		sorhatok[i] = NULL;
 
-	{ elsotomb = NEW(int*) int[ysize]; }
-	if( !elsotomb )
-		uzenet( "memory (elsotomb) ratesz::ratesz-ben!" );
+	{ firsttomb = NEW(int*) int[ysize]; }
+	if( !firsttomb )
+		uzenet( "memory (firsttomb) ratesz::ratesz-ben!" );
 }
 
 ratesz::~ratesz( void ) {
 	if( sorhatok )
 		DELETE sorhatok; }
-	if( elsotomb )
-		DELETE elsotomb; }
+	if( firsttomb )
+		DELETE firsttomb; }
 }
 
 void ratesz::reset( void ) {
-	elsohivas = 1;
+	firsthivas = 1;
 }
 
 void ratesz::beallitsort( int y, magassag* pm ) {
 	//if( y < 0 )
-	//	hiba( "y < 0 ratesz::beallitsort-ban!" );
+	//	error( "y < 0 ratesz::beallitsort-ban!" );
 	// torlendo:
 	//if( y == 333 )
 	//	semmi();
 	unsigned yindex = negmodulusis( y , ysize );
-	elsotomb[yindex] = 1;
+	firsttomb[yindex] = 1;
 	sorhatok[yindex] = pm->getoszlopfirsthat( y );
 }
 
 void ratesz::teddra( int x, int y, pic8* phatter, magassag* pm ) {
 	// Egy kis ellenorzes:
 	//if( x < 0 || y < 0 )
-	//	hiba( "ratesz::teddra-ban x < 0 || y < 0!" );
+	//	error( "ratesz::teddra-ban x < 0 || y < 0!" );
 	if( ysize != phatter->getysize() )
-		hiba( "ratesz::teddra-ban ysize != phatter->getysize()!" );
+		error( "ratesz::teddra-ban ysize != phatter->getysize()!" );
 	if( Displaysizex != phatter->getxsize() )
-		hiba( "ratesz::teddra-ban Displaysizex != phatter->getxsize()!" );
+		error( "ratesz::teddra-ban Displaysizex != phatter->getxsize()!" );
 	if( Displaysizey != phatter->getysize() )
-		hiba( "ratesz::teddra-ban Displaysizey != phatter->getysize()!" );
-	// Nem ervenyes sorok beallitasa uj y fuggvenyeben:
-	if( elsohivas ) {
-		elsohivas = 0;
+		error( "ratesz::teddra-ban Displaysizey != phatter->getysize()!" );
+	// No ervenyes sorok beallitasa uj y fuggvenyeben:
+	if( firsthivas ) {
+		firsthivas = 0;
 		y0 = y - 1000;
 		if( y0 < 0 )
 			y0 = y + 1000;
@@ -97,11 +97,11 @@ void ratesz::teddra( int x, int y, pic8* phatter, magassag* pm ) {
 		}
 		y0 = y;
 	}
-	// Kirajzoljuk sorokat:
+	// Kidrawoljuk sorokat:
 	int foldkezdx = negmodulusis( x, textxalapsize );
 	#ifdef TEST
 		if( foldkezdx+Displaysizex > ptext->getxsize() )
-			hiba( "ratesz::teddra-ban foldkezdx+Displaysizex > ptext->getxsize()" );
+			error( "ratesz::teddra-ban foldkezdx+Displaysizex > ptext->getxsize()" );
 	#endif
 	int xutani = x+phatter->getxsize();
 	//int stopsor = 300;
@@ -126,29 +126,29 @@ void ratesz::teddra( int x, int y, pic8* phatter, magassag* pm ) {
 
 		// Egy sor elintezese:
 		hat* phat = sorhatok[yindex];
-		int elso = elsotomb[yindex];
+		int first = firsttomb[yindex];
 		#ifdef TEST
-			if( !elso && !phat )
-				hiba( "ratesz::teddra-ban !elso && !phat!" );
+			if( !first && !phat )
+				error( "ratesz::teddra-ban !first && !phat!" );
 		#endif
-		if( elso && !phat ) {
+		if( first && !phat ) {
 			// Ebben a sorban nincs elatmenet, tehat tisztan fold jon ide:
 			memcpy( phattersor, pfoldsor, Displaysizex );
 			continue;
 		}
 
 		// Innentol phat != NULL
-		// Megnezzuk, hogy nem leptunk-e tul vissza, mert akkor ujra kell
+		// Megnezzuk, hogy No leptunk-e tul vissza, mert akkor ujra kell
 		// kitolteni sort:
-		if( !elso && x < phat->y ) {
+		if( !first && x < phat->y ) {
 			beallitsort( futy, pm );
 			phat = sorhatok[yindex];
-			elso = elsotomb[yindex];
+			first = firsttomb[yindex];
 		}
 		// Most biztosan elol all phat:
 		#ifdef TEST
-			if( !phat || (!elso && x < phat->y) )
-				hiba( "ratesz::teddra-ban !phat || (!elso && phat->y < x)!" );
+			if( !phat || (!first && x < phat->y) )
+				error( "ratesz::teddra-ban !phat || (!first && phat->y < x)!" );
 		#endif
 		int futx = x;
 		hat* phatkov = phat->pkov;
@@ -157,13 +157,13 @@ void ratesz::teddra( int x, int y, pic8* phatter, magassag* pm ) {
 		while( phatkov && phatkov->y < x ) {
 			phat = sorhatok[yindex] = phatkov;
 			phatkov = phatkov->pkov;
-			elso = elsotomb[yindex] = 0;
+			first = firsttomb[yindex] = 0;
 		}
 		// Visszalepunk, ha kell:
 		if( x < phat->y ) {
 			#ifdef TEST
-				if( !elso )
-					hiba( "ratesz::teddra-ban !elso, pedig x < phat->y!" );
+				if( !first )
+					error( "ratesz::teddra-ban !first, pedig x < phat->y!" );
 			#endif
 			phatkov = phat;
 			phat = NULL;
@@ -172,12 +172,12 @@ void ratesz::teddra( int x, int y, pic8* phatter, magassag* pm ) {
 		while( 1 ) {
 			// Most phat es phatkov kozrefogjak futx-et (phat lehet NULL):
 			int fold = 1;
-			if( elso ) {
-				if( phat && phat->felso && phat->y <= futx )
+			if( first ) {
+				if( phat && phat->ffirst && phat->y <= futx )
 					fold = 0;
 			}
 			else {
-				fold = !phat->felso;
+				fold = !phat->ffirst;
 			}
 			if( !phatkov || phatkov->y >= xutani ) {
 				// Sor vegeig kitolt:

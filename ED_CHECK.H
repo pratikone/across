@@ -1,5 +1,5 @@
 
-// Visszaadja, hogy volt-e hiba:
+// Visszaadja, hogy volt-e error:
 int check_topology( int kelldialog );
 
 

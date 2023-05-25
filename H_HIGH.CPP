@@ -33,12 +33,12 @@ static int Kovhang[MAXWAV];
 static unsigned long Hangerok[MAXWAV];
 static wav *Pwavok[MAXWAV];
 
-static int Elsostart = 1;
+static int firststart = 1;
 
 void starthanghigh( void ) {
-	if( !Elsostart )
-		hiba( "starthanghigh-ban !Elsostart!" );
-	Elsostart = 0;
+	if( !firststart )
+		error( "starthanghigh-ban !firststart!" );
+	firststart = 0;
 	if( !Hangenabled )
 		return;
 
@@ -48,7 +48,7 @@ void starthanghigh( void ) {
 		return;
 	}
 	if( Hanghighbevoltkapcsolva )
-		hiba( "Hanghighbevoltkapcsolva igaz starthanghigh-ban!" );
+		error( "Hanghighbevoltkapcsolva igaz starthanghigh-ban!" );
 	Hanghighbevoltkapcsolva = 1;
 	for( int i = 0; i < WAVBANKSZAM; i++ ) {
 		Wavbank[i] = NULL;
@@ -91,7 +91,7 @@ void stophanghigh( void ) {
 	if( !Hangenabled )
 		return;
 	if( !Hanghighbevoltkapcsolva )
-		hiba( "Hanghighbevoltkapcsolva hamis stophanghigh-ban!" );
+		error( "Hanghighbevoltkapcsolva hamis stophanghigh-ban!" );
 	stophang();
 	for( int i = 0; i < WAVBANKSZAM; i++ ) {
 		if( Wavbank[i] ) {
@@ -126,7 +126,7 @@ void setsurlodas( double ero ) {
 	if( ero > 1.0 )
 		ero = 1.0;
 	if( ero < 0 )
-		hiba( "ero < 0!" );
+		error( "ero < 0!" );
 	Surlerokell = ero;
 }
 
@@ -135,7 +135,7 @@ void startwave( int wavazonosito, double hangero ) {
 		return;
 
 	if( hangero <= 0.0 || hangero >= 1.0 )
-		hiba( "wav: hangero <= 0.0 || hangero >= 1.0!" );
+		error( "wav: hangero <= 0.0 || hangero >= 1.0!" );
 
 	wav* pwav = Wavbank[wavazonosito];
 
@@ -156,7 +156,7 @@ void startwave( int wavazonosito, double hangero ) {
 		}
 	}
 	_enable();
-	hiba( "Wavszam szerint meg van csat, de nincs!" );
+	error( "Wavszam szerint meg van csat, de nincs!" );
 }
 
 int vanmegwav( void ) {
@@ -351,14 +351,14 @@ static void surlodaselintezes( short* sbuff ) {
 
 void callbackhang( short* sbuff, unsigned char* cbuff ) {
 	if( !Hangenabled )
-		hiba( "callbackhang, pedig !Hangenabled!" );
+		error( "callbackhang, pedig !Hangenabled!" );
 	#ifdef TEST
 	if( Atmenet >= Buffsize )
-		hiba( "Atmenet >= Buffsize!" );
+		error( "Atmenet >= Buffsize!" );
 	#endif
 	memset( sbuff, 0, Buffsize*2 );
 	if( Mute ) {
-		// Nem kell hang:
+		// No kell hang:
 		if( Wavszam > 0 ) {
 			Wavszam = 0;
 			for( int i = 0; i < MAXWAV; i++ )
@@ -383,7 +383,7 @@ void callbackhang( short* sbuff, unsigned char* cbuff ) {
 				Ezmegy[i] = 0;
 				Wavszam--;
 				if( Wavszam < 0 )
-					hiba( "Wavszam < 0 !" );
+					error( "Wavszam < 0 !" );
 			}
 			wavadd( sbuff, &Pwavok[i]->tomb[Kovhang[i]], darab, Hangerok[i] );
 			Kovhang[i] += darab;

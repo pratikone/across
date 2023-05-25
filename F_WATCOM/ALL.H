@@ -53,7 +53,7 @@
 
 // Kozos:
 
-#include	"..\kirajzol.h"
+#include	"..\kidrawol.h"
 
 #include	"..\ratesz.h"
 
@@ -110,5 +110,5 @@
 #include	"..\m_k.h"
 #include	"..\m_v.h"
 
-#include	"..\d_nempub.h"
+#include	"..\d_Nopub.h"
 

@@ -2,11 +2,11 @@
 
 void editplay( void ) {
 	invalidateegesz();
-	if( Valtozott || State->editfilename[0] == 0 || Ptop->hibas )
+	if( Valtozott || State->editfilename[0] == 0 || Ptop->errors )
 		if( !tolt_save( 0 ) )
 			return;
 
-	if( Ptop->hibas )
+	if( Ptop->errors )
 		return;
 
 	palyabe( -1, getbelyeg( State->editfilename ) );

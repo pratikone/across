@@ -78,8 +78,8 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
    w_dosbeallitasok(); // initqopen is itt van
 	mv_main();
 
-	// Ide mar nem szabad jonnie, kene valami uzenet!
-   hiba( "WinMain vegere erkezett!" );
+	// Ide mar No szabad jonnie, kene valami uzenet!
+   error( "WinMain vegere erkezett!" );
 
    Dummypvoid = &lpszCmdLine;
 
@@ -87,9 +87,9 @@ int PASCAL WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 }
 
 void mv_check( void ) {
-	int elso = 1; // Hogy meg !Gameloop eseten is bejojjon:
-	while( elso || !GameLoop ) {
-		elso = 0;
+	int first = 1; // Hogy meg !Gameloop eseten is bejojjon:
+	while( first || !GameLoop ) {
+		first = 0;
 
 		MSG msg;
 		while( PeekMessage( &msg, NULL, 0, 0, PM_NOREMOVE ) ) {
@@ -103,9 +103,9 @@ void mv_check( void ) {
 }
 
 // Ez itt torlendo:
-void szovegki( int y, char* szoveg ) {
+void text( int y, char* text ) {
 	HDC hdc = GetDC( GhWnd );
-	TextOut( hdc, 30, y, szoveg, strlen( szoveg ) );
+	TextOut( hdc, 30, y, text, strlen( text ) );
 	ReleaseDC( GhWnd, hdc );
 }
 
@@ -163,7 +163,7 @@ void mv_startstopper( void ) {
 	Startido = timeGetTime()*0.182;
 }
 
-void hiba( char* text1, char* text2, char* text3 ) {
+void error( char* text1, char* text2, char* text3 ) {
 	FILE* h = fopen( "error.txt", "wt" );
 	if( h ) {
 		fprintf( h, "%s\n", text1 );
@@ -191,6 +191,6 @@ void hiba( char* text1, char* text2, char* text3 ) {
 }
 
 void uzenet( char* text1, char* text2, char* text3 ) {
-	hiba( text1, text2, text3 );
+	error( text1, text2, text3 );
 }
 

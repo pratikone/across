@@ -15,7 +15,7 @@ void palyaleiro::foldbeolv_ratesz( int leiroindex ) {
 			strcpy( foldname, "4_fold3.pcx" );
 			break;
 		default:
-			hiba( "foldbeolv-ban nincs meg leiroindex!" );
+			error( "foldbeolv-ban nincs meg leiroindex!" );
 	}
 
 	pic8* pfoldkis;
@@ -41,7 +41,7 @@ void palyaleiro::foldbeolv_ratesz( int leiroindex ) {
 		szoros++;
 	szoros++;
 	if( pfold || pratesz )
-		hiba( "palyaleiro::foldbeolv_ratesz-ben pfold || pratesz nem NULL!" );
+		error( "palyaleiro::foldbeolv_ratesz-ben pfold || pratesz No NULL!" );
 	{ pfold = NEW(pic8*) pic8( szoros*foldxalapsize, pfoldkis->getysize() ); }
 	for( int i = 0; i < szoros; i++ ) {
 		blt8( pfold, pfoldkis, i*foldxalapsize, 0 );
@@ -70,12 +70,12 @@ void palyaleiro::foldbeolv_ratesz( int leiroindex ) {
 static void loadname( char* text, FILE* h ) {
 	char sor[200];
 	if( fgets( sor, 190, h ) == NULL )
-		hiba( "Nem tudott olvasni sort filebol!" );
+		error( "No tudott olvasni sort filebol!" );
 	char tmp[200];
 	if( sscanf( sor, "%s", tmp ) != 1 )
-		hiba( "loadname-ben nem tudta feldolgozni sort!: ", sor );
+		error( "loadname-ben No tudta feldolgozni sort!: ", sor );
 	if( strlen( tmp ) > FILEnameHOSSZ )
-		hiba( "loadname-ben name tul hosszu!: ", tmp );
+		error( "loadname-ben name tul hosszu!: ", tmp );
 	strcpy( text, tmp );
 }
 
@@ -101,7 +101,7 @@ palyaleiro::palyaleiro( char* name ) {
 	pkisc = NULL;
 	pkisd = NULL;
 	pkise = NULL;
-	pkiselsorud = NULL;
+	pkisfirstrud = NULL;
 	pkishatsorud = NULL;
 	pkisalkar = NULL;
 	pkisfelkar = NULL;
@@ -117,12 +117,12 @@ palyaleiro::palyaleiro( char* name ) {
 	if( strcmp( name, "leir3.lei" ) == 0 )
 		leiroindex = 2;
 	if( leiroindex < 0 )
-		hiba( "palyaleiro::palyaleiro-ban nem talalta meg nameet!: ", name );
+		error( "palyaleiro::palyaleiro-ban No talalta meg nameet!: ", name );
 
 
 	FILE* h = qopen( name, "rt" );
 	if( !h )
-		hiba( "Nem tudta megnyitni palyaleirot!: ", name );
+		error( "No tudta megnyitni palyaleirot!: ", name );
 
 
 
@@ -174,9 +174,9 @@ palyaleiro::palyaleiro( char* name ) {
 	{ pkise = NEW(kiskep*) kiskep( tmp ); }
 	// Lyukindexeket a-bol atmasoljuk:
 	pkisb->lyuk = pkisc->lyuk = pkisd->lyuk = pkise->lyuk = pkisa->lyuk;
-	// Elsorud:
+	// firstrud:
 	loadname( tmp, h );
-	{ pkiselsorud = NEW(kiskep*) kiskep( tmp ); }
+	{ pkisfirstrud = NEW(kiskep*) kiskep( tmp ); }
 	// Hatsorud:
 	loadname( tmp, h );
 	{ pkishatsorud = NEW(kiskep*) kiskep( tmp ); }
@@ -203,7 +203,7 @@ palyaleiro::palyaleiro( char* name ) {
 
 	int magicnumber = loadint( h );
 	if( magicnumber != 17322 )
-		hiba( "leiroban nem stimmel magic number!: ", name );
+		error( "leiroban No stimmel magic number!: ", name );
 
 	qclose( h );
 }
@@ -248,8 +248,8 @@ palyaleiro::~palyaleiro( void ) {
 		DELETE pkisd; }
 	if( pkise )
 		DELETE pkise; }
-	if( pkiselsorud )
-		DELETE pkiselsorud; }
+	if( pkisfirstrud )
+		DELETE pkisfirstrud; }
 	if( pkishatsorud )
 		DELETE pkishatsorud; }
 	if( pkisalkar )
@@ -264,7 +264,7 @@ palyaleiro::~palyaleiro( void ) {
 // play-bol van hivva:
 void csakfoldcsere( void ) {
 	if( !Korny->pleiro->pfold || !Korny->pleiro->pratesz )
-		hiba( "csakfoldcsere-ben !Korny->pleiro->pfold || !Korny->pleiro->pratesz!" );
+		error( "csakfoldcsere-ben !Korny->pleiro->pfold || !Korny->pleiro->pratesz!" );
 
 	DELETE Korny->pleiro->pfold; }
 	Korny->pleiro->pfold = NULL;

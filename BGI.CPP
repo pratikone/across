@@ -1,7 +1,7 @@
 #include	"all.h"
 
-void vonalki( int x1, int y1, int x2, int y2 ) {
-	hiba( "vonalki Itt nem szabadna lennie!" );
+void LINEki( int x1, int y1, int x2, int y2 ) {
+	error( "LINEki Itt No szabadna lennie!" );
 	x1++;
 	y1++;
 	x2++;
@@ -10,7 +10,7 @@ void vonalki( int x1, int y1, int x2, int y2 ) {
 
 // Ennek van egy mcga-s megfeleloje is mas paramokkal!:
 void kiteljeskerek( int x, int y, int sugar, double alfa ) {
-	hiba( "kiteljeskerek Itt nem szabadna lennie!" );
+	error( "kiteljeskerek Itt No szabadna lennie!" );
 	x++;
 	y++;
 	sugar++;
@@ -18,5 +18,5 @@ void kiteljeskerek( int x, int y, int sugar, double alfa ) {
 }
 
 void bgitorol( void ) {
-	hiba( "bgitorol Itt nem szabadna lennie!" );
+	error( "bgitorol Itt No szabadna lennie!" );
 }

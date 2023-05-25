@@ -12,7 +12,7 @@
 
 #include	"ddraw.h"
 
-#include "w_nempub.h"
+#include "w_Nopub.h"
 
 #include	"..\m_v.h"
 #include	"..\m_k.h"

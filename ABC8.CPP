@@ -1,6 +1,6 @@
 #include	"all.h"
 
-static int Hibaismeretlenkar = 0;
+static int errorismeretlenkar = 0;
 
  
 abc8::abc8( char* name ) {
@@ -24,58 +24,58 @@ abc8::abc8( char* name ) {
 		ytomb[i] = 0;
 	FILE* h = qopen( name, "rb" );
 	if( !h ) {
-		hiba( "Nem tudta megnyitni abc konstruktor file-t!: ", name );
+		error( "No tudta megnyitni abc konstruktor file-t!: ", name );
 		return;
 	}
 	char tmp[20];
 	if( fread( tmp, 4, 1, h ) != 1 ) {
-		hiba( "Nem tudja olvasni abc-t!: ", name );
+		error( "No tudja olvasni abc-t!: ", name );
 		qclose( h );
 		return;
 	}
 	if( strcmp( tmp, "RA1" ) != 0 ) {
-		hiba( "Nem ervenyes abc file elso negy byte alapjan!: ", name );
+		error( "No ervenyes abc file first negy byte alapjan!: ", name );
 		qclose( h );
 		return;
 	}
 	short darabszam = 0;
 	if( fread( &darabszam, 2, 1, h ) != 1 ) {
-		hiba( "Nem tudja olvasni abc-t!: ", name );
+		error( "No tudja olvasni abc-t!: ", name );
 		qclose( h );
 		return;
 	}
 	if( darabszam <= 0 || darabszam > 256 )
-		hiba( "abc file darabszama nem stimmel!" );
+		error( "abc file darabszama No stimmel!" );
 	for( int kkk = 0; kkk < darabszam; kkk++ ) {
 		// Sorban beolvassa betuk spritejait:
 		if( fread( tmp, 7, 1, h ) != 1 ) {
-			hiba( "Nem tudja olvasni abc-t!: ", name );
+			error( "No tudja olvasni abc-t!: ", name );
 			qclose( h );
 			return;
 		}
 		if( strcmp( tmp, "EGYMIX" ) != 0 ) {
-			hiba( "Nem talalta meg EGYMIX-et!: ", name );
+			error( "No talalta meg EGYMIX-et!: ", name );
 			qclose( h );
 			return;
 		}
 		unsigned char c = -1;
 		if( fread( &c, 1, 1, h ) != 1 ) {
-			hiba( "Nem tudja olvasni abc-t!: ", name );
+			error( "No tudja olvasni abc-t!: ", name );
 			qclose( h );
 			return;
 		}
 		if( fread( &ytomb[c], 2, 1, h ) != 1 ) {
-			hiba( "Nem tudja olvasni abc-t!: ", name );
+			error( "No tudja olvasni abc-t!: ", name );
 			qclose( h );
 			return;
 		}
 		if( ppsprite[c] ) {
-			hiba( "Egy karakter ketszer van meg abc file-ban!: ", name );
+			error( "Egy karakter ketszer van meg abc file-ban!: ", name );
 			return;
 		}
 		{ ppsprite[c] = NEW(pic8*) pic8( ".spr", h ); }
 		if( !ppsprite[c]->success ) {
-			hiba( "Nem tudta beolvasni SPRITE-ot abc file-bol!: ", name );
+			error( "No tudta beolvasni SPRITE-ot abc file-bol!: ", name );
 			return;
 		}
 	}
@@ -104,7 +104,7 @@ static int Spacehossz = 5;
 
 void abc8::write( pic8* pdest, int x, int y, char* text, int tavpar ) {
 	if( !success ) {
-		hiba( "abc8::write, pedig nem success!" );
+		error( "abc8::write, pedig No success!" );
 		return;
 	}
 	if( tavpar == -1000 )
@@ -117,8 +117,8 @@ void abc8::write( pic8* pdest, int x, int y, char* text, int tavpar ) {
 			continue;
 		}
 		if( !ppsprite[index] ) {
-			if( Hibaismeretlenkar ) {
-				hiba( "abc8::len-ben ismeretlen karakter!" );
+			if( errorismeretlenkar ) {
+				error( "abc8::len-ben ismeretlen karakter!" );
 				return;
 			}
 			else {
@@ -136,7 +136,7 @@ void abc8::write( pic8* pdest, int x, int y, char* text, int tavpar ) {
 
 int abc8::len( char* text, int tavpar ) {
 	if( !success ) {
-		hiba( "abc8::len, pedig nem success!" );
+		error( "abc8::len, pedig No success!" );
 		return 0;
 	}
 	if( tavpar == -1000 )
@@ -150,8 +150,8 @@ int abc8::len( char* text, int tavpar ) {
 				text++;
 				continue;
 			}
-			if( Hibaismeretlenkar ) {
-				hiba( "abc8::len-ben ismeretlen karakter!" );
+			if( errorismeretlenkar ) {
+				error( "abc8::len-ben ismeretlen karakter!" );
 				return 0;
 			}
 			else {

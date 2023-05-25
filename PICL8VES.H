@@ -1,5 +1,5 @@
 
-//#define PICLOWTEST // Csak hibat jelez. Bar o vizsgalja csak kiirast, de
+//#define PICLOWTEST // Csak errort jelez. Bar o vizsgalja csak kiirast, de
 					 // csak pic15.cpp-n keresztul lehet hivni, aminek kell
 					 // kiirast vizsgalnia.
 

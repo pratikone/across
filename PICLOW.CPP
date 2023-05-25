@@ -78,11 +78,11 @@ void closegraph_l( void ) {
 void ppixel_l( int x, int y, int szin ) {
 	#ifdef PICLOWTEST
 	if( !Modeinited ) {
-		hiba( "ppixel_l-ben nem Modeinited!" );
+		error( "ppixel_l-ben No Modeinited!" );
 		return;
 	}
 	if( x < 0 || x >= Xsize || y < 0 || y >= Ysize ) {
-		hiba( "ppixel_l-ben kepbol kiiras!" );
+		error( "ppixel_l-ben kepbol kiiras!" );
 		return;
 	}
 	#endif
@@ -102,7 +102,7 @@ void ppixel_l( int x, int y, int szin ) {
 	int bank = int(Bankszam[unsigned(y)]);
 	long cim = Kezdocim[unsigned(y)];
 	if( x >= Toresx[unsigned(y)] ) {
-		// A masodik bankban van pont!
+		// A second bankban van pont!
 		bank++;
 		cim = -Toresx[y];
 	}
@@ -117,11 +117,11 @@ void ppixel_l( int x, int y, int szin ) {
 int gpixel_l( int x, int y ) {
 	#ifdef PICLOWTEST
 	if( !Modeinited ) {
-		hiba( "gpixel_l-ben nem Modeinited!" );
+		error( "gpixel_l-ben No Modeinited!" );
 		return 0;
 	}
 	if( x < 0 || x >= Xsize || y < 0 || y >= Ysize ) {
-		hiba( "gpixel_l-ben kepen kivulrol olvasas!" );
+		error( "gpixel_l-ben kepen kivulrol olvasas!" );
 		return 0;
 	}
 	#endif
@@ -139,7 +139,7 @@ int gpixel_l( int x, int y ) {
 	int bank = int(Bankszam[unsigned(y)]);
 	long cim = Kezdocim[unsigned(y)];
 	if( x >= Toresx[unsigned(y)] ) {
-		// A masodik bankban van pont!
+		// A second bankban van pont!
 		bank++;
 		cim = -Toresx[y];
 	}
@@ -154,11 +154,11 @@ int gpixel_l( int x, int y ) {
 void putbytes_l( int x, int y, unsigned char* tomb, int xsize ) {
 	#ifdef PICLOWTEST
 	if( !Modeinited ) {
-		hiba( "putbytes_l-ban nem Modeinited!" );
+		error( "putbytes_l-ban No Modeinited!" );
 		return;
 	}
 	if( x < 0 || x+xsize-1 >= Xsize || y < 0 || y >= Ysize ) {
-		hiba( "putbytes_l-ban kepen kivulre iras!" );
+		error( "putbytes_l-ban kepen kivulre iras!" );
 		return;
 	}
 	#endif
@@ -180,7 +180,7 @@ void putbytes_l( int x, int y, unsigned char* tomb, int xsize ) {
 	int maradekx = xsize;
 	int tombfelex = 0;
 	if( x < Toresx[unsigned(y)] ) {
-		// Elso bankban biztos van:
+		// first bankban biztos van:
 		if( Kurbank != Bankszam[y] ) {
 			bank_drv( unsigned(Bankszam[y]) );
 			Kurbank = int(Bankszam[y]);
@@ -200,7 +200,7 @@ void putbytes_l( int x, int y, unsigned char* tomb, int xsize ) {
 		}
 	}
 
-	// Masodik bank elintezese (biztos, hogy ebben is van mit tenni!):
+	// second bank elintezese (biztos, hogy ebben is van mit tenni!):
 	if( Kurbank != Bankszam[y]+1 ) {
 		bank_drv( unsigned(Bankszam[y]+1) );
 		Kurbank = int(Bankszam[y]+1);
@@ -220,11 +220,11 @@ void putbytes_l( int x, int y, unsigned char* tomb, int xsize ) {
 void getbytes_l( int x, int y, unsigned char* tomb, int xsize ) {
 	#ifdef PICLOWTEST
 	if( !Modeinited ) {
-		hiba( "getbytes_l-ban nem Modeinited!" );
+		error( "getbytes_l-ban No Modeinited!" );
 		return;
 	}
 	if( x < 0 || x+xsize-1 >= Xsize || y < 0 || y >= Ysize ) {
-		hiba( "getbytes_l-ban kepen kivulre iras!" );
+		error( "getbytes_l-ban kepen kivulre iras!" );
 		return;
 	}
 	#endif
@@ -246,7 +246,7 @@ void getbytes_l( int x, int y, unsigned char* tomb, int xsize ) {
 	int maradekx = xsize;
 	int tombfelex = 0;
 	if( x < Toresx[unsigned(y)] ) {
-		// Elso bankban biztos van:
+		// first bankban biztos van:
 		if( Kurbank != Bankszam[y] ) {
 			bank_drv( unsigned(Bankszam[y]) );
 			Kurbank = int(Bankszam[y]);
@@ -266,7 +266,7 @@ void getbytes_l( int x, int y, unsigned char* tomb, int xsize ) {
 		}
 	}
 
-	// Masodik bank elintezese (biztos, hogy ebben is van mit tenni!):
+	// second bank elintezese (biztos, hogy ebben is van mit tenni!):
 	if( Kurbank != Bankszam[y]+1 ) {
 		bank_drv( unsigned(Bankszam[y]+1) );
 		Kurbank = int(Bankszam[y]+1);

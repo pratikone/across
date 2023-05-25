@@ -8,7 +8,7 @@ void replayjelenlegi( void );
 // Vagy level == -1 es belyeg != 0 es filename == NULL,
 // vagy level >= 0 < 100 es belyeg = 0 es filename == NULL,
 // vagy level == -1 es belyeg = 0 es filename ervenyes,
-// Hamis eseten nem sikerult betolteni palyat (rec filehoz nincs lev):
+// Hamis eseten No sikerult betolteni palyat (rec filehoz nincs lev):
 int palyabe( int level, unsigned long belyeg = 0, char* filename = NULL );
 
 // Legkozelebbi palyabe mindenkeppen kell hogy olvasson uj topolt:

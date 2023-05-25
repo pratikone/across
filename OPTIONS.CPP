@@ -44,13 +44,13 @@ static void help( void ) {
 	}
 }
 
-static int Elsorarajz = 1;
+static int firstradraw = 1;
 
-static void rarajzmot( pic8* ppic, int x1, int y1, int x2, int y2, double fakt ) {
+static void radrawmot( pic8* ppic, int x1, int y1, int x2, int y2, double fakt ) {
 	if( fakt > 1.0 )
 		fakt = 1.0;
 	if( x1 >= x2 || y1 >= y2 )
-		hiba( "rarajzmot-ban x1 >= x2 || y1 >= y2!" );
+		error( "radrawmot-ban x1 >= x2 || y1 >= y2!" );
 
 	// Megcsinaljuk hatteret:
 	unsigned char felszin = Korny->ppic_vollecbal->gpixel( 2, 2 );
@@ -63,7 +63,7 @@ static void rarajzmot( pic8* ppic, int x1, int y1, int x2, int y2, double fakt )
 	ppic->fuggszegmens( x2, y1, y2-y1+1, keret );
 	ppic->vizszegmens( x1, y1, x2-x1+1, keret );
 	ppic->vizszegmens( x1, y2, x2-x1+1, keret );
-	// Belso csikok:
+	// Bfirst csikok:
 	ppic->fuggszegmens( x1+1, y1+1, y2-y1-1, vilagos );
 	ppic->fuggszegmens( x2-1, y1+1, y2-y1-1, sotet );
 	ppic->vizszegmens( x1+1, y1+1, x2-x1-1, vilagos );
@@ -81,8 +81,8 @@ static void rarajzmot( pic8* ppic, int x1, int y1, int x2, int y2, double fakt )
 	y1 = ykozep-yfelsize;
 	y2 = ykozep+yfelsize;
 
-	if( Elsorarajz ) {
-		Elsorarajz = 0;
+	if( firstradraw ) {
+		firstradraw = 0;
 		int xs = Korny->ppic_setsizemot->getxsize();
 		int ys = Korny->ppic_setsizemot->getysize();
 		unsigned char lyuk = Korny->ppic_setsizemot->gpixel( 0, 0 );
@@ -117,7 +117,7 @@ static void setresolution( void ) {
 		if( State->res == 4 )
 			val.kur = 3;
 		if( val.kur < 0 )
-			hiba( "setresolution-ban val.kur < 0!" );
+			error( "setresolution-ban val.kur < 0!" );
 
 		val.egykepen = 6;
 		val.x0 = 80;
@@ -164,7 +164,7 @@ static void setresolution( void ) {
 		if( State->res == 4 )
 			val.kur = 2;
 		if( val.kur < 0 )
-			hiba( "setresolution-ban val.kur < 0!" );
+			error( "setresolution-ban val.kur < 0!" );
 
 		val.egykepen = 6;
 		val.x0 = 80;
@@ -201,7 +201,7 @@ static void setresolution( void ) {
 
 static double setbikesize( double fakt, char* fejlec ) {
 	while( 1 ) {
-		// Szoveg kiiras:
+		// text kiiras:
 		blt8( Korny->picbuffer, Korny->ppic_setsize );
 		Korny->pabc_setsize->writekozep( Korny->picbuffer, 160, 10, fejlec );
 		Korny->pabc_setsize->writekozep( Korny->picbuffer, 160, 120,
@@ -211,12 +211,12 @@ static double setbikesize( double fakt, char* fejlec ) {
 		Korny->pabc_setsize->writekozep( Korny->picbuffer, 160, 172,
 				"Press enter when ready!" );
 
-		// FAKT kirajzolas:
+		// FAKT kidrawolas:
 		int xo = 105;
 		int yo = 40;
 		int xs = 100;
 		int ys = (195.0/266)*xs;
-		rarajzmot( Korny->picbuffer, xo, yo, xo+xs, yo+ys, fakt/0.676 );
+		radrawmot( Korny->picbuffer, xo, yo, xo+xs, yo+ys, fakt/0.676 );
 
 		// Kep kiteves:
 		lassufizre( Korny->picbuffer, Korny->pal_setsize );
@@ -243,20 +243,20 @@ static double setbikesize( double fakt, char* fejlec ) {
 // VOLUME VOLUME VOLUME VOLUME VOLUME VOLUME VOLUME VOLUME VOLUME VOLUME
 // VOLUME VOLUME VOLUME VOLUME VOLUME VOLUME VOLUME VOLUME VOLUME VOLUME
 
-static void rarajzvolume( pic8* ppic, int x1, int y, int x2, double volume ) {
+static void radrawvolume( pic8* ppic, int x1, int y, int x2, double volume ) {
 	if( volume > 1.0 )
 		volume = 1.0;
 	if( volume < 0.0 )
 		volume = 0.0;
 	if( x1 >= x2 )
-		hiba( "rarajzvolume-ban x1 >= x2!" );
+		error( "radrawvolume-ban x1 >= x2!" );
 
 	int gombxs = Korny->ppic_volgomb->getxsize();
 	int gombys = Korny->ppic_volgomb->getysize();
 	int lecxs = Korny->ppic_vollecjobb->getxsize();
 	int lecys = Korny->ppic_vollecjobb->getysize();
 	if( lecxs*2+10 >= x2-x1 )
-		hiba( "rarajzvolume-ban lecxs*2+10 >= x2-x1!" );
+		error( "radrawvolume-ban lecxs*2+10 >= x2-x1!" );
 	// Kitesszuk lec ket szelet:
 	blt8( ppic, Korny->ppic_vollecbal, x1, y-lecys/2 );
 	blt8( ppic, Korny->ppic_vollecjobb, x2-lecxs, y-lecys/2 );
@@ -272,7 +272,7 @@ static void rarajzvolume( pic8* ppic, int x1, int y, int x2, double volume ) {
 
 static double setsoundvolume( double volume ) {
 	while( 1 ) {
-		// Szoveg kiiras:
+		// text kiiras:
 		blt8( Korny->picbuffer, Korny->ppic_setsize );
 		Korny->pabc_setsize->writekozep( Korny->picbuffer, 160, 10,
 			"Set Sound Volume!" );
@@ -281,11 +281,11 @@ static double setsoundvolume( double volume ) {
 		Korny->pabc_setsize->writekozep( Korny->picbuffer, 160, 172,
 				"Press enter when ready!" );
 
-		// FAKT kirajzolas:
+		// FAKT kidrawolas:
 		int x1 = 90;
 		int yo = 70;
 		int x2 = 230;
-		rarajzvolume( Korny->picbuffer, x1, yo, x2, volume );
+		radrawvolume( Korny->picbuffer, x1, yo, x2, volume );
 
 		// Kep kiteves:
 		lassufizre( Korny->picbuffer, Korny->pal_setsize );
@@ -338,14 +338,14 @@ static double setsoundvolume( double volume ) {
 
 		strcpy( Korny->rubrikak[1], "Bike Size    (Play)" );
 		strcpy( Korny->rubrikak[2], "Bike Size (Replay)" );
-		// Kirajzoljuk ket kis size teglalapot:
+		// Kidrawoljuk ket kis size teglalapot:
 		int xo = 260;
 		int yo = 100;
 		int xs = 45;
 		int ys = (195.0/266)*xs;
-		rarajzmot( Korny->picbuffer, xo, yo, xo+xs, yo+ys, State->fakt_p );
+		radrawmot( Korny->picbuffer, xo, yo, xo+xs, yo+ys, State->fakt_p );
 		yo = 140;
-		rarajzmot( Korny->picbuffer, xo, yo, xo+xs, yo+ys, State->fakt_r );
+		radrawmot( Korny->picbuffer, xo, yo, xo+xs, yo+ys, State->fakt_r );
 
 
 		kurrens = val.valassz( Korny->pal_playmenu );
@@ -397,25 +397,25 @@ void options( void ) {
 			strcpy( Korny->rubrikak[0], "Video mode:     640x480" );
 
 		strcpy( Korny->rubrikak[1], "Bike Size:" );
-		// Kirajzoljuk kis size teglalapot:
+		// Kidrawoljuk kis size teglalapot:
 		int xo = 231;
 		int yo = 71; //99
 		int xs = 58;
 		int ys = (195.0/266)*xs;
-		rarajzmot( Korny->picbuffer, xo, yo, xo+xs, yo+ys, State->fakt/0.751 );
+		radrawmot( Korny->picbuffer, xo, yo, xo+xs, yo+ys, State->fakt/0.751 );
 
-		// Kirajzoljuk sound volume-ot:
+		// Kidrawoljuk sound volume-ot:
 		strcpy( Korny->rubrikak[2], "Sound Volume:" );
 		int x1 = 225;
 		yo = 123; // 158
 		int x2 = 295;
-		rarajzvolume( Korny->picbuffer, x1, yo, x2, State->soundvolume );
+		radrawvolume( Korny->picbuffer, x1, yo, x2, State->soundvolume );
 
 		// Jatekos valasztas:
 		jatekos* pj = &State->jatekosok[State->jatekos];
 		sprintf( Korny->rubrikak[3], "Player:   %s", pj->name );
 
-		// Help szoveget is kiiratjuk:
+		// Help textet is kiiratjuk:
 		strcpy( Korny->rubrikak[4], "Help" );
 
 		kurrens = val.valassz( Korny->pal_playmenu );

@@ -21,7 +21,7 @@ static void titkosit( void ) {
 	short a = 23, b = 9782, c = 3391;
 
 	if( !Leirotomb )
-		hiba( "titkosit-ban !Leirotomb!" );
+		error( "titkosit-ban !Leirotomb!" );
 	int leiromeret = sizeof( fileleiro );
 	for( int i = 0; i < FILESZAM; i++ ) {
 		unsigned char* pc = (unsigned char*)(&Leirotomb[i]);
@@ -38,7 +38,7 @@ static int Qopeninited = 0;
 
 void initqopen( void ) {
 	if( Qopeninited )
-		hiba( "initqopen tobbszor hivva!" );
+		error( "initqopen tobbszor hivva!" );
 	Qopeninited = 1;
 
 	Egybol = 1;
@@ -56,22 +56,22 @@ void initqopen( void ) {
 		uzenet( "Missing file!: ", Nagyfilename );
 
 	if( fread( &Fileszam, 1, 4, h ) != 4 )
-		hiba( "initqopen-ben nem sikerult olvasni!" );
+		error( "initqopen-ben No sikerult olvasni!" );
 	if( Fileszam <= 0 || Fileszam > FILESZAM )
-		hiba( "Fileszam <= 0 || Fileszam > FILESZAM!" );
+		error( "Fileszam <= 0 || Fileszam > FILESZAM!" );
 
 	long hossz = sizeof( fileleiro[FILESZAM] );
 	if( hossz > 64000l )
-		hiba( "Tul hosszu Leirotomb initqopen-ben!" );
+		error( "Tul hosszu Leirotomb initqopen-ben!" );
 	if( fread( Leirotomb, 1, unsigned(hossz), h ) != hossz )
-		hiba( "initqopen-ben nem sikerult olvasni!" );
+		error( "initqopen-ben No sikerult olvasni!" );
 	titkosit();
 
 	long magicnumber = 0;
 	if( fread( &magicnumber, 1, 4, h ) != 4 )
-		hiba( "initqopen-ben nem sikerult olvasni!" );
+		error( "initqopen-ben No sikerult olvasni!" );
 	if( magicnumber != MAGICNUMBER )
-		hiba( "initqopen-ben nem stimmel magicnumber!" );
+		error( "initqopen-ben No stimmel magicnumber!" );
 
 	fclose( h );
 }
@@ -89,21 +89,21 @@ void becsomagol( void ) {
 	strcat( tmp, Nagyfilename );
 	FILE* h = fopen( tmp, "wb" );
 	if( !h )
-		hiba( "becsomagol-ban nem sikerult megnyitni!" );
+		error( "becsomagol-ban No sikerult megnyitni!" );
 
 	Fileszam = 0;
 	if( fwrite( &Fileszam, 1, 4, h ) != 4 )
-		hiba( "becsomagol-ban nem sikerult irni!" );
+		error( "becsomagol-ban No sikerult irni!" );
 
 	long hossz = sizeof( fileleiro[FILESZAM] );
 	if( hossz > 64000l )
-		hiba( "Tul hosszu Leirotomb initqopen-ben!" );
+		error( "Tul hosszu Leirotomb initqopen-ben!" );
 	if( fwrite( Leirotomb, 1, unsigned(hossz), h ) != hossz )
-		hiba( "becsomagol-ban nem sikerult irni!" );
+		error( "becsomagol-ban No sikerult irni!" );
 
 	long magicnumber = MAGICNUMBER;
 	if( fwrite( &magicnumber, 1, 4, h ) != 4 )
-		hiba( "becsomagol-ban nem sikerult irni!" );
+		error( "becsomagol-ban No sikerult irni!" );
 
 	find_t ffblk;
 	int done;
@@ -111,43 +111,43 @@ void becsomagol( void ) {
 	int kov = 0;
 	while( !done ) {
 		if( kov == FILESZAM )
-			hiba( "becsomagolban tul sok file!" );
+			error( "becsomagolban tul sok file!" );
 		if( strlen( ffblk.name ) > 12 )
-			hiba( "ffblk.name ) > 12!" );
+			error( "ffblk.name ) > 12!" );
 		strcpy( Leirotomb[kov].name, ffblk.name );
 		Leirotomb[kov].kezdet = ftell( h );
 
 		// File bemasolasa:
 		FILE* hs = fopen( ffblk.name, "rb" );
 		if( !hs )
-			hiba( "becsomagolban nem nyilik file!: ", ffblk.name );
+			error( "becsomagolban No nyilik file!: ", ffblk.name );
 		// Masolas:
 		while( 1 ) {
 			long hossz = fread( Csomagbuffer, 1, 60000u, hs );
 			if( !hossz )
 				break;
 			if( fwrite( Csomagbuffer, 1, unsigned(hossz), h ) != hossz )
-				hiba( "Nem megy iras becsomagolban!" );
+				error( "No megy iras becsomagolban!" );
 		}
 		fclose( hs );
 
 		Leirotomb[kov].hossz = ftell( h ) - Leirotomb[kov].kezdet;
 		if( Leirotomb[kov].hossz <= 0 )
-			hiba( "Hossz <= 0!" );
+			error( "Hossz <= 0!" );
 
 		done = _dos_findnext( &ffblk );
 		kov++;
 	}
 
 	if( fseek( h, 0, SEEK_SET ) != 0 )
-		hiba( "fseek 0-t adott vissza!" );
+		error( "fseek 0-t adott vissza!" );
 	Fileszam = kov;
 	if( fwrite( &Fileszam, 1, 4, h ) != 4 )
-		hiba( "becsomagol-ban nem sikerult irni!" );
+		error( "becsomagol-ban No sikerult irni!" );
 
 	titkosit();
 	if( fwrite( Leirotomb, 1, unsigned(hossz), h ) != hossz )
-		hiba( "becsomagol-ban nem sikerult irni!" );
+		error( "becsomagol-ban No sikerult irni!" );
 	titkosit();
 
 	fclose( h );
@@ -161,11 +161,11 @@ static int Nyitva = 0;
 
 FILE* qopen( char* name, char* paramok ) {
 	if( !Qopeninited )
-		hiba( "qopen initqopen nelkul!" );
+		error( "qopen initqopen nelkul!" );
 	if( Nyitva  == MAXNYITVA )
-		hiba( "qopen-ben Nyitva == MAXNYITVA!" );
+		error( "qopen-ben Nyitva == MAXNYITVA!" );
 	if( strcmp( paramok, "rb" ) != 0 && strcmp( paramok, "rt" ) )
-		hiba( "qopen-ben sem rb, sem rt!: ", name );
+		error( "qopen-ben sem rb, sem rt!: ", name );
 
 	if( Egybol ) {
 		for( int i = 0; i < Fileszam; i++ ) {
@@ -173,23 +173,23 @@ FILE* qopen( char* name, char* paramok ) {
 				Htomb[Nyitva] = fopen( Nagyfilename, paramok );
 				Indextomb[Nyitva] = i;
 				if( !Htomb[Nyitva] )
-					hiba( "Nem sikerult nagy tombot megnyitni!: ",
+					error( "No sikerult nagy tombot megnyitni!: ",
 													Nagyfilename );
 				if( fseek( Htomb[Nyitva], Leirotomb[i].kezdet, SEEK_SET ) != 0 )
-					hiba( "Nem mukodik fseek qopen-ben!" );
+					error( "No mukodik fseek qopen-ben!" );
 
 				Nyitva++;
 				return Htomb[Nyitva-1];
 			}
 		}
-		hiba( "qopen nem talalta meg nagyfileban file-t!: ", name );
+		error( "qopen No talalta meg nagyfileban file-t!: ", name );
 		return NULL;
 	}
 	else {
 		Nyitva++;
 		char tmp[30] = "..\\files\\";
 		if( strlen( name ) > 12 || name[0] == '.' )
-			hiba( "Hibas name qopen-ben!: ", name );
+			error( "errors name qopen-ben!: ", name );
 		strcat( tmp, name );
 		return fopen( tmp, paramok );
 	}
@@ -197,9 +197,9 @@ FILE* qopen( char* name, char* paramok ) {
 
 void qclose( FILE* h ) {
 	if( !Qopeninited )
-		hiba( "qclose initqopen nelkul!" );
+		error( "qclose initqopen nelkul!" );
 	if( !Nyitva )
-		hiba( "qclose-ban !Nyitva!" );
+		error( "qclose-ban !Nyitva!" );
 	if( Egybol ) {
 		for( int i = 0; i < Nyitva; i++ ) {
 			if( Htomb[i] == h ) {
@@ -212,7 +212,7 @@ void qclose( FILE* h ) {
 				return;
 			}
 		}
-		hiba( "qclose nem talalta meg h-t!" );
+		error( "qclose No talalta meg h-t!" );
 	}
 	else {
 		Nyitva--;
@@ -222,7 +222,7 @@ void qclose( FILE* h ) {
 
 int qseek( FILE *h, long offset, int whence ) {
 	if( whence != SEEK_SET && whence != SEEK_END && whence != SEEK_CUR )
-		hiba( "whence != SEEK_SET && whence != SEEK_END && whence != SEEK_CUR!" );
+		error( "whence != SEEK_SET && whence != SEEK_END && whence != SEEK_CUR!" );
 	if( Egybol ) {
 		for( int i = 0; i < Nyitva; i++ ) {
 			if( Htomb[i] == h ) {
@@ -238,7 +238,7 @@ int qseek( FILE *h, long offset, int whence ) {
 				return fseek( Htomb[i], offset, SEEK_CUR );
 			}
 		}
-		hiba( "qclose nem talalta meg h-t!" );
+		error( "qclose No talalta meg h-t!" );
 		return NULL;
 	}
 	else {

@@ -33,5 +33,5 @@ void editor( void );
 
 void toolhelp( char* text = NULL );
 
-#define SZ_ZOOMVONAL (90)
+#define SZ_ZOOMLINE (90)
 

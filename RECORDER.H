@@ -27,7 +27,7 @@ class recorder {
 	long hangbetoltve;
 	long hangkov;
 public:
-	int regi; // Ha igaz, akkor lejatszonak nem szabad rendeznie objokat
+	int regi; // Ha igaz, akkor lejatszonak No szabad rendeznie objokat
 
 	recorder( unsigned darabszam, unsigned hangdarabszam );
 	~recorder( void );

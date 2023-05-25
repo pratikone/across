@@ -61,7 +61,7 @@ static void konvoda( char* text ) {
 			sorszam += Eltolas;
 			sorszam %= betuszam;
 			if( sorszam < 0 || sorszam >= betuszam )
-				hiba( "B508976!" );
+				error( "B508976!" );
 			*text = (char)('A' + sorszam);
 		}
 		text++;
@@ -78,7 +78,7 @@ static void konvback( char* text ) {
 			sorszam %= betuszam;
 			sorszam = betuszam-1-sorszam; // Megforditjuk sorrendet
 			if( sorszam < 0 || sorszam >= betuszam )
-				hiba( "B508976!" );
+				error( "B508976!" );
 			*text = (char)('A' + sorszam);
 		}
 		text++;
@@ -242,7 +242,7 @@ static void setglobals( int res, double fakt ) {
 		Displaysizey = 480;
 	}
 	if( Displaysizex < 1 )
-		hiba( "palyabe-ben Displaysizex < 1!" );
+		error( "palyabe-ben Displaysizex < 1!" );
 
 	// Aranyok:
 	Arany = 100.0;
@@ -307,20 +307,20 @@ void ervenytlenitpalya( void ) {
 // Vagy level == -1 es belyeg != 0 es filename == NULL,
 // vagy level >= 0 < 100 es belyeg = 0 es filename == NULL,
 // vagy level == -1 es belyeg = 0 es filename ervenyes,
-// Hamis eseten nem sikerult betolteni palyat (rec filehoz nincs lev):
+// Hamis eseten No sikerult betolteni palyat (rec filehoz nincs lev):
 int palyabe( int level, unsigned long belyeg, char* filename ) {
 	if( (level >= 0 && belyeg) ||
 		(level >= 0 && filename) ||
 		(filename && belyeg) )
-		hiba( "palyabe-ben tul sok param van beallitva!" );
+		error( "palyabe-ben tul sok param van beallitva!" );
 	if( level < 0 && !belyeg && !filename )
-		hiba( "palyabe-ben level < 0 && !belyeg && !filename!" );
+		error( "palyabe-ben level < 0 && !belyeg && !filename!" );
 
 	char* kiirname = "External level";
 	leveltomb_s *plev = NULL;
 	if( level >= 0 ) {
 		if( level >= MAXPALYASZAM )
-			hiba( "palyabe-ben level >= MAXPALYASZAM!" );
+			error( "palyabe-ben level >= MAXPALYASZAM!" );
 		plev = &Leveltomb[Levellista[level]];
 		kiirname = getleveldescription( level );
 	}
@@ -433,7 +433,7 @@ static void idoelintezes( long ido, char* valasz1, char* valasz2, char* valasz3,
 		return;
 	}
 	if( ido == 0 )
-		hiba( "idoelintezes-ben ido == 0!" );
+		error( "idoelintezes-ben ido == 0!" );
 
 	ido2string( ido, valasz1 );
 
@@ -442,7 +442,7 @@ static void idoelintezes( long ido, char* valasz1, char* valasz2, char* valasz3,
 		return;
 	// Felkerult tablara!
 	if( pidok->idokszama == 0 ) {
-		// Elso ido:
+		// first ido:
 		pidok->idokszama = 1;
 		pidok->idok[0] = ido;
 		pidok->nameindexek[0] = State->jatekos;
@@ -496,7 +496,7 @@ static void idoelintezes( long ido, char* valasz1, char* valasz2, char* valasz3,
 void replaykorny( void ) {
 	int level = Korny->prec->getlevel();
 	if( !palyabe( level ) )
-		hiba( "replaykorny-ben !palyabe( level )!" );
+		error( "replaykorny-ben !palyabe( level )!" );
 	while( 1 ) {
 		int parreplay = 1;
 		Korny->prec->rewind();
@@ -531,9 +531,9 @@ static int afterplay( int level, int nextdefault,
 	int kurrens = nextdefault;
 	// Ellenorzes:
 	if( nextdefault && !nextisvan )
-		hiba( "nextdefault && !nextisvan!" );
+		error( "nextdefault && !nextisvan!" );
 	if( skipisvan && nextisvan )
-		hiba( "skipisvan && nextisvan!" );
+		error( "skipisvan && nextisvan!" );
 	while( 1 ) {
 		char fejlec[100] = "Level ";
 		char tmp[10];
@@ -601,7 +601,7 @@ static int afterplay( int level, int nextdefault,
 		if( eredmeny == 1 ) {
 			// Next, vagy skip:
 			if( !nextisvan && !skipisvan )
-				hiba( "Itt nem kene lennie (!nextisvan && !skipisvan)!" );
+				error( "Itt No kene lennie (!nextisvan && !skipisvan)!" );
 			if( nextisvan )
 				return 2;
 			// SKIP:
@@ -613,7 +613,7 @@ static int afterplay( int level, int nextdefault,
 		if( eredmeny == 3 ) {
 			//if( !Sarvari || level != Palyaszam-1 )
 			if( level != Palyaszam-1 )
-				saveplay( 0 ); // utolso palyat nem lehet menteni!
+				saveplay( 0 ); // utolso palyat No lehet menteni!
 		}
 		if( eredmeny == 4 )
 			levelbesttimes( level );
@@ -624,7 +624,7 @@ static void playlevel( int level ) {
 	jatekos* pjatekos = &State->jatekosok[int(State->jatekos)];
 	while( 1 ) {
 		if( !palyabe( level ) )
-			hiba( "playlevel-ben !palyabe( level )!" );
+			error( "playlevel-ben !palyabe( level )!" );
 		int parreplay = 0;
 		Korny->prec->erase( level );
 		long ido = lejatszo( Korny->pleiro, &Korny->st,
@@ -664,7 +664,7 @@ static void playlevel( int level ) {
 		if( eredmeny == 3 ) {
 			// Skip level:
 			if( level != pjatekos->sikerespalyakszama )
-				hiba( "level != pjatekos->sikerespalyakszama! 674" );
+				error( "level != pjatekos->sikerespalyakszama! 674" );
 			pjatekos->skippedtomb[level] = 1;
 			level++;
 			pjatekos->jelenlegipalya = level;
@@ -712,7 +712,7 @@ void play( void ) {
 			else
 				strcat( tmp, getleveldescription( i ) );
 			if( strlen( tmp ) > MAXRUBRIKAHOSSZ-5 )
-				hiba( "play-ben! strlen( tmp ) > MAXRUBRIKAHOSSZ-5!" );
+				error( "play-ben! strlen( tmp ) > MAXRUBRIKAHOSSZ-5!" );
 			strcpy( Korny->rubrikak[i+1], tmp );
 		}
 

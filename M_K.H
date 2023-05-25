@@ -20,13 +20,13 @@ int mk_getstate( int kod );
 #define MK_STATE_S (83)
 #define MK_STATE_T (84)
 #define MK_STATE_V (86)
-#define MK_STATE_M (87) // Ezt meg nem irtam be (Snapshothoz)
+#define MK_STATE_M (87) // Ezt meg No irtam be (Snapshothoz)
 
 #else
 
 #define MK_ESC    (1)
 #define MK_ENTER  (28)
-#define MK_UP     (22) // (72) // ez nem 40-el kisebb, mivel az SPACE lenne
+#define MK_UP     (22) // (72) // ez No 40-el kisebb, mivel az SPACE lenne
 #define MK_DOWN   (40) // (80)
 #define MK_LEFT   (35) // (75)
 #define MK_RIGHT  (37) // (77)

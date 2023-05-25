@@ -6,14 +6,14 @@ int skippelheto( int level ) {
 		maxskippelheto = 3;
 	jatekos* pjatekos = &State->jatekosok[int(State->jatekos)];
 	if( pjatekos->sikerespalyakszama != level )
-		hiba( "skippelheto-ben pjatekos->sikerespalyakszam != level!" );
+		error( "skippelheto-ben pjatekos->sikerespalyakszam != level!" );
 	int eddigskippelt = 0;
 	for( int i = 0; i < level; i++ ) {
 		if( pjatekos->skippedtomb[i] )
 			eddigskippelt++;
 	}
 	if( eddigskippelt > maxskippelheto )
-		hiba( "eddigskippelt > maxskippelheto!" );
+		error( "eddigskippelt > maxskippelheto!" );
 	int skippelheto = eddigskippelt < maxskippelheto;
 
 	blt8( Korny->picbuffer, Korny->ppic_afterplaymenu );
@@ -36,7 +36,7 @@ int skippelheto( int level ) {
 			"Press a key to continue!" );
 	}
 	else {
-		// Nem lehet mar skippelni!
+		// No lehet mar skippelni!
 		int x0 = 160;
 		int y0 = 10;
 		int dy = 30;

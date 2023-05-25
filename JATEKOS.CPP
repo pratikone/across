@@ -62,7 +62,7 @@ void newjatekos( int visszater ) {
 		uzenet( "Sorry, no more players can get onto the list!" );
 	int maxrub = MAXRUBRIKASZAM;
 	if( MAXJATEKOS > maxrub )
-		hiba( "MAXJATEKOS > MAXRUBRIKASZAM!" );
+		error( "MAXJATEKOS > MAXRUBRIKASZAM!" );
 
 	//Korny->pal_newjatekos->set();
 	blt8( Korny->picbuffer, Korny->ppic_newjatekos );
@@ -108,7 +108,7 @@ void jatekosvalasztas( int visszater ) {
 	strcpy( Korny->rubrikak[0], "Create New Player" );
 	for( int i = 0; i < State->jatekosokszama; i++ ) {
 		if( strlen( State->jatekosok[i].name ) > MAXRUBRIKAHOSSZ )
-			hiba( "Tul hosszu name jatekosvalasztas-ban!" );
+			error( "Tul hosszu name jatekosvalasztas-ban!" );
 		strcpy( Korny->rubrikak[i+1], State->jatekosok[i].name );
 	}
 

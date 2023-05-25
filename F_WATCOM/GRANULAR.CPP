@@ -29,14 +29,14 @@ static int pmhivas( void *buffer, int size ) {
 		return 0;
 } */
 
-static int Elso = 1;
+static int first = 1;
 static int Granula = 64;
 
 // Sokszor lehet hivni, de csak egyszer kiserli meg granularitas beolvasasat:
 int getgranularitas( void ) {
-	if( !Elso )
+	if( !first )
 		return Granula;
-	Elso = 0;
+	first = 0;
 
 	// Eloszor megnezzuk, hogy nincs-e SETUP.VID file-ban beallitva
 	// granularitas:

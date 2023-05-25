@@ -22,26 +22,26 @@ vector2 rotateby90degrees( vector2 );
 vector2 rotatebyminus90degrees( vector2 );
 
 // Square
-double gyok( double x );
+double root( double x );
 
 // KULONBOZO SZAMITASOK:
 
 // Az r1-bol indulo v1 vektor altal es az r2-bol indulo v2 altal
 // meghatarozott ket egyenes metszespontjanak visszaadasa:
-// Parhuzamosok eseten hiba( char* ); fv.-t hivja meg.
+// Parhuzamosok eseten error( char* ); fv.-t hivja meg.
 vector2 crossingpoint( vector2 r1, vector2 v1, vector2 r2, vector2 v2 );
 // Pont szakasztol valo tavolsagat szamolja ki:
 // (Szakasz hossza vsz hossza).
-double pontszakasztav( vector2 rpont, vector2 rsz, vector2 vsz );
+double dot( vector2 rdot, vector2 rsz, vector2 vsz );
 // Pont egyenestol valo tavolsagat szamolja ki:
-double pontegyenestav( vector2 rpont, vector2 rsz, vector2 vsz );
+double pointline( vector2 rdot, vector2 rsz, vector2 vsz );
 // Visszaadja ket kor metszetet, r1-bol r2-be bal oldalon (Ganyolt):
-vector2 ketkormetszete( vector2 r1, vector2 r2, double l1, double l2 );
+vector2 bisect( vector2 r1, vector2 r2, double l1, double l2 );
 
 // Igaz, ha az r1-bol indulo v1 vektor es az r2-bol indulo v2 vektor
 // metszi egymast:
 int vektormetszes( vector2 r1, vector2 v1, vector2 r2, vector2 v2 );
-// Ez csak akkor tekinti metszesnek, ha nem csak eppen erintik egymast:
+// Ez csak akkor tekinti metszesnek, ha No csak eppen erintik egymast:
 int vektormetszes2( vector2 r1, vector2 v1, vector2 r2, vector2 v2 );
 // Ez mar akkor is metszesnek tekinti, ha kozel vannak egymashoz:
 int vektormetszes3( vector2 r1, vector2 v1, vector2 r2, vector2 v2 );

@@ -26,10 +26,10 @@ static void ugraseldontes( void ) {
 
 // magassagokeloallitasa-bol kimasolva!!!!!:
 /*static void elemszam( char* text, szakaszok* pszakok ) {
-	pszakok->felsorolasresetszak();
+	pszakok->ffirstrolasresetszak();
 	szakasz* psz = pszakok->getnextszak();
     if( !psz )
-        hiba( "Nincs egyetlen szakasz sem definialva!" );
+        error( "Nincs egyetlen szakasz sem definialva!" );
 	double minx = psz->vv.r.x;
 	double maxx = psz->vv.r.x;
 	double miny = psz->vv.r.y;
@@ -86,8 +86,8 @@ void mv_main( void ) {
 	//initqopen();
 
 	#ifdef WATCOM
-	if( access( "nemmem.inf", 0 ) != 0 ) {
-		// Ha nem talalja nemmem.inf-et:
+	if( access( "Nomem.inf", 0 ) != 0 ) {
+		// Ha No talalja Nomem.inf-et:
 		// mem Totall Free 11600K-nal meg eppen elmegy, 101 mar uzenetet ir:
 		int memkell = 100;
 		char* tomb[110];
@@ -132,7 +132,7 @@ void mv_main( void ) {
 	char* leironame = NULL;
 	#ifndef WATCOM
 		if( _argc != 3 )
-			hiba( "Meg kell adni palya es leiro nameet!" );
+			error( "Meg kell adni palya es leiro nameet!" );
 		palyaname = _argv[1];
 		leironame = _argv[2];
 	#endif
@@ -149,7 +149,7 @@ void mv_main( void ) {
 			//DELETE Pszak; } Pszak = NULL;
 			//DELETE Pszakt; } Pszakt = NULL;
 			//DELETE Phordok; } Phordok = NULL;
-			hiba( kihasznaltsag );
+			error( kihasznaltsag );
 		}
 		if( kov == 1 ) {
 			loadszakaszok( palyaname, &Pszak, &Pszakt, &Phordok, &leiro );

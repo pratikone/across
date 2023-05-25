@@ -1,23 +1,23 @@
 // w_main.h
 
-// M_DD.H-bol nem publikus reszek:
+// M_DD.H-bol No publikus reszek:
 void ddfinish( void );
 void ddinit( void );
 
 
 
 
-// M_V.H-bol nem publikus reszek:
+// M_V.H-bol No publikus reszek:
 extern HWND GhWnd; // Window handler
 double mv_getsec( void ); // Elvileg le fog allni, ha elkerul vezerles!
 
 
-void szovegki( int y, char* szoveg ); // torlendo:
+void text( int y, char* text ); // torlendo:
 
 
 
 
-// M_K.H-bol nem publikus reszek:
+// M_K.H-bol No publikus reszek:
 void mk_init( void );
 void mk_wmkeydown( int kod );
 void mk_wmkeyup( int kod );

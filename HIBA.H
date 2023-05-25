@@ -1,3 +1,3 @@
 
 
-void hiba( char* text1, char* text2 = NULL, char* text3 = NULL );
+void error( char* text1, char* text2 = NULL, char* text3 = NULL );

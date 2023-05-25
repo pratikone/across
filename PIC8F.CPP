@@ -25,7 +25,7 @@ int pic8f::getysize( void ) {
 unsigned char pic8f::gpixel( int x, int y ) {
 	#ifdef TEST
 		if( x < 0 || y < 0 )
-			hiba( "pic8f::gpixel-ben bemeno negativ!" );
+			error( "pic8f::gpixel-ben bemeno negativ!" );
 	#endif
 	x = x%xsize;
 	y = y%ysize;
@@ -39,7 +39,7 @@ unsigned char pic8f::gpixel( int x, int y ) {
 void pic8f::ppixel( int x, int y, unsigned char szin ) {
 	#ifdef TEST
 		if( x < 0 || y < 0 )
-			hiba( "pic8f::ppixel-ben bemeno negativ!" );
+			error( "pic8f::ppixel-ben bemeno negativ!" );
 	#endif
 	x = x%xsize;
 	y = y%ysize;
@@ -50,18 +50,18 @@ void pic8f::ppixel( int x, int y, unsigned char szin ) {
 	ppic->sormuttomb[y][x] = szin;
 }
 
-void pic8f::vizvonalcpy( int x, int y, unsigned char* tomb ) {
+void pic8f::vizLINEcpy( int x, int y, unsigned char* tomb ) {
 	x = x%xsize;
 	y = y%ysize;
 	if( x < 0 )
 		x += xsize;
 	if( y < 0 )
 		y += ysize;
-	// Kozepso reszlet kirajzolasa
+	// Kozepso reszlet kidrawolasa
 	bytecopy( &ppic->sormuttomb[y][x], tomb, xsize );
-	// Utolso reszlet kirajzolasa
+	// Utolso reszlet kidrawolasa
 	bytecopy( &ppic->sormuttomb[y][x+xsize], tomb, xsize-x );
-	// Elso reszlet kirajzolasa
+	// first reszlet kidrawolasa
 	bytecopy( &ppic->sormuttomb[y][0], &tomb[xsize-x], x );
 
 	// Ugyanez megismetelve:
@@ -70,7 +70,7 @@ void pic8f::vizvonalcpy( int x, int y, unsigned char* tomb ) {
 	bytecopy( &ppic->sormuttomb[y+ysize][0], &tomb[xsize-x], x );
 }
 
-void pic8f::fuggvonalcpy( int x, int y, unsigned char* tomb ) {
+void pic8f::fuggLINEcpy( int x, int y, unsigned char* tomb ) {
 	x = x%xsize;
 	y = y%ysize;
 	if( x < 0 )
@@ -92,7 +92,7 @@ void pic8f::fuggvonalcpy( int x, int y, unsigned char* tomb ) {
 		psor[x] = tomb[i];
 		psor[x2] = tomb[i];
 	}
-	// Elso reszlet:
+	// first reszlet:
 	hossz = y;
 	for( i = 0; i < hossz; i++ ) {
 		unsigned char* psor = ppic->sormuttomb[i];
@@ -104,7 +104,7 @@ void pic8f::fuggvonalcpy( int x, int y, unsigned char* tomb ) {
 void pic8f::vizszegmens( int x, int y, int size, unsigned char szin ) {
 	#ifdef TEST
 		if( x < 0 || y < 0 )
-			hiba( "pic8f::ppixel-ben bemeno negativ!" );
+			error( "pic8f::ppixel-ben bemeno negativ!" );
 	#endif
 	x = x%xsize;
 	y = y%ysize;
@@ -119,7 +119,7 @@ void pic8f::vizszegmens( int x, int y, int size, unsigned char szin ) {
 void pic8f::fuggszegmens( int x, int y, int size, unsigned char szin ) {
 	#ifdef TEST
 		if( x < 0 || y < 0 )
-			hiba( "pic8f::ppixel-ben bemeno negativ!" );
+			error( "pic8f::ppixel-ben bemeno negativ!" );
 	#endif
 	x = x%xsize;
 	y = y%ysize;
@@ -142,12 +142,12 @@ void pic8f::place( int x, int y ) {
 }
 
 // A kovetkezoek place alapjan dolgoznak:
-void pic8f::vizvonalset( int x, int y, int hossz, unsigned char szin ) {
+void pic8f::vizLINEset( int x, int y, int hossz, unsigned char szin ) {
 	#ifdef TEST
 		if( x < 0 || y < 0 )
-			hiba( "pic8f::vizvonalset-ben bemeno negativ!" );
+			error( "pic8f::vizLINEset-ben bemeno negativ!" );
 		if( hossz > xsize )
-			hiba( "pic8f::vizvonalset-ben hossz > xsize!" );
+			error( "pic8f::vizLINEset-ben hossz > xsize!" );
 	#endif
 	x = x%xsize;
 	y = y%ysize;
@@ -157,9 +157,9 @@ void pic8f::vizvonalset( int x, int y, int hossz, unsigned char szin ) {
 		y += ysize;
 	#ifdef TEST
 		if( x+hossz >= x0+xsize )
-			hiba( "pic8f::vizvonalset-ben vonal lelog keprol!" );
+			error( "pic8f::vizLINEset-ben LINE lelog keprol!" );
 		if( y >= y0+ysize )
-			hiba( "pic8f::vizvonalset-ben vonal lelog keprol!" );
+			error( "pic8f::vizLINEset-ben LINE lelog keprol!" );
 	#endif
 	memset( &ppic->sormuttomb[y][x], szin, hossz );
 }
@@ -167,7 +167,7 @@ void pic8f::vizvonalset( int x, int y, int hossz, unsigned char szin ) {
 unsigned char* pic8f::getcim( int x, int y ) {
 	/*#ifdef TEST
 		if( x < 0 || y < 0 )
-			hiba( "pic8f::getcim-ben bemeno negativ!" );
+			error( "pic8f::getcim-ben bemeno negativ!" );
 	#endif */
 	x = x%xsize;
 	y = y%ysize;
@@ -191,9 +191,9 @@ void pic8f::csakegyblt( pic8* pp, int x, int y ) {
 		y += ysize;
 	#ifdef TEST
 		if( x+pp->getxsize() > x0+xsize )
-			hiba( "pic8f::vizvonalset-ben vonal lelog keprol!" );
+			error( "pic8f::vizLINEset-ben LINE lelog keprol!" );
 		if( y+pp->getysize() > y0+ysize )
-			hiba( "pic8f::vizvonalset-ben vonal lelog keprol!" );
+			error( "pic8f::vizLINEset-ben LINE lelog keprol!" );
 	#endif
 	blt8( ppic, pp, x, y );
 }
@@ -207,23 +207,23 @@ void pic8f::csakegyblt( pic8* pp, int x, int y, int x1, int y1, int x2, int y2 )
 		y += ysize;
 	#ifdef TEST
 		if( x2 < x1 || y2 < y1 )
-			hiba( "pic8f::csakegyblt-ben x2 <= x1 || y2 <= y1!" );
+			error( "pic8f::csakegyblt-ben x2 <= x1 || y2 <= y1!" );
 		if( x+x2-x1 >= x0+xsize )
-			hiba( "pic8f::vizvonalset-ben vonal lelog keprol!" );
+			error( "pic8f::vizLINEset-ben LINE lelog keprol!" );
 		if( y+y2-y1 >= y0+ysize )
-			hiba( "pic8f::vizvonalset-ben vonal lelog keprol!" );
+			error( "pic8f::vizLINEset-ben LINE lelog keprol!" );
 	#endif
 	blt8( ppic, pp, x, y, x1, y1, x2, y2 );
 }
 
 void pic8f::freshrectangle( int x1, int y1, int x2, int y2 ) {
 	if( x1 > x2 || y1 > y2 )
-		hiba( "freshrectangle-ban meretek fel vannak cserelve!" );
+		error( "freshrectangle-ban meretek fel vannak cserelve!" );
 	int xs = x2-x1+1;
 	int ys = y2-y1+1;
 	#ifdef TEST
 		if( xs < 2 || ys < 2 )
-			hiba( "freshrectangle-ban egyik meret kisebb mint 2!" );
+			error( "freshrectangle-ban egyik meret kisebb mint 2!" );
 	#endif
 	int x = x1%xsize;
 	int y = y1%ysize;
@@ -233,9 +233,9 @@ void pic8f::freshrectangle( int x1, int y1, int x2, int y2 ) {
 		y += ysize;
 	#ifdef TEST
 		if( x+xs-1 >= x0+xsize )
-			hiba( "pic8f::freshrectangle-ben block lelog keprol!" );
+			error( "pic8f::freshrectangle-ben block lelog keprol!" );
 		if( y+ys-1 >= y0+ysize )
-			hiba( "pic8f::freshrectangle-ben block lelog keprol!" );
+			error( "pic8f::freshrectangle-ben block lelog keprol!" );
 	#endif
 	// X IRANYBAN SZABDALAS:
 	int adx = -1, asx = -1, ahx = -1; // a block adatai:   d-dest, s-source,
@@ -309,13 +309,13 @@ void pic8f::freshrectangle( int x1, int y1, int x2, int y2 ) {
 
 
 
-static void getvizvonal( int x, int y, int xsize, unsigned char* tomb,
+static void getvizLINE( int x, int y, int xsize, unsigned char* tomb,
 			unsigned char viewhat, unsigned char viewelo,
 			magassag* pmfugg, int zoom ) {
 	kitoltcsikot( pmfugg, y, x, xsize, tomb, viewhat, viewelo, zoom );
 }
 
-static void getfuggvonal( int x, int y, int ysize, unsigned char* tomb,
+static void getfuggLINE( int x, int y, int ysize, unsigned char* tomb,
 			unsigned char viewhat, unsigned char viewelo,
 			magassag* pmviz, int zoom ) {
 	kitoltcsikot( pmviz, x, y, ysize, tomb, viewhat, viewelo, zoom );
@@ -326,7 +326,7 @@ int max(int value1, int value2) {
 }
 
 static unsigned char *Tomb = NULL, *Tombeg = NULL, *Tombfold = NULL;
-static int Elsotolpic8f = 1;
+static int firsttolpic8f = 1;
 static int Lefoglaltsize = 700;
 
 // Bal also sarok koordinatajanak a valtozasa:
@@ -337,8 +337,8 @@ void tolpic8f( int x1, int y1, int x2, int y2, pic8f* pf,
 	pf->place( x2, y2 );
 	int xsize = pf->getxsize();
 	int ysize = pf->getysize();
-	if( Elsotolpic8f ) {
-		Elsotolpic8f = 0;
+	if( firsttolpic8f ) {
+		firsttolpic8f = 0;
 		{ Tomb = NEW(unsigned char*) unsigned char[Lefoglaltsize]; }
 		{ Tombeg = NEW(unsigned char*) unsigned char[Lefoglaltsize]; }
 		{ Tombfold = NEW(unsigned char*) unsigned char[Lefoglaltsize]; }
@@ -346,21 +346,21 @@ void tolpic8f( int x1, int y1, int x2, int y2, pic8f* pf,
 			uzenet( "memory lehet hogy Tombfold!" );
 	}
 	//if( Lefoglaltsize != max( xsize, ysize ) + 10 )
-	//	hiba( "Lefoglaltsize != max( xsize, ysize ) + 10" );
+	//	error( "Lefoglaltsize != max( xsize, ysize ) + 10" );
 	int egesz = 0;
 	if( x1 < -10000 || y1 < -10000 )
 		egesz = 1;
 	//if( x2 < 0 || y2 < 0 )
-	//	hiba( "tolpic8f-ben negativ koordinatak vannak megadva!" );
+	//	error( "tolpic8f-ben negativ koordinatak vannak megadva!" );
 	if( abs( x2-x1 ) >= xsize/2 )
 		egesz = 1;
 	if( abs( y2-y1 ) >= ysize/2 )
 		egesz = 1;
 	if( egesz ) {
 		for( int i = 0; i < ysize; i++ ) {
-			getvizvonal( x2, y2+i, xsize, Tomb, viewhat, viewelo, pmfugg,
+			getvizLINE( x2, y2+i, xsize, Tomb, viewhat, viewelo, pmfugg,
 				Config.zoom );
-			pf->vizvonalcpy( x2, y2+i, Tomb );
+			pf->vizLINEcpy( x2, y2+i, Tomb );
 		}
 		return;
 	}
@@ -376,33 +376,33 @@ void tolpic8f( int x1, int y1, int x2, int y2, pic8f* pf,
 
 	if( baloldalt ) {
 		for( int i = 0; i < hosszx; i++ ) {
-			getfuggvonal( x2+i, y2, ysize, Tomb, viewhat, viewelo, pmviz,
+			getfuggLINE( x2+i, y2, ysize, Tomb, viewhat, viewelo, pmviz,
 				Config.zoom );
-			pf->fuggvonalcpy( x2+i, y2, Tomb );
+			pf->fuggLINEcpy( x2+i, y2, Tomb );
 		}
 	}
 	else {
 		for( int i = 0; i < hosszx; i++ ) {
 			int j = x2+xsize-hosszx+i;
-			getfuggvonal( j, y2, ysize, Tomb, viewhat, viewelo, pmviz,
+			getfuggLINE( j, y2, ysize, Tomb, viewhat, viewelo, pmviz,
 					Config.zoom );
-			pf->fuggvonalcpy( j, y2, Tomb );
+			pf->fuggLINEcpy( j, y2, Tomb );
 		}
 	}
 
 	if( lent ) {
 		for( int i = 0; i < hosszy; i++ ) {
-			getvizvonal( x2, y2+i, xsize, Tomb, viewhat, viewelo, pmfugg,
+			getvizLINE( x2, y2+i, xsize, Tomb, viewhat, viewelo, pmfugg,
 					Config.zoom );
-			pf->vizvonalcpy( x2, y2+i, Tomb );
+			pf->vizLINEcpy( x2, y2+i, Tomb );
 		}
 	}
 	else {
 		for( int i = 0; i < hosszy; i++ ) {
 			int j = y2+ysize-hosszy+i;
-			getvizvonal( x2, j, xsize, Tomb, viewhat, viewelo, pmfugg,
+			getvizLINE( x2, j, xsize, Tomb, viewhat, viewelo, pmfugg,
 					Config.zoom );
-			pf->vizvonalcpy( x2, j, Tomb );
+			pf->vizLINEcpy( x2, j, Tomb );
 		}
 	}
 }

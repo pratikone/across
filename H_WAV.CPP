@@ -2,7 +2,7 @@
 
 void wav::lefoglal( void ) {
 	if( size > 1000000 )
-		hiba( "wav::alloc-ban size > 1000000!" );
+		error( "wav::alloc-ban size > 1000000!" );
 	{ tomb = NEW(signed short*) signed short[size]; }
 	if( !tomb )
 		uzenet( "wav::alloc-ban memory!" );
@@ -22,11 +22,11 @@ static void namewavtest( char* name ) {
 			if( strcmpi( ".wav", &name[i] ) == 0 )
 				return;
 			else
-				hiba( "namerawtest-ben nincs .raw!" );
+				error( "namerawtest-ben nincs .raw!" );
 		}
 		i--;
 	}
-	hiba( "namewavtest-ben nincs .wav!" );
+	error( "namewavtest-ben nincs .wav!" );
 }
 
 
@@ -41,7 +41,7 @@ struct wavheader {
 	short channel; // 1 -> mono, 2 -> stereo
 	unsigned short frekvencia;
 	short miez2, miez3, miez4;
-	long nemkene;
+	long Nokene;
 	// audio data:
 	char data[4];
 	long hossz;
@@ -53,15 +53,15 @@ wav::wav( char* name, double maxamplitudo, int start, int ucsoutani ) {
 	// Lemeri file hosszat:
 	FILE* h = qopen( name, "rb" );
 	if( !h )
-		hiba( "Nem tudta megnyitni file-t: ", name );
+		error( "No tudta megnyitni file-t: ", name );
 
 	wavheader header;
 	int negyvennegy = 44;
 	if( sizeof( wavheader ) != negyvennegy )
-		hiba( "sizeof( wavheader ) != 44!" );
+		error( "sizeof( wavheader ) != 44!" );
 
 	if( fread( &header, 1, 44, h ) != 44 )
-		hiba( "Nem sikerult beolvasni wav-ot!" );
+		error( "No sikerult beolvasni wav-ot!" );
 
 	long hossz = header.hossz;
 	int bit16 = 1;
@@ -80,28 +80,28 @@ wav::wav( char* name, double maxamplitudo, int start, int ucsoutani ) {
 	}
 
 	if( header.channel != 1 )
-		hiba( "Wav file nem mono!: ", name );
+		error( "Wav file No mono!: ", name );
 
 	if( bit16 ) {
 		// 16 bites uncompressed:
 		if( size%2 )
-			hiba( "16 bites wav-nal nem paros byteszam!" );
+			error( "16 bites wav-nal No paros byteszam!" );
 		size = reszhossz;
 		if( start+reszhossz > hossz/2 )
-			hiba( "Reszlet kilog wav-bol!" );
+			error( "Reszlet kilog wav-bol!" );
 		lefoglal();
 		qseek( h, start*2, SEEK_CUR );
 		if( fread( tomb, 1, size*2, h ) != size*2 )
-			hiba( "Nem sikerult beolvasni wav-ot!: ", name );
+			error( "No sikerult beolvasni wav-ot!: ", name );
 	}
 	else {
 		// 8 bites uncompressed:
 		if( reszlet )
-			hiba( "8 bitre meg nincs megirva reszlet!" );
+			error( "8 bitre meg nincs megirva reszlet!" );
 		size = hossz;
 		lefoglal();
 		if( fread( tomb, 1, hossz, h ) != hossz )
-			hiba( "Nem sikerult beolvasni wav-ot!: ", name );
+			error( "No sikerult beolvasni wav-ot!: ", name );
 		unsigned char* bytetomb = (unsigned char*)tomb;
 		for( int i = size-1; i >= 0; i-- ) {
 			tomb[i] = short((((short)(bytetomb[i]))-128)<<8);
@@ -134,9 +134,9 @@ void wav::save( char* name ) {
 	// Lemeri file hosszat:
 	FILE* h = fopen( name, "wb" );
 	if( !h )
-		hiba( "Nem tudta megnyitni file-t: ", name );
+		error( "No tudta megnyitni file-t: ", name );
 	if( fwrite( tomb, 1, size*2, h ) != size*2 )
-			hiba( "Nem sikerult irni wav-ot wav::save-ben!" );
+			error( "No sikerult irni wav-ot wav::save-ben!" );
 	fclose( h );
 }
 
@@ -144,7 +144,7 @@ void wav::save( char* name ) {
 // Elejere tesz egy loopot a vegebol, amit aztan le is vag:
 void wav::loopol( int n ) {
 	if( n >= size )
-		hiba( "n >= size!" );
+		error( "n >= size!" );
 	for( int i = 0; i < n; i++ ) {
 		double arany = ((double)i)/n;
 		tomb[i] = arany*tomb[i] + (1-arany)*tomb[size-n+i];
@@ -155,9 +155,9 @@ void wav::loopol( int n ) {
 // pwav elejet rateszi vegere:
 void wav::vegereilleszt( wav* pwav, int n ) {
 	if( n >= size )
-		hiba( "n >= size!" );
+		error( "n >= size!" );
 	if( n >= pwav->size )
-		hiba( "n >= pwav->size!" );
+		error( "n >= pwav->size!" );
 	for( int i = 0; i < n; i++ ) {
 		double arany = ((double)i)/n;
 		tomb[size-n+i] = (1-arany)*tomb[i] + arany*pwav->tomb[i];
@@ -171,10 +171,10 @@ wav2::wav2( wav* pwav ) {
 	mtomb = NULL;
 	tomb = pwav->tomb;
 	#ifndef WATCOM
-		hiba( "wav2 csak Watcom alatt mukodik!" );
+		error( "wav2 csak Watcom alatt mukodik!" );
 	#endif
 	if( pwav->size > 64000 )
-		hiba( "wav2-ben size > 64000!" );
+		error( "wav2-ben size > 64000!" );
 	{ mtomb = NEW(short*) short[pwav->size]; }
 	if( !mtomb )
 		uzenet( "memory" );

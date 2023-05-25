@@ -3,18 +3,18 @@ struct szakasz;
 
 struct targy;
 
-struct vonal;
+struct LINE;
 
-struct vonalnode {
-	vonal* 	   pvonal;
-	vonalnode* pnext;
+struct LINEnode {
+	LINE* 	   pLINE;
+	LINEnode* pnext;
 };
 
-typedef vonalnode* pvonalnode;
+typedef LINEnode* pLINEnode;
 
 #define CSOMAGBANNODESZAM (500)
 struct soknodecsomag {
-	vonalnode nodetomb[CSOMAGBANNODESZAM];
+	LINEnode nodetomb[CSOMAGBANNODESZAM];
 	soknodecsomag* nextcsomag;
 };
 
@@ -27,20 +27,20 @@ class szakaszok {
 	int szakfuto;
 
 	// Terbeli kereseshez:
-	pvonalnode* tertomb;
+	pLINEnode* tertomb;
 	int xdim, ydim;
 	double cellameret;
 	vector2 origo;
-	vonalnode* nextnode; // getnext ez alapjan dolgozik!
+	LINEnode* nextnode; // getnext ez alapjan dolgozik!
 
 
-	void beindexelvonalat( vonal* pv, double maxtav );
-	void bekot( int cellax, int cellay, vonal* pv );
+	void beindexelLINEat( LINE* pv, double maxtav );
+	void bekot( int cellax, int cellay, LINE* pv );
 
 	// Terbeli kereseshez nodkezeles:
-	soknodecsomag* pelsocsomag;
+	soknodecsomag* pfirstcsomag;
 	int csomagbanbetelt;
-	vonalnode* getnewnode( void );
+	LINEnode* getnewnode( void );
 	void deleteallnodes( void );
 public:
 	//szakaszok( void );
@@ -54,11 +54,11 @@ public:
 	// Terbeli fv.-ek:
 	// rendez-t csak egyszer szabad hivni!
 	void rendez( double maxtav );
-	void felsorolasreset( vector2 r );
-	vonal* getnext( void );
+	void ffirstrolasreset( vector2 r );
+	LINE* getnext( void );
 
 	// Osszes szakaszon vegigmennek:
-	void felsorolasresetszak( void );
+	void ffirstrolasresetszak( void );
 	szakasz* getnextszak( void );
 
 	// Visszaadja kajak szamat!:
@@ -71,14 +71,14 @@ public:
 	int getsorszam( szakasz* pszakasz );
 };
 
-struct vonal {
+struct LINE {
 	vector2 r, v, egyseg;
 	double hossz;
 };
 
 struct szakasz {
 public:
-	vonal vv;
+	LINE vv;
 	targy*	 ptargy;
 };
 

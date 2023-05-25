@@ -7,7 +7,7 @@ double  Hatarx1,
         Hatary1,
         Hatary2;
 
-void resetkirajzol( void ) {
+void resetkidrawol( void ) {
     Hatarx1 = 2.0;
     Hatary1 = 2.0;
     Hatarx2 = Displaysizex-3.0;
@@ -31,18 +31,18 @@ static vector2 interpolal( vector2 v1, vector2 v2, double x ) {
     return vissza;
 }
 
-// Meg nem affin koordok:
+// Meg No affin koordok:
 static void kidoboz( vector2 a, vector2 b, pic8* ppic8, double szelesseg,
         kiskep* pk, double tulloga, double tullogb, int tukor = 0 ) {
-    vector2 vegys = egys( b-a );
-    b = b + vegys*tullogb;
-    a = a - vegys*tulloga;
+    vector2 mixed = egys( b-a );
+    b = b + mixed*tullogb;
+    a = a - mixed*tulloga;
     vector2 v = b-a;
     vector2 v2fel;
     if( tukor )
-        v2fel = rotateby90degrees( vegys ) * szelesseg;
+        v2fel = rotateby90degrees( mixed ) * szelesseg;
     else
-        v2fel = rotatebyminus90degrees( vegys ) * szelesseg;
+        v2fel = rotatebyminus90degrees( mixed ) * szelesseg;
     a = a-v2fel;
 
     a.x *= Aranyx;
@@ -55,7 +55,7 @@ static void kidoboz( vector2 a, vector2 b, pic8* ppic8, double szelesseg,
 }
 
 // sugar meg nincs megszorozva:
-// Meg nem affin koordok:
+// Meg No affin koordok:
 static void kidobozkerek( vector2 r, double sugar, double alfa,
         pic8* ppicbuffer, kiskep* pk, int tukor = 0 ) {
     vector2 vfel( cos( alfa ) * sugar, sin( alfa ) * sugar );
@@ -87,7 +87,7 @@ static void kigyuru( pic8* ppic8, int x, int y, unsigned char szin ) {
     #ifdef TEST
         if( x < 1 || x >= ppic8->getxsize()-1 ||
             y < 1 || y >= ppic8->getysize()-1 )
-            hiba( "kigyuru-ben x, vagy y lelog!" );
+            error( "kigyuru-ben x, vagy y lelog!" );
     #endif
     unsigned char *sor = ppic8->getptr( y-1 );
     sor[x-1] = szin; sor[x] = szin; sor[x+1] = szin;
@@ -120,7 +120,7 @@ static void felhokfel( int x, int y, pic8* ppicbuffer, pic8* pfelho,
 
 double Mo_y, Mo_bal, Mo_dx;
 
-void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
+void kidrawol320( st320* pst, double t, palyaleiro* pleiro, int view,
         int timeki, double baljobb, double ugrasnagysag, int ugras1volt,
         double forgas ) {
     int sx = -1, sy = -1;
@@ -138,13 +138,13 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
     if( sy == 480 )
         res = 4;
     if( !res )
-        hiba( "kirajzol320-ban !res!" );
+        error( "kidrawol320-ban !res!" );
 
     #ifdef TEST
         if( baljobb < 0 || baljobb > 1.0 )
-            hiba( "baljobb < 0 || baljobb > 1.0!" );
+            error( "baljobb < 0 || baljobb > 1.0!" );
         if( forgas < 0.0 || forgas > 1.0 )
-            hiba( "forgas < 0.0 || forgas > 1.0!" );
+            error( "forgas < 0.0 || forgas > 1.0!" );
     #endif
     // Ha kell affinitassal torodni:
     int vanforgas = 0;
@@ -186,7 +186,7 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
 
     vector2 vsarok( 0, 0 );
     vector2 vmotorhelye;
-    // View ablak abszolut leptekben mert elso es utolso koordja, hogy
+    // View ablak abszolut leptekben mert first es utolso koordja, hogy
     // ehhez tudjunk viszonyitani, el kell osztani erteket Configt.zoom-mal:
     int vx1 = -100, vy1 = -100, vx2 = -100, vy2 = -100;
 
@@ -232,15 +232,15 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
 
 
     if( view ) {
-        // View ablakba motoros berajzolasa:
+        // View ablakba motoros bedrawolasa:
         int x = (motorkozep.x-origo.x)*Aranyx/Config.zoom;
         int y = (motorkozep.y-origo.y)*Aranyy/Config.zoom;
         kigyuru( pleiro->pviewbuffer, x-vx1, y-vy1,
                                     pleiro->viewmotorindex );
     }
 
-    // Spriteok kirajzolasa, de view-ba csak kesobb kerulnek:
-    Pszakt->felsorolasresetszak();
+    // Spriteok kidrawolasa, de view-ba csak kesobb kerulnek:
+    Pszakt->ffirstrolasresetszak();
     szakasz* psz;
 
     while( (psz=Pszakt->getnextszak()) != NULL ) {
@@ -252,7 +252,7 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
         vector2 rrr = spritehely( psz, pt, t )-origo;
         int xkozep = rrr.x*Aranyx;
         int ykozep = rrr.y*Aranyy;
-        // Potty kirajzolasa View ablakba:
+        // Potty kidrawolasa View ablakba:
         if( view ) {
             int x = xkozep/Config.zoom;
             int y = ykozep/Config.zoom;
@@ -263,7 +263,7 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
             }
         }
 
-        // Normalis sprite kirajzolas:
+        // Normalis sprite kidrawolas:
         long l = t*ptt->frameseb;
         int index = int(l%ptt->frameszam);
         pic8* ppic = ptt->spriteok[index];
@@ -279,22 +279,22 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
         }
     }
 
-    // Most jon motoros kirajzolasa:
+    // Most jon motoros kidrawolasa:
     vector2 p_k1 = (Kor2.r-sarok);
     vector2 p_k2 = (Kor4.r-sarok);
 
-    int elsokerekrogton = 1;
+    int firstkerekrogton = 1;
     int hatsokerekrogton = 1;
 
     if( vanforgas ) {
         if( (forgas > 0.0 && !Hatra) || (forgas <= 0.0 && Hatra) )
-            elsokerekrogton = 0;
+            firstkerekrogton = 0;
         else
             hatsokerekrogton = 0;
     }
 
     // Kerekek:
-    if( elsokerekrogton )
+    if( firstkerekrogton )
         kidobozkerek( p_k1, Kor2.sugar, Kor2.alfa, ppicbuffer, pleiro->pkiskerek );
     if( hatsokerekrogton )
         kidobozkerek( p_k2, Kor4.sugar, Kor4.alfa, ppicbuffer, pleiro->pkiskerek );
@@ -326,12 +326,12 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
         Mj = vector2null - Mj;
     Mr = kozep;
 
-    // Elso felfuggesztes:
+    // first felfuggesztes:
     //vector2 p_fogantyu = Mi*(330-Mx) + Mj*(My-335) + Mr;
     vector2 p_fogantyu = Mi*(336-Mx) + Mj*(My-335) + Mr;
     p_fogantyu = interpolal( p_k1, p_fogantyu, 1.235 );
     kidoboz( p_k1, p_fogantyu, ppicbuffer, 0.06,
-        pleiro->pkiselsorud, 0.05, 0.03 );
+        pleiro->pkisfirstrud, 0.05, 0.03 );
 
     // Hatso felfuggesztes:
     vector2 p_darab2 = Mi*(370-Mx) + Mj*(My-520) + Mr;
@@ -361,7 +361,7 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
     vector2 p_vall = Mi*(532-Mx) + Mj*(My-320) + Mr;
     vector2 p_kezfej = p_fogantyu;
 
-    // Ugras belekombinalasa kar kirajzolasaba:
+    // Ugras belekombinalasa kar kidrawolasaba:
     // p_kezfej-et mozditjuk el szukseges mertekben:
     if( ugrasnagysag > 0.0001 ) {
         ugrasnagysag = 1.0-ugrasnagysag;
@@ -420,10 +420,10 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
     double felkarhossz = 0.41;
     vector2 p_konyok;
     if( Hatra )
-        p_konyok = ketkormetszete( p_kezfej, p_vall,
+        p_konyok = bisect( p_kezfej, p_vall,
                                         alkarhossz, felkarhossz );
     else
-        p_konyok = ketkormetszete( p_vall, p_kezfej,
+        p_konyok = bisect( p_vall, p_kezfej,
                                         felkarhossz, alkarhossz );
 
     if( p_konyok.x < -10000000.0 && p_konyok.x > -10000002.0 )
@@ -432,7 +432,7 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
         #ifdef TEST
         double alhossz = abs( p_konyok-p_kezfej );
         if( fabs( alhossz - alkarhossz ) > 0.0001 )
-            hiba( "alhossz - alkarhossz ) > 0.0001!" );
+            error( "alhossz - alkarhossz ) > 0.0001!" );
         #endif
     }
 
@@ -450,14 +450,14 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
     Affinitas = 0;
 
     // Kerekek:
-    if( !elsokerekrogton || !hatsokerekrogton ) {
+    if( !firstkerekrogton || !hatsokerekrogton ) {
         if( Hatra ) {
             // Visszacserelem kerekek koordjait:
             vector2 tmpv = p_k1;
             p_k1 = p_k2;
             p_k2 = tmpv;
         }
-        if( !elsokerekrogton )
+        if( !firstkerekrogton )
             kidobozkerek( p_k1, Kor2.sugar, Kor2.alfa, ppicbuffer, pleiro->pkiskerek );
         if( !hatsokerekrogton )
             kidobozkerek( p_k2, Kor4.sugar, Kor4.alfa, ppicbuffer, pleiro->pkiskerek );
@@ -500,7 +500,7 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
         unsigned char *pbuffersor = ppicbuffer->getptr( viewyorig-1 );
         pbuffersor += viewxorig-1;
         memset( pbuffersor, keret, Config.viewxsize+2 );
-        // Keret felso:
+        // Keret ffirst:
         pbuffersor = ppicbuffer->getptr( viewyorig+Config.viewysize );
         pbuffersor += viewxorig-1;
         memset( pbuffersor, keret, Config.viewxsize+2 );

@@ -33,32 +33,32 @@ gyuru::~gyuru( void ) {
 
 void gyuru::ujkoord( int k, double x, double y ) {
 	if( k < 0 || k >= pontszam )
-		hiba( "gyuru::ujkoord-ban k < 0 || k >= pontszam!" );
+		error( "gyuru::ujkoord-ban k < 0 || k >= pontszam!" );
 	ponttomb[k].x = x;
 	ponttomb[k].y = y;
 }
 
-void gyuru::kirajz( int k, int fel, int szaggatott ) {
+void gyuru::kidraw( int k, int fel, int szaggatott ) {
 	if( k < 0 || k >= pontszam )
-   	hiba( "gyuru::kirajz-ban k < 0 || k >= pontszam!" );
+   	error( "gyuru::kidraw-ban k < 0 || k >= pontszam!" );
 	if( (fel && k == pontszam-1) || (!fel && k == 0) ) {
 		// Elejet a vegevel kell osszekotni:
-		vonalrajz( ponttomb[pontszam-1], ponttomb[0], szaggatott );
+		LINEdraw( ponttomb[pontszam-1], ponttomb[0], szaggatott );
    }
    else {
 	// Normal osszekotes:
 	  if( fel )
-		vonalrajz( ponttomb[k], ponttomb[k+1], szaggatott );
+		LINEdraw( ponttomb[k], ponttomb[k+1], szaggatott );
 		else
-		vonalrajz( ponttomb[k-1], ponttomb[k], szaggatott );
+		LINEdraw( ponttomb[k-1], ponttomb[k], szaggatott );
    }
 }
 
-void gyuru::osszrajz( void ) {
+void gyuru::osszdraw( void ) {
 	if( pontszam < 3 || pontszam > MAXPONT )
-		hiba( "gyuru::osszrajz-ban pontszam < 3 || pontszam > MAXPONT!" );
+		error( "gyuru::osszdraw-ban pontszam < 3 || pontszam > MAXPONT!" );
 	for( int i = 0; i < pontszam; i++ )
-		kirajz( i, 1, 0 );
+		kidraw( i, 1, 0 );
 }
 
 
@@ -69,7 +69,7 @@ int gyuru::beszur( int k ) {
 		return 0;
 	}
 	if( k >= pontszam )
-		hiba( "gyuru::beszur-ban k >= pontszam!" );
+		error( "gyuru::beszur-ban k >= pontszam!" );
 
 	if( pontszam >= lefoglaltmaxpont ) {
 		// Ujra fel kell venni pontok tombjet, csak most tobb ponttal:
@@ -97,7 +97,7 @@ int gyuru::beszur( int k ) {
 
 void gyuru::torol( int k ) {
 	if( k < 0 || k >= pontszam )
-		hiba( "gyuru::torol-ben k < 0 || k >= pontszam!" );
+		error( "gyuru::torol-ben k < 0 || k >= pontszam!" );
 	if( pontszam <= 3 )
 		return;
 	for( int i = k; i < pontszam-1; i++ ) {
@@ -129,7 +129,7 @@ int gyuru::metszesszam( vector2 r1, vector2 v1 ) {
 		double y1 = ponttomb[i].y;
 		double x2, y2;
 		if( i < pontszam-1 ) {
-			// Nem az utolso pont:
+			// No az utolso pont:
 			x2 = ponttomb[i+1].x;
 			y2 = ponttomb[i+1].y;
 		}
@@ -175,7 +175,7 @@ int gyuru::metszeshely( vector2 r1, vector2 v1, int kihagy, vector2* phely ) {
 		if( i == kihagy )
 			continue;
 
-		// Szomszedos szakaszokat nem vizsgalunk:
+		// Szomszedos szakaszokat No vizsgalunk:
 		if( kihagy >= 0 ) {
 			if( kihagy == 0 ) {
 				if( i == pontszam - 1 )
@@ -200,7 +200,7 @@ int gyuru::metszeshely( vector2 r1, vector2 v1, int kihagy, vector2* phely ) {
 		double y1 = ponttomb[i].y;
 		double x2, y2;
 		if( i < pontszam-1 ) {
-			// Nem az utolso pont:
+			// No az utolso pont:
 			x2 = ponttomb[i+1].x;
 			y2 = ponttomb[i+1].y;
 		}
@@ -210,7 +210,7 @@ int gyuru::metszeshely( vector2 r1, vector2 v1, int kihagy, vector2* phely ) {
 			y2 = ponttomb[0].y;
 		}
 
-		// Eloalltak masodik szakasz pontjai is, megnezzuk hatha annyira
+		// Eloalltak second szakasz pontjai is, megnezzuk hatha annyira
 		// kilognak egymasbol, hogy rogton kizarhatjuk metszest:
 		if( (x1 < minx && x2 < minx) ||
 			(x1 > maxx && x2 > maxx) ||
@@ -239,10 +239,10 @@ gyuru::gyuru( FILE* h ) {
 	ponttomb = NULL;
 
 	if( fread( &pontszam, 1, sizeof( pontszam ), h ) != sizeof( pontszam ) )
-		hiba( "gyuru::gyuru-ben nem megy file olvasas!" );
+		error( "gyuru::gyuru-ben No megy file olvasas!" );
 
 	if( pontszam < 3 || pontszam > MAXPONT ) {
-		hiba( "gyuru::gyuru-ben pontszam < 3 || pontszam > MAXPONT!" );
+		error( "gyuru::gyuru-ben pontszam < 3 || pontszam > MAXPONT!" );
 	}
 
 	lefoglaltmaxpont = pontszam+10;
@@ -253,13 +253,13 @@ gyuru::gyuru( FILE* h ) {
 	}
 	if( fread( ponttomb, 1, sizeof( vector2 ) * pontszam, h ) !=
 											sizeof( vector2 ) * pontszam )
-						hiba( "gyuru::gyuru-ben nem megy file olvasasa!" );
+						error( "gyuru::gyuru-ben No megy file olvasasa!" );
 }
 
 void gyuru::save( FILE* h, topol* ptop ) {
 	// Ugy kell elmenteni, hogy ha sorban megyunk vegig pontokon,
 	// akkor mindig baloldalon legyen fold:
-	// Eloszor megnezzuk, hogy vonal ureg, vagy folddarab-e:
+	// Eloszor megnezzuk, hogy LINE ureg, vagy folddarab-e:
 	int levegoben = ptop->levegoben( this ); // Ha levegoben, akkor folddarab
 
 	int pozitivjaras = pozitivkorjaras();
@@ -282,13 +282,13 @@ void gyuru::save( FILE* h, topol* ptop ) {
 
 	// Itt jon a mentes lenyegeben:
 	if( fwrite( &pontszam, 1, sizeof( pontszam ), h ) != sizeof( pontszam ) )
-		hiba( "gyuru::save-ben nem megy file-ba iras!" );
+		error( "gyuru::save-ben No megy file-ba iras!" );
 	if( fwrite( ponttomb, 1, sizeof( vector2 ) * pontszam, h ) !=
 											sizeof( vector2 ) * pontszam )
-						hiba( "gyuru::save-ben nem megy file-ba iras!" );
+						error( "gyuru::save-ben No megy file-ba iras!" );
 }
 
-// Visszaadja b pontban fekvo belso szoget, ha belso oldal bal oldal a, b, c
+// Visszaadja b pontban fekvo bfirst szoget, ha bfirst oldal bal oldal a, b, c
 // haladas eseten:
 static double balszog( vector2* pa, vector2 b, vector2 c ) {
 		while( 1 ) {
@@ -296,13 +296,13 @@ static double balszog( vector2* pa, vector2 b, vector2 c ) {
 		double dx1 = pa->x-b.x;
 		if( dy1 == 0.0 && dx1 == 0 )
 			// Ezt mar topologia check-ben meg kellett volna szuntetni:
-			hiba( "balszog-ben ket pont egybe esik!" );
+			error( "balszog-ben ket pont egybe esik!" );
 		double alfa = atan2( dy1, dx1 );
 		double dy2 = c.y-b.y;
 		double dx2 = c.x-b.x;
 		if( dy2 == 0.0 && dx2 == 0 )
 			// Ezt mar topologia check-ben meg kellett volna szuntetni:
-			hiba( "balszog-ben ket pont egybe esik!" );
+			error( "balszog-ben ket pont egybe esik!" );
 		double beta = atan2( dy2, dx2 );
 		double szog = alfa-beta;
 		if( szog < 0 )
@@ -345,7 +345,7 @@ void gyuru::szetvalaszt( void ) {
 
 // akkor ad igazat, ha korbejaraskor poligon belseje bal oldalon van;
 int gyuru::pozitivkorjaras( void ) {
-	// Sorban osszeadjuk belso szogeket:
+	// Sorban osszeadjuk bfirst szogeket:
 	double sum = 0.0;
 	for( int i = 0; i < pontszam-2; i++ ) {
 		sum += balszog( &ponttomb[i], ponttomb[i+1], ponttomb[i+2] );
@@ -357,7 +357,7 @@ int gyuru::pozitivkorjaras( void ) {
 		/*char tmp[100];
 		sprintf( tmp, "Nagy az elteres, x100 = %d!", int(fabs( fabs( maradek ) - 2*K_pi )*100) );
 		dialog( tmp );*/
-		return 0; // Ilyenkor biztos hogy van egymast metszo ket vonal
+		return 0; // Ilyenkor biztos hogy van egymast metszo ket LINE
 	}
 	if( maradek > 0.0 )
 		return 0;

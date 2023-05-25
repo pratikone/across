@@ -1,6 +1,6 @@
 #include	"all.h"
 
-double Elszakadasisebhat, Belsosav, G;
+double Elszakadasisebhat, Bfirstsav, G;
 double  Talppontegybeolvadasitav;
 
 double Ugrassebesseg1, Ugrassebesseg2;
@@ -19,7 +19,7 @@ double Ketmaxsugar, Spritemaxsugar;
 double Fekegyutthato;
 double Kord2x, Kord2y, Kord4x, Kord4y;
 
-// MCGA kirajzolasos:
+// MCGA kidrawolasos:
 
 
 // Aranyok mindig be vannak allitva play.cpp-ben:
@@ -30,7 +30,7 @@ void initadatok( void ) {
 	Kord2x = -0.1, Kord2y = -0.5, Kord4x = 0.5, Kord4y = -0.5;
 
 	Elszakadasisebhat = 0.01;
-	Belsosav = 0.02;
+	Bfirstsav = 0.02;
 	G = 10.0;      // nehezsegi gyorsulas: a [m/s^2]
 	Talppontegybeolvadasitav = 0.1;
 
@@ -45,7 +45,7 @@ void initadatok( void ) {
 	Sr = 1000.0;  // rudban mozgasi ellenallas: F/v [N*s/m]
 
 	// Kor1:
-	strcpy( Kor1.name, "Test elso" );
+	strcpy( Kor1.name, "Test first" );
 	Kor1.alfa = 0.0;
 	Kor1.omega = 0.0;
 	Kor1.sugar = 0.3;
@@ -57,7 +57,7 @@ void initadatok( void ) {
 	//Kor1.utoljaraleert = 0;
 
 	// Kor2:
-	strcpy( Kor2.name, "Kerek elso" );
+	strcpy( Kor2.name, "Kerek first" );
 	Kor2.alfa = 0.0;
 	Kor2.omega = 0.0;
 	Kor2.sugar = 0.4;
@@ -78,7 +78,7 @@ void initadatok( void ) {
 	Kor4.v = vector2( 0, 0 );
 	//Kor4.utoljaraleert = 0;
 
-	// MCGA kirajzolasos:
+	// MCGA kidrawolasos:
 	P_alap1 = vector2( 0.2, 0.05 );
 	P_alap2 = vector2( -0.6, -0.04 );
 	P_alap3 = vector2( -0.05, 0.4 );

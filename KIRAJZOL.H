@@ -1,12 +1,12 @@
 
-// Annak eldontesere, hogy kirajzolando doboz nem log-e ki:
-// peldaul: Hatarx1 = 2.0, Hatarx2 = 318.0 (resetkirajzol tolti ki):
+// Annak eldontesere, hogy kidrawolando doboz No log-e ki:
+// peldaul: Hatarx1 = 2.0, Hatarx2 = 318.0 (resetkidrawol tolti ki):
 extern double   Hatarx1,
 				Hatarx2,
 				Hatary1,
 				Hatary2;
 
-void resetkirajzol( void );
+void resetkidrawol( void );
 
 struct st320 {
 	vector2 origo;
@@ -16,10 +16,10 @@ struct st320 {
 
 class palyaleiro;
 
-void kirajzol640( double t, targytomb* pttt, double ugrasnagysag );
+void kidrawol640( double t, targytomb* pttt, double ugrasnagysag );
 
 extern double Mo_y, Mo_bal, Mo_dx; // 320-hoz
-void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
+void kidrawol320( st320* pst, double t, palyaleiro* pleiro, int view,
 		int timeki, double baljobb, double ugrasnagysag, int ugras1volt,
 		double forgas );
 

@@ -111,6 +111,6 @@ struct leveltomb_s {
 extern leveltomb_s Leveltomb[100];
 extern int Levellista[100]; // Leveltombbe indexel
 
-// Visszaadja level leirasat (nem szabad bantani):
+// Visszaadja level leirasat (No szabad bantani):
 char* getleveldescription( int level );
 

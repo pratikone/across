@@ -4,8 +4,8 @@ class ratesz {
 	int textxalapsize;
 	int ysize;
 	int y0;
-	int elsohivas;
-	int* elsotomb;
+	int firsthivas;
+	int* firsttomb;
 
 	hat** sorhatok;
 

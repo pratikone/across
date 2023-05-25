@@ -1,5 +1,5 @@
 
-// int koordinatak mindig kepernyo bal-felso sarkahoz vannak viszonyitva,
+// int koordinatak mindig kepernyo bal-ffirst sarkahoz vannak viszonyitva,
 // tehat le kell takarni Sav-okat.
 
 // Konvertalasok:
@@ -22,8 +22,8 @@ double getzoomvalue( void );
 // Visszaadja kepernyon tiz pixel tavolsagat double leptekben:
 double display_double_kozeltav( void );
 
-extern int Vonalcsakeditbe;
-void vonalrajz( vector2 p1, vector2 p2, int szaggatott );
+extern int LINEcsakeditbe;
+void LINEdraw( vector2 p1, vector2 p2, int szaggatott );
 
 extern int Savx;
 extern int Savy;

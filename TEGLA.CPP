@@ -2,36 +2,36 @@
 
 //static int Kep[25][25];
 
-//static void kirajzkocka( int x, int y, int fold );
-//static void kirajzszakasz( vector2 r, vector2 v );
+//static void kidrawkocka( int x, int y, int fold );
+//static void kidrawszakasz( vector2 r, vector2 v );
 
 static void sorki( int x1, int x2, int y, int szin, pic8f* ppic8f ) {
 	#ifdef TEST
-		// Sajnos nem tudok teljes ellenorzest csinalni!:
+		// Sajnos No tudok teljes ellenorzest csinalni!:
 		if( x1 > x2+1 )
-			hiba( "teglaban (sorki) x1 > x2!" );
+			error( "teglaban (sorki) x1 > x2!" );
 		if( x2-x1 > ppic8f->getxsize() )
-			hiba( "teglaban (sorki) x2-x1 > xsize!" );
+			error( "teglaban (sorki) x2-x1 > xsize!" );
 	#endif
 	if( x1 > x2 )
 		return;
-	ppic8f->vizvonalset( x1, y, x2-x1+1, szin );
+	ppic8f->vizLINEset( x1, y, x2-x1+1, szin );
 	/*for( int x = x1; x <= x2; x++ ) {
 		if( x < 0 || x >= 25 )
-			hiba( "x kilog sorki-ban!" );
+			error( "x kilog sorki-ban!" );
 		if( y < 0 || y >= 25 )
-			hiba( "y kilog sorki-ban!" );
+			error( "y kilog sorki-ban!" );
 		Kep[x][y] = szin;
 	}
 	*/
 }
 
-// Csak teszthez kell, kirajzolja oldalakat:
+// Csak teszthez kell, kidrawolja oldalakat:
 /*static void teglaoldalak( vector2 A, vector2 B, vector2 C, vector2 D ) {
-	kirajzszakasz( A, B-A );
-	kirajzszakasz( B, C-B );
-	kirajzszakasz( C, D-C );
-	kirajzszakasz( D, A-D );
+	kidrawszakasz( A, B-A );
+	kidrawszakasz( B, C-B );
+	kidrawszakasz( C, D-C );
+	kidrawszakasz( D, A-D );
 } */
 
 static void reszletki( double y0, double yv, double ax0, double am,
@@ -78,7 +78,7 @@ void tegla( vector2 r, vector2 v, vector2 v2fel, int szin, pic8f* ppic8f ) {
 		return;
 	#ifdef TEST
 		if( abs( v2fel ) < 0.1 )
-			hiba( "Tul kicsi szelesseg tegla-ban!" );
+			error( "Tul kicsi szelesseg tegla-ban!" );
 	#endif
 	// v-nek felfele kell mutatnia:
 	if( v.y < 0 ) {
@@ -106,10 +106,10 @@ void tegla( vector2 r, vector2 v, vector2 v2fel, int szin, pic8f* ppic8f ) {
 		D = tmp2;
 	}
 
-	// Most felulrol lefele a kovetkezo a nem szigoru sorrend: ABDC
+	// Most felulrol lefele a kovetkezo a No szigoru sorrend: ABDC
 	// es A szemben van C-vel!
 
-	// Megnezzuk, hogy nem tul merolegesek-e az oldalai tengelyekkel:
+	// Megnezzuk, hogy No tul merolegesek-e az oldalai tengelyekkel:
 	if( fabs( v.x ) < 0.1 || fabs( v.y ) < 0.1 ) {
 		// Egy reszletben kuldjuk ki egeszet:
 		reszletki( C.y, A.y, A.x, 0, C.x, 0, szin, ppic8f );
@@ -122,17 +122,17 @@ void tegla( vector2 r, vector2 v, vector2 v2fel, int szin, pic8f* ppic8f ) {
 	// Kiszamitjuk ket meredekseget:
 	double mDC = (D.x-C.x)/(D.y-C.y);
 	double mBC = (B.x-C.x)/(B.y-C.y);
-	// Most pedig harom reszletben kirajzoljuk teglalapot:
+	// Most pedig harom reszletben kidrawoljuk teglalapot:
 	//			y0   yv  ax0 am bx0 bm
 	// Also:
 	reszletki( C.y, D.y, C.x, mDC, C.x, mBC, szin, ppic8f );
 	// Kozepso:
 	reszletki( D.y, B.y, D.x, mBC, D2x, mBC, szin, ppic8f );
-	// Felso:
+	// Ffirst:
 	reszletki( B.y, A.y, B2x, mBC, B.x, mDC, szin, ppic8f );
 }
 
-/*static void kirajzkocka( int x, int y, int fold ) {
+/*static void kidrawkocka( int x, int y, int fold ) {
 	setcolor( ColorFG );
 	int s = 15;
 	int ox = 100+s*x;
@@ -146,7 +146,7 @@ void tegla( vector2 r, vector2 v, vector2 v2fel, int szin, pic8f* ppic8f ) {
 	}
 }
 
-static void kirajzszakasz( vector2 r, vector2 v ) {
+static void kidrawszakasz( vector2 r, vector2 v ) {
 	setcolor( ColorFG );
 	double s = 15;
 	r.x = 100+s/2+s*r.x + 0.5;
@@ -183,11 +183,11 @@ static void kirajzszakasz( vector2 r, vector2 v ) {
 
 		for( x = 0; x < 25; x++ ) {
 			for( int y = 0; y < 25; y++ ) {
-				kirajzkocka( x, y, Kep[x][y] );
+				kidrawkocka( x, y, Kep[x][y] );
 			}
 		}
 		if( getch() == 'q' )
-			hiba( "q" );
+			error( "q" );
 
 		alfa += 0.1;
 		i++;

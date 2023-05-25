@@ -1,5 +1,5 @@
 
-// 0-nem kell hang, 1 8bit mono, 2 16bit mono:
+// 0-No kell hang, 1 8bit mono, 2 16bit mono:
 int starthang( unsigned buffsize );
 void stophang( void );
 void hang( void );

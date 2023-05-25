@@ -1,6 +1,6 @@
 
 
-extern double Elszakadasisebhat, Belsosav, G;
+extern double Elszakadasisebhat, Bfirstsav, G;
 extern double  Talppontegybeolvadasitav;
 
 extern double Ugrassebesseg1, Ugrassebesseg2;
@@ -19,7 +19,7 @@ extern double Fejsugar;
 extern double Spritemaxsugar; // Targykereseshez!
 extern double Ketmaxsugar; // Targykereseshez!
 
-// MCGA kirajzolasos:
+// MCGA kidrawolasos:
 
 extern double Arany, Aranyx, Aranyy;
 

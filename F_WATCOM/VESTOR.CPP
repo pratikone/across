@@ -21,7 +21,7 @@ struct leirostruct {
 
 static void setmodevesa8( int res ) {
 	if( res != 1 && res != 2 && res != 3 && res != 4 )
-		hiba( "setmodevesa8_l-ban res != 1 && res != 2 && res != 3 && res != 4!" );
+		error( "setmodevesa8_l-ban res != 1 && res != 2 && res != 3 && res != 4!" );
 
 	unsigned short modszam = 0;
 	if( res == 1 || res == 2 ) {
@@ -33,7 +33,7 @@ static void setmodevesa8( int res ) {
 	if( res == 4 )
 		modszam = 0x101;
 	if( !modszam )
-		hiba( "setvesamode8-ben ismeretlen mod!" );
+		error( "setvesamode8-ben ismeretlen mod!" );
 
 	unsigned short retvalue = 1000;
 
@@ -156,7 +156,7 @@ static unsigned char* Basemutato = NULL;
 
 void setmode8_l( int res ) {
 	if( res != 1 && res != 2 && res != 3 && res != 4 )
-		hiba( "setmode8_l-ban res != 1 && res != 2 && res != 3 && res != 4!" );
+		error( "setmode8_l-ban res != 1 && res != 2 && res != 3 && res != 4!" );
 
 	//if( Res == res )
 	//	return;
@@ -177,7 +177,7 @@ void setmode8_l( int res ) {
 	#endif
 
 	if( Basemutato == NULL )
-		hiba( "setmode8_l-ben Basemutato == NULL!" );
+		error( "setmode8_l-ben Basemutato == NULL!" );
 
 	if( res == 1 ) {
 		Xsize = 320;
@@ -212,7 +212,7 @@ void setmode8_l( int res ) {
 	{ Toresx = NEW(long*) long[Ysize]; }
 	{ Bankszam = NEW(long*) long[Ysize]; }
 	if( !Torott || !Kezdocim || !Toresx || !Bankszam ) {
-		hiba( "Nem sikerult lefoglalni initmode_l-ben!" );
+		error( "No sikerult lefoglalni initmode_l-ben!" );
 		return;
 	}
 	bankvaltas( 0 );
@@ -229,7 +229,7 @@ void setmode8_l( int res ) {
 			Torott[int(y)] = 0;
 			Kezdocim[int(y)] = soreleje-(bankeleje<<16); // Meg byte-ban
 			//if( Kezdocim[int(y)] % BYTEN )
-			//	hiba( "setmode8_l-ben Kezdocim[int(y)] % BYTEN!" );
+			//	error( "setmode8_l-ben Kezdocim[int(y)] % BYTEN!" );
 			Kezdocim[int(y)] = Kezdocim[int(y)]/BYTEN; // Pixelben megadva
 			Toresx[int(y)] = 0;
 			Bankszam[int(y)] = bankeleje;
@@ -239,11 +239,11 @@ void setmode8_l( int res ) {
 			Torott[int(y)] = 1;
 			Kezdocim[int(y)] = soreleje-(bankeleje<<16);
 			//if( Kezdocim[int(y)] % BYTEN )
-			//	hiba( "setmode8_l-ben Kezdocim[int(y)] % BYTEN!" );
+			//	error( "setmode8_l-ben Kezdocim[int(y)] % BYTEN!" );
 			Kezdocim[int(y)] = Kezdocim[int(y)]/BYTEN; // Pixelben megadva
 			Toresx[int(y)] = 0x10000l-Kezdocim[int(y)]*BYTEN;
 			//if( Toresx[int(y)] % BYTEN )
-			//	hiba( "setmode8_l-ben Toresx[int(y)] % BYTEN!" );
+			//	error( "setmode8_l-ben Toresx[int(y)] % BYTEN!" );
 			Toresx[int(y)] = Toresx[int(y)]/BYTEN;
 			Bankszam[int(y)] = bankeleje;
 		}
@@ -264,11 +264,11 @@ void setmode8_l( int res ) {
 void putline8_l( int x, int y, unsigned char* tomb, int xsize ) {
 	#ifdef PICLOWTEST
 	if( Res == 0 ) {
-		hiba( "putbytes8_l-ben nem Res == 0!" );
+		error( "putbytes8_l-ben No Res == 0!" );
 		return;
 	}
 	if( x < 0 || x+xsize-1 >= Xsize || y < 0 || y >= Ysize ) {
-		hiba( "putbytes8_l-ben kepen kivulre iras!" );
+		error( "putbytes8_l-ben kepen kivulre iras!" );
 		return;
 	}
 	#endif
@@ -303,7 +303,7 @@ void putline8_l( int x, int y, unsigned char* tomb, int xsize ) {
 	int maradekx = xsize;
 	int tombfelex = 0;
 	if( x < Toresx[unsigned(y)] ) {
-		// Elso bankban biztos van:
+		// first bankban biztos van:
 		if( Kurbank != Bankszam[y] ) {
 			bankvaltas( unsigned(Bankszam[y]) );
 			Kurbank = int(Bankszam[y]);
@@ -323,7 +323,7 @@ void putline8_l( int x, int y, unsigned char* tomb, int xsize ) {
 		}
 	}
 
-	// Masodik bank elintezese (biztos, hogy ebben is van mit tenni!):
+	// second bank elintezese (biztos, hogy ebben is van mit tenni!):
 	if( Kurbank != Bankszam[y]+1 ) {
 		bankvaltas( unsigned(Bankszam[y]+1) );
 		Kurbank = int(Bankszam[y]+1);
@@ -343,11 +343,11 @@ void putline8_l( int x, int y, unsigned char* tomb, int xsize ) {
 void getline8_l( int x, int y, unsigned char* tomb, int xsize ) {
 	#ifdef PICLOWTEST
 	if( Res == 0 ) {
-		hiba( "getbytes8_l-ben nem Res == 0!" );
+		error( "getbytes8_l-ben No Res == 0!" );
 		return;
 	}
 	if( x < 0 || x+xsize-1 >= Xsize || y < 0 || y >= Ysize ) {
-		hiba( "getbytes8_l-ben kepen kivulrol olvasas!" );
+		error( "getbytes8_l-ben kepen kivulrol olvasas!" );
 		return;
 	}
 	#endif
@@ -382,7 +382,7 @@ void getline8_l( int x, int y, unsigned char* tomb, int xsize ) {
 	int maradekx = xsize;
 	int tombfelex = 0;
 	if( x < Toresx[unsigned(y)] ) {
-		// Elso bankban biztos van:
+		// first bankban biztos van:
 		if( Kurbank != Bankszam[y] ) {
 			bankvaltas( unsigned(Bankszam[y]) );
 			Kurbank = int(Bankszam[y]);
@@ -402,7 +402,7 @@ void getline8_l( int x, int y, unsigned char* tomb, int xsize ) {
 		}
 	}
 
-	// Masodik bank elintezese (biztos, hogy ebben is van mit tenni!):
+	// second bank elintezese (biztos, hogy ebben is van mit tenni!):
 	if( Kurbank != Bankszam[y]+1 ) {
 		bankvaltas( unsigned(Bankszam[y]+1) );
 		Kurbank = int(Bankszam[y]+1);
@@ -422,11 +422,11 @@ void getline8_l( int x, int y, unsigned char* tomb, int xsize ) {
 void putpixel8_l( int x, int y, unsigned char szin ) {
 	#ifdef PICLOWTEST
 	if( Res == 0 ) {
-		hiba( "putbytes8_l-ben nem Res == 0!" );
+		error( "putbytes8_l-ben No Res == 0!" );
 		return;
 	}
 	if( x < 0 || x >= Xsize || y < 0 || y >= Ysize ) {
-		hiba( "putpixel8_l-ben kepen kivulre iras!" );
+		error( "putpixel8_l-ben kepen kivulre iras!" );
 		return;
 	}
 	#endif
@@ -462,7 +462,7 @@ void putpixel8_l( int x, int y, unsigned char szin ) {
 
 	// A sor torott:
 	if( x < Toresx[unsigned(y)] ) {
-		// Elso bankban biztos van:
+		// first bankban biztos van:
 		if( Kurbank != Bankszam[y] ) {
 			bankvaltas( unsigned(Bankszam[y]) );
 			Kurbank = int(Bankszam[y]);
@@ -472,7 +472,7 @@ void putpixel8_l( int x, int y, unsigned char szin ) {
 		return;
 	}
 
-	// Masodik bank elintezese (biztos, hogy ebben is van mit tenni!):
+	// second bank elintezese (biztos, hogy ebben is van mit tenni!):
 	if( Kurbank != Bankszam[y]+1 ) {
 		bankvaltas( unsigned(Bankszam[y]+1) );
 		Kurbank = int(Bankszam[y]+1);

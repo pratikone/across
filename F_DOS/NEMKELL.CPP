@@ -1,9 +1,9 @@
 #include	"all.h"
 
-void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
+void kidrawol320( st320* pst, double t, palyaleiro* pleiro, int view,
 		int timeki, double baljobb, double ugrasnagysag, int ugras1volt,
 		double forgas ) {
-	hiba( "Nem kene itt lennie (kirajzol320)!" );
+	error( "No kene itt lennie (kidrawol320)!" );
 	pst++;
 	t++;
 	pleiro++;
@@ -16,6 +16,6 @@ void kirajzol320( st320* pst, double t, palyaleiro* pleiro, int view,
 }
 
 void teljes( void ) {
-	hiba( "Nem kene itt lennie (teljes)!" );
+	error( "No kene itt lennie (teljes)!" );
 }
 

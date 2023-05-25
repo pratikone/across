@@ -4,7 +4,7 @@ class texture {
 public:
 		texture( pic8* ppic, int inverz );
 		~texture( void );
-	void getvonal( int x, int y, int xsize, unsigned char* tomb );
+	void getLINE( int x, int y, int xsize, unsigned char* tomb );
 };
 
 

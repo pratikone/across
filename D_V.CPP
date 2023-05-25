@@ -16,7 +16,7 @@ void    billstop( void );
     }
 } */
 
-/*static void vegeszoveg( void ) {
+/*static void vegetext( void ) {
     printf( "Thank you for playing SuperCross.\n" );
     printf( "\n" );
     //printf( "Evaluation version for Epic MegaGames.\n" );
@@ -28,13 +28,13 @@ void    billstop( void );
     //printf( "Original idea, Programming, Sound, Levels: Balazs Rozsa\n" );
     //printf( "Art: Barczi Imre, Balazs Rozsa\n" );
     //printf( "Testers: Barczi Imre, Csaba Rozsa, Andras Torok, Csaba Fekete,\n" );
-    //printf( "           Tamas Kristyan, Akos Nemeth Buhin\n" );
+    //printf( "           Tamas Kristyan, Akos Noeth Buhin\n" );
     //printf( "Special thanks to Gabor Gerenyi and Tamas Kristyan for some sound files.\n" );
 } */
 
 
 
-static void vegeszoveg( void ) {
+static void vegetext( void ) {
     #ifdef SARVARI
 		printf( "Action SuperCross shareware version 1.2 Copyright (C) 1997, 1998 Bal zs R¢zsa  \n" );
         printf( "                                                                               \n" );
@@ -84,15 +84,15 @@ static void vegeszoveg( void ) {
 
 
 
-// Ezekbol nem johet vissza:
-static void directhiba( char* text1, char* text2, char* text3, char* text4 ) {
+// Ezekbol No johet vissza:
+static void directerror( char* text1, char* text2, char* text3, char* text4 ) {
 
     // torlendo:
 	//mk_getextchar();
 
 	settextmode();
-	if( strcmp( text1, "Kiir szoveg!" ) == 0 ) {
-		vegeszoveg();
+	if( strcmp( text1, "Kiir text!" ) == 0 ) {
+		vegetext();
 		stophang();
 		mk_emptychar();
 		while( !mk_kbhit() )
@@ -141,15 +141,15 @@ static void directhiba( char* text1, char* text2, char* text3, char* text4 ) {
 
 static int Tovabb;
 
-void hiba( char* text1, char* text2, char* text3 ) {
+void error( char* text1, char* text2, char* text3 ) {
     Tovabb = 0;
     if( Tovabb )
         return;
-    if( strcmp( text1, "Kiir szoveg!" ) == 0 )
-        directhiba( text1, text2, text3, NULL );
+    if( strcmp( text1, "Kiir text!" ) == 0 )
+        directerror( text1, text2, text3, NULL );
     if( access( "message.inf", 0 ) == 0 )
-        directhiba( "message.inf accessed\n", text1, text2, text3 );
-    directhiba( "Sorry, internal error.", NULL, NULL, NULL );
+        directerror( "message.inf accessed\n", text1, text2, text3 );
+    directerror( "Sorry, internal error.", NULL, NULL, NULL );
 }
 
 void uzenet( char* text1, char* text2, char* text3 ) {
@@ -157,10 +157,10 @@ void uzenet( char* text1, char* text2, char* text3 ) {
     if( strstr( text1, "memory" ) && !strstr( text1, "about" ) ) {
         // Ha memory szerepel text1-ben:
         if( access( "message.inf", 0 ) == 0 ) // Most mem-et is csak inf-re adja:
-            directhiba( "message.inf accessed\n", text1, text2, text3 );
-        directhiba( "Sorry, out of memory!", NULL, NULL, NULL );
+            directerror( "message.inf accessed\n", text1, text2, text3 );
+        directerror( "Sorry, out of memory!", NULL, NULL, NULL );
     }
-    directhiba( text1, text2, text3, NULL );
+    directerror( text1, text2, text3, NULL );
 }
 
 // Ugyanaz mint random, de az nincs WATCOM-ban:
@@ -225,7 +225,7 @@ void main( int argc, const char* argv[] ) {
 
     mv_main();
 
-    hiba( "main vegere nem szabadna jonnie" );
+    error( "main vegere No szabadna jonnie" );
 }
 
 void mv_check( void ) {

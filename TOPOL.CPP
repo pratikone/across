@@ -21,7 +21,7 @@ kerek::kerek( double x, double y, int tipusp ) {
 
 static const double Hal_eltol = -0.15 + 0.3 * (0.07/0.37);
 
-void kerek::kirajzol( void ) {
+void kerek::kidrawol( void ) {
 	int szegmensszam = 16;
 	double sugar = 0.4;
 
@@ -31,62 +31,62 @@ void kerek::kirajzol( void ) {
 		double alfa2 = (i+1)*elfordulas;
 		vector2 r1( sugar*sin( alfa1 ), sugar*cos( alfa1 ) );
 		vector2 r2( sugar*sin( alfa2 ), sugar*cos( alfa2 ) );
-		vonalrajz( r+r1, r+r2, 0 );
+		LINEdraw( r+r1, r+r2, 0 );
 	}
 
 	// Kis jel kor kozepere:
 	double meret = 0.02;
-	vonalrajz( r+vector2( -meret, -meret ),  r+vector2( meret, meret ), 0 );
-	vonalrajz( r+vector2( meret, -meret ),  r+vector2( -meret, meret ), 0 );
+	LINEdraw( r+vector2( -meret, -meret ),  r+vector2( meret, meret ), 0 );
+	LINEdraw( r+vector2( meret, -meret ),  r+vector2( -meret, meret ), 0 );
 
 	// Beleirjuk betut korbe:
 	if( tipus == T_CEL ) {
-		vonalrajz( r+vector2( -0.15, 0.3 ),  r+vector2( -0.15, -0.3 ), 0 );
-		vonalrajz( r+vector2( -0.15, 0.3 ),  r+vector2( 0.15, 0.3 ), 0 );
-		vonalrajz( r+vector2( -0.15, -0.3 ), r+vector2( 0.15, -0.3 ), 0 );
-		vonalrajz( r+vector2( -0.15, 0.0 ),  r+vector2( 0.1, 0.0 ), 0 );
+		LINEdraw( r+vector2( -0.15, 0.3 ),  r+vector2( -0.15, -0.3 ), 0 );
+		LINEdraw( r+vector2( -0.15, 0.3 ),  r+vector2( 0.15, 0.3 ), 0 );
+		LINEdraw( r+vector2( -0.15, -0.3 ), r+vector2( 0.15, -0.3 ), 0 );
+		LINEdraw( r+vector2( -0.15, 0.0 ),  r+vector2( 0.1, 0.0 ), 0 );
 		return;
 	}
 	if( tipus == T_KAJA ) {
-		vonalrajz( r+vector2( -0.15, 0.3 ),  r+vector2( -0.15, -0.3 ), 0 );
-		vonalrajz( r+vector2( -0.15, -0.3 ), r+vector2( 0.15, -0.3 ), 0 );
-		vonalrajz( r+vector2( -0.15, 0.0 ),  r+vector2( 0.1, 0.0 ), 0 );
+		LINEdraw( r+vector2( -0.15, 0.3 ),  r+vector2( -0.15, -0.3 ), 0 );
+		LINEdraw( r+vector2( -0.15, -0.3 ), r+vector2( 0.15, -0.3 ), 0 );
+		LINEdraw( r+vector2( -0.15, 0.0 ),  r+vector2( 0.1, 0.0 ), 0 );
 		return;
 	}
 	if( tipus == T_KEZDO ) {
-		vonalrajz( r+vector2( 0.15, 0.3 ),  r+vector2( 0.15, 0.0 ), 0 );
-		vonalrajz( r+vector2( -0.15, -0.3 ),  r+vector2( -0.15, 0.0 ), 0 );
+		LINEdraw( r+vector2( 0.15, 0.3 ),  r+vector2( 0.15, 0.0 ), 0 );
+		LINEdraw( r+vector2( -0.15, -0.3 ),  r+vector2( -0.15, 0.0 ), 0 );
 
-		vonalrajz( r+vector2( -0.15, 0.3 ),  r+vector2( 0.15, 0.3 ), 0 );
-		vonalrajz( r+vector2( -0.15, -0.3 ), r+vector2( 0.15, -0.3 ), 0 );
-		vonalrajz( r+vector2( -0.15, 0.0 ),  r+vector2( 0.15, 0.0 ), 0 );
+		LINEdraw( r+vector2( -0.15, 0.3 ),  r+vector2( 0.15, 0.3 ), 0 );
+		LINEdraw( r+vector2( -0.15, -0.3 ), r+vector2( 0.15, -0.3 ), 0 );
+		LINEdraw( r+vector2( -0.15, 0.0 ),  r+vector2( 0.15, 0.0 ), 0 );
 		return;
 	}
 	if( tipus == T_HALALOS ) {
-		vonalrajz( r+vector2( -0.15, 0.3 ),  r+vector2( -0.15, -0.3 ), 0 );
-		vonalrajz( r+vector2( -0.15, 0.07 ),  r+vector2( 0.15, -0.3 ), 0 );
-		vonalrajz( r+vector2( Hal_eltol, 0.0 ),  r+vector2( 0.15, 0.3 ), 0 );
+		LINEdraw( r+vector2( -0.15, 0.3 ),  r+vector2( -0.15, -0.3 ), 0 );
+		LINEdraw( r+vector2( -0.15, 0.07 ),  r+vector2( 0.15, -0.3 ), 0 );
+		LINEdraw( r+vector2( Hal_eltol, 0.0 ),  r+vector2( 0.15, 0.3 ), 0 );
 		return;
 	}
-	hiba( "iugiffiif" );
+	error( "iugiffiif" );
 }
 
 kerek::kerek( FILE* h ) {
 	if( fread( &r.x, 1, sizeof( r.x ), h ) != sizeof( r.x ) )
-		hiba( "Nem olvas file-bol kerek::kerek-ben!" );
+		error( "No olvas file-bol kerek::kerek-ben!" );
 	if( fread( &r.y, 1, sizeof( r.y ), h ) != sizeof( r.y ) )
-		hiba( "Nem olvas file-bol kerek::kerek-ben!" );
+		error( "No olvas file-bol kerek::kerek-ben!" );
 	if( fread( &tipus, 1, sizeof( tipus ), h ) != sizeof( tipus ) )
-		hiba( "Nem olvas file-bol kerek::kerek-ben!" );
+		error( "No olvas file-bol kerek::kerek-ben!" );
 }
 
 void kerek::save( FILE* h ) {
 	if( fwrite( &r.x, 1, sizeof( r.x ), h ) != sizeof( r.x ) )
-		hiba( "Nem ir file-ba kerek::save-ben!" );
+		error( "No ir file-ba kerek::save-ben!" );
 	if( fwrite( &r.y, 1, sizeof( r.y ), h ) != sizeof( r.y ) )
-		hiba( "Nem ir file-ba kerek::save-ben!" );
+		error( "No ir file-ba kerek::save-ben!" );
 	if( fwrite( &tipus, 1, sizeof( tipus ), h ) != sizeof( tipus ) )
-		hiba( "Nem ir file-ba kerek::save-ben!" );
+		error( "No ir file-ba kerek::save-ben!" );
 }
 
 double kerek::belyegszamitas( void ) {
@@ -103,7 +103,7 @@ double kerek::belyegszamitas( void ) {
 // TOPOL TOPOL TOPOL TOPOL TOPOL TOPOL TOPOL TOPOL TOPOL TOPOL TOPOL TOPOL
 
 topol::topol( void ) {
-	hibas = 0;
+	errors = 0;
 	lezart = 0;
 	for( int i = 0; i < MAXGYURU; i++ )
 		ptomb[i] = NULL;
@@ -174,15 +174,15 @@ kerek* topol::legkozkerek( double x, double y, double* ptav ) {
 	return pker;
 }
 
-void topol::kirajzol( void ) {
+void topol::kidrawol( void ) {
 	for( int i = 0; i < MAXGYURU; i++ ) {
 		if( ptomb[i] ) {
-			ptomb[i]->osszrajz();
+			ptomb[i]->osszdraw();
 		}
 	}
 	for( i = 0; i < MAXKEREK; i++ ) {
 		if( kerektomb[i] ) {
-			kerektomb[i]->kirajzol();
+			kerektomb[i]->kidrawol();
 		}
 	}
 }
@@ -190,7 +190,7 @@ void topol::kirajzol( void ) {
 // Igaz, ha bent van:
 int topol::levegoben( gyuru* pgy, vector2* pr ) {
 	if( (pgy && pr) || (!pgy && !pr) )
-		hiba( "topol::levegoben-ben paramok nem stimmelnek!" );
+		error( "topol::levegoben-ben paramok No stimmelnek!" );
 
 	vector2 r;
 	if( pgy )
@@ -211,7 +211,7 @@ int topol::levegoben( gyuru* pgy, vector2* pr ) {
 }
 
 topol::topol( char* filename, int kulso ) {
-	hibas = 0;
+	errors = 0;
 	lezart = 0;
 
 	FILE* h = NULL;
@@ -220,7 +220,7 @@ topol::topol( char* filename, int kulso ) {
 	else
 		h = qopen( filename, "rb" );
 	if( !h )
-		hiba( "topol::topol-ban nem tudta nyitni file-t!: ", filename );
+		error( "topol::topol-ban No tudta nyitni file-t!: ", filename );
 
 	for( int i = 0; i < MAXGYURU; i++ )
 			ptomb[i] = NULL;
@@ -230,9 +230,9 @@ topol::topol( char* filename, int kulso ) {
 	// Verzio beolvasasa:
 	char tmp[10] = "AAAAA";
 	if( fread( tmp, 1, 5, h ) != 5 )
-		hiba( "Nem tudott olvasni txt file-bol!" );
+		error( "No tudott olvasni txt file-bol!" );
 	if( strncmp( tmp, "POT", 3 ) != 0 )
-		hiba( "topol::topol( char* filename )-ben nem stimmel eleje!" );
+		error( "topol::topol( char* filename )-ben No stimmel eleje!" );
 
 	unsigned long belyeg_l = 0;
 	double belyeg = 0;
@@ -246,49 +246,49 @@ topol::topol( char* filename, int kulso ) {
 
 	/*if( verzio == 1 ) {
 		// Ezt az agat ki kell majd torolni veglegesbol, mivel
-		// 1-es verzio nem ervenyes:
+		// 1-es verzio No ervenyes:
 
 		// Belyeg:
 		if( fread( &belyeg, 1, 4, h ) != 4 )
-			hiba( "Nem tudott olvasni lev file-bol!" );
+			error( "No tudott olvasni lev file-bol!" );
 
-		// Beolvassuk hogy hibas-e:
-		double hibaertek;
-		if( fread( &hibaertek, 1, sizeof( hibaertek ), h ) != sizeof( hibaertek ) )
-			hiba( "Nem tudott olvasni lev file-bol!" );
-		if( hibaertek + double(belyeg) < 9786.0 ||
-			hibaertek + double(belyeg) > 36546.0 )
-			hiba( "topol::topol-ban hibaertek kivul esik tartomanyon!" );
-		if( hibaertek + double(belyeg) > 20000.0 )
-			hibas = 1;
+		// Beolvassuk hogy errors-e:
+		double errorertek;
+		if( fread( &errorertek, 1, sizeof( errorertek ), h ) != sizeof( errorertek ) )
+			error( "No tudott olvasni lev file-bol!" );
+		if( errorertek + double(belyeg) < 9786.0 ||
+			errorertek + double(belyeg) > 36546.0 )
+			error( "topol::topol-ban errorertek kivul esik tartomanyon!" );
+		if( errorertek + double(belyeg) > 20000.0 )
+			errors = 1;
 
 		// Beolvassuk hogy lezart-e:
 		double lezartertek;
 		if( fread( &lezartertek, 1, sizeof( lezartertek ), h ) != sizeof( lezartertek ) )
-			hiba( "Nem tudott olvasni lev file-bol!" );
+			error( "No tudott olvasni lev file-bol!" );
 		if( lezartertek + double(belyeg) < 9875.0 ||
 			lezartertek + double(belyeg) > 32345.0 )
-			hiba( "topol::topol-ban lezartertek kivul esik tartomanyon!" );
+			error( "topol::topol-ban lezartertek kivul esik tartomanyon!" );
 		if( lezartertek + double(belyeg) > 20000.0 )
 			lezart = 1;
 
 	}
 	if( verzio == 2 ) {
 		// Ezt az agat ki kell majd torolni veglegesbol, mivel
-		// 1-es verzio nem ervenyes:
+		// 1-es verzio No ervenyes:
 
 		// Belyeg:
 		long belyeg_l;
 		if( fread( &belyeg_l, 1, 4, h ) != 4 )
-			hiba( "Nem tudott olvasni lev file-bol!" );
+			error( "No tudott olvasni lev file-bol!" );
 
 		// Beolvassuk hogy shareware-e:
 		double sarvarertek;
 		if( fread( &sarvarertek, 1, sizeof( sarvarertek ), h ) != sizeof( sarvarertek ) )
-			hiba( "Nem tudott olvasni lev file-bol!" );
+			error( "No tudott olvasni lev file-bol!" );
 		if( sarvarertek + double(belyeg_l) < 9786.0 ||
 			sarvarertek + double(belyeg_l) > 36546.0 )
-			hiba( "topol::topol-ban sarvarertek kivul esik tartomanyon!" );
+			error( "topol::topol-ban sarvarertek kivul esik tartomanyon!" );
 
 		// Ha igaz, akkor ezt a level file-t regisztraltbol-bol mentettek:
 		// Csak en regisztraltbol is sarvar-nak mentek:
@@ -298,81 +298,81 @@ topol::topol( char* filename, int kulso ) {
 													filename );
 		#endif
 
-		// Beolvassuk hogy hibas-e:
-		double hibaertek;
-		if( fread( &hibaertek, 1, sizeof( hibaertek ), h ) != sizeof( hibaertek ) )
-			hiba( "Nem tudott olvasni lev file-bol!" );
-		if( hibaertek + double(belyeg_l) < 9786.0 ||
-			hibaertek + double(belyeg_l) > 36546.0 )
-			hiba( "topol::topol-ban hibaertek kivul esik tartomanyon!" );
-		if( hibaertek + double(belyeg_l) > 20000.0 )
-			hibas = 1;
+		// Beolvassuk hogy errors-e:
+		double errorertek;
+		if( fread( &errorertek, 1, sizeof( errorertek ), h ) != sizeof( errorertek ) )
+			error( "No tudott olvasni lev file-bol!" );
+		if( errorertek + double(belyeg_l) < 9786.0 ||
+			errorertek + double(belyeg_l) > 36546.0 )
+			error( "topol::topol-ban errorertek kivul esik tartomanyon!" );
+		if( errorertek + double(belyeg_l) > 20000.0 )
+			errors = 1;
 
 		// Beolvassuk hogy lezart-e:
 		double lezartertek;
 		if( fread( &lezartertek, 1, sizeof( lezartertek ), h ) != sizeof( lezartertek ) )
-			hiba( "Nem tudott olvasni lev file-bol!" );
+			error( "No tudott olvasni lev file-bol!" );
 		if( lezartertek + double(belyeg_l) < 9875.0 ||
 			lezartertek + double(belyeg_l) > 32345.0 )
-			hiba( "topol::topol-ban lezartertek kivul esik tartomanyon!" );
+			error( "topol::topol-ban lezartertek kivul esik tartomanyon!" );
 		if( lezartertek + double(belyeg_l) > 20000.0 )
 			lezart = 1;
 	}
 	if( verzio == 3 ) {
 		// Belyeg:
 		if( fread( &belyeg, 1, 4, h ) != 4 )
-			hiba( "Nem tudott olvasni lev file-bol!" );
+			error( "No tudott olvasni lev file-bol!" );
 
 		// Beolvassuk hogy shareware-e:
 		double sarvarertek;
 		if( fread( &sarvarertek, 1, sizeof( sarvarertek ), h ) != sizeof( sarvarertek ) )
-			hiba( "Nem tudott olvasni lev file-bol!" );
+			error( "No tudott olvasni lev file-bol!" );
 
-		// Beolvassuk hogy hibas-e:
-		double hibaertek;
-		if( fread( &hibaertek, 1, sizeof( hibaertek ), h ) != sizeof( hibaertek ) )
-			hiba( "Nem tudott olvasni lev file-bol!" );
-		hibas = 0;
+		// Beolvassuk hogy errors-e:
+		double errorertek;
+		if( fread( &errorertek, 1, sizeof( errorertek ), h ) != sizeof( errorertek ) )
+			error( "No tudott olvasni lev file-bol!" );
+		errors = 0;
 
 		// Beolvassuk hogy lezart-e:
 		double lezartertek;
 		if( fread( &lezartertek, 1, sizeof( lezartertek ), h ) != sizeof( lezartertek ) )
-			hiba( "Nem tudott olvasni lev file-bol!" );
+			error( "No tudott olvasni lev file-bol!" );
 		lezart = 0;
 	}
 	if( verzio == 4 ) {
 		// Belyeg:
 		if( fread( &belyeg_l, 1, 4, h ) != 4 )
-			hiba( "Nem tudott olvasni lev file-bol!" );
+			error( "No tudott olvasni lev file-bol!" );
 		if( fread( &belyeg, 1, sizeof( belyeg ), h ) != sizeof( double ) )
-			hiba( "Nem tudott olvasni lev file-bol double belyeget!" );
+			error( "No tudott olvasni lev file-bol double belyeget!" );
 
 		double sarvarertek;
 		if( fread( &sarvarertek, 1, sizeof( sarvarertek ), h ) != sizeof( sarvarertek ) )
-			hiba( "Nem tudott olvasni lev file-bol!" );
+			error( "No tudott olvasni lev file-bol!" );
 
-		double hibaertek;
-		if( fread( &hibaertek, 1, sizeof( hibaertek ), h ) != sizeof( hibaertek ) )
-			hiba( "Nem tudott olvasni lev file-bol!" );
+		double errorertek;
+		if( fread( &errorertek, 1, sizeof( errorertek ), h ) != sizeof( errorertek ) )
+			error( "No tudott olvasni lev file-bol!" );
 
 		double lezartertek;
 		if( fread( &lezartertek, 1, sizeof( lezartertek ), h ) != sizeof( lezartertek ) )
-			hiba( "Nem tudott olvasni lev file-bol!" );
+			error( "No tudott olvasni lev file-bol!" );
 	}*/
 	if( verzio == 6 /*|| verzio == 5*/ ) {
 		// Belyeg:
 		if( fread( &belyeg_l, 1, 4, h ) != 4 )
-			hiba( "Nem tudott olvasni lev file-bol!" );
+			error( "No tudott olvasni lev file-bol!" );
 		if( fread( &belyeg, 1, sizeof( belyeg ), h ) != sizeof( double ) )
-			hiba( "Nem tudott olvasni lev file-bol double belyeget!" );
+			error( "No tudott olvasni lev file-bol double belyeget!" );
 
 		// Beolvassuk hogy shareware-e:
 		double sarvarertek;
 		if( fread( &sarvarertek, 1, sizeof( sarvarertek ), h ) != sizeof( sarvarertek ) )
-			hiba( "Nem tudott olvasni lev file-bol!" );
+			error( "No tudott olvasni lev file-bol!" );
 		if( sarvarertek + belyeg < 9786.0 ||
 			sarvarertek + belyeg > 36546.0 )
-			hiba( "topol::topol-ban sarvarertek kivul esik tartomanyon!" );
+			error( "topol::topol-ban sarvarertek kivul esik tartomanyon!" );
 
 		// Ha igaz, akkor ezt a level file-t regisztraltbol-bol mentettek:
 		// Csak en regisztraltbol is sarvar-nak mentek:
@@ -382,23 +382,23 @@ topol::topol( char* filename, int kulso ) {
 													filename );
 		#endif
 
-		// Beolvassuk hogy hibas-e:
-		double hibaertek;
-		if( fread( &hibaertek, 1, sizeof( hibaertek ), h ) != sizeof( hibaertek ) )
-			hiba( "Nem tudott olvasni lev file-bol!" );
-		if( hibaertek + belyeg < 9786.0 ||
-			hibaertek + belyeg > 36546.0 )
-			hiba( "topol::topol-ban hibaertek kivul esik tartomanyon!" );
-		if( hibaertek + belyeg > 20000.0 )
-			hibas = 1;
+		// Beolvassuk hogy errors-e:
+		double errorertek;
+		if( fread( &errorertek, 1, sizeof( errorertek ), h ) != sizeof( errorertek ) )
+			error( "No tudott olvasni lev file-bol!" );
+		if( errorertek + belyeg < 9786.0 ||
+			errorertek + belyeg > 36546.0 )
+			error( "topol::topol-ban errorertek kivul esik tartomanyon!" );
+		if( errorertek + belyeg > 20000.0 )
+			errors = 1;
 
 		// Beolvassuk hogy lezart-e:
 		double lezartertek;
 		if( fread( &lezartertek, 1, sizeof( lezartertek ), h ) != sizeof( lezartertek ) )
-			hiba( "Nem tudott olvasni lev file-bol!" );
+			error( "No tudott olvasni lev file-bol!" );
 		if( lezartertek + belyeg < 9875.0 ||
 			lezartertek + belyeg > 32345.0 )
-			hiba( "topol::topol-ban lezartertek kivul esik tartomanyon!" );
+			error( "topol::topol-ban lezartertek kivul esik tartomanyon!" );
 		if( lezartertek + belyeg > 20000.0 )
 			lezart = 1;
 
@@ -416,13 +416,13 @@ topol::topol( char* filename, int kulso ) {
 		qseek( h, 100, SEEK_SET );
 	double gyuruolvszam = 0;
 	if( fread( &gyuruolvszam, 1, sizeof( gyuruolvszam ), h ) != sizeof( gyuruolvszam ) )
-		hiba( "topol::topol-ban nem tudta olvasni lebego gyuruszamot!" );
+		error( "topol::topol-ban No tudta olvasni lebego gyuruszamot!" );
 
 	int gyuruszam = gyuruolvszam;
 	if( gyuruszam > MAXGYURU )
-		hiba( "topol::topol-ban gyuruszam > MAXGYURU!: " );
+		error( "topol::topol-ban gyuruszam > MAXGYURU!: " );
 	if( gyuruszam <= 0 )
-		hiba( "topol::topol-ban gyuruszam <= 0!" );
+		error( "topol::topol-ban gyuruszam <= 0!" );
 
 	for( i = 0; i < gyuruszam; i++ ) {
 		// Beolvassa sok gyurut:
@@ -432,13 +432,13 @@ topol::topol( char* filename, int kulso ) {
 	// Gyuruk szama:
 	double kerekolvszam = 0;
 	if( fread( &kerekolvszam, 1, sizeof( kerekolvszam ), h ) != sizeof( kerekolvszam ) )
-		hiba( "topol::topol-ban nem tudta olvasni lebego kerekszamot!" );
+		error( "topol::topol-ban No tudta olvasni lebego kerekszamot!" );
 
 	int kerekszam = kerekolvszam;
 	if( kerekszam > MAXKEREK )
-		hiba( "topol::topol-ban kerekszam > MAXKEREK!: " );
+		error( "topol::topol-ban kerekszam > MAXKEREK!: " );
 	if( kerekszam <= 0 )
-		hiba( "topol::topol-ban kerekszam <= 0!" );
+		error( "topol::topol-ban kerekszam <= 0!" );
 
 	for( i = 0; i < kerekszam; i++ ) {
 		// Beolvassa sok gyurut:
@@ -480,8 +480,8 @@ void topol::save( char* filename ) {
 	// Mivel ezzel meg valtoztathatunk polygonokon
 	// (polygon korbejaras megvaltoztatas, egymason fekvo pontok
 	// megszuntetese, tul hegyes szogek eltolasa), ezert ezt elore tesszuk:
-	hibas = check_topology( 0 );
-	if( hibas && lezart ) {
+	errors = check_topology( 0 );
+	if( errors && lezart ) {
 		dialog( "You cannot save this file as a locked file because there are",
 				"some topology errors in the design and you could not play on it!" );
 		return;
@@ -490,7 +490,7 @@ void topol::save( char* filename ) {
 
 	FILE* h = fopen( filename, "wb" );
 	if( !h )
-		hiba( "topol::save-ben nem tudta nyitni file-t!: ", filename );
+		error( "topol::save-ben No tudta nyitni file-t!: ", filename );
 
 	fwrite( "POT06", 1, 5, h );
 
@@ -515,18 +515,18 @@ void topol::save( char* filename ) {
 
 	fwrite( &sarvarertek, 1, sizeof( sarvarertek ), h );
 
-	// Kiirjuk hogy hibas-e:
-	// Ha hibaertek + double(belyeg_l) > 20000.0, akkor hibas:
-	double hibaertek = 11877.0 + s_random( 5871 ) - belyeg;
-	if( hibas ) // ezt mar elejen meghataroztuk
-		hibaertek = 20961.0 + s_random( 4982 ) - belyeg;
-	fwrite( &hibaertek, 1, sizeof( hibaertek ), h );
+	// Kiirjuk hogy errors-e:
+	// Ha errorertek + double(belyeg_l) > 20000.0, akkor errors:
+	double errorertek = 11877.0 + s_random( 5871 ) - belyeg;
+	if( errors ) // ezt mar elejen meghataroztuk
+		errorertek = 20961.0 + s_random( 4982 ) - belyeg;
+	fwrite( &errorertek, 1, sizeof( errorertek ), h );
 
 	// Kiirjuk hogy lezart-e:
 	double lezartertek = 12112.0 + s_random( 6102 ) - belyeg;
 	if( lezart )
 		lezartertek = 23090.0 + s_random( 6310 ) - belyeg;
-	fwrite( &lezartertek, 1, sizeof( hibaertek ), h );
+	fwrite( &lezartertek, 1, sizeof( errorertek ), h );
 
 	// Kiirjuk level nameet:
 	fwrite( levelname, 1, LEVELNAMEHOSSZ+1, h );
@@ -559,7 +559,7 @@ void topol::save( char* filename ) {
 
 	fclose( h );
 
-	if( hibas )
+	if( errors )
 		dialog( "Though the level file was successfully saved, there are some errors in the design.",
 				"You cannot play on this level until you correct these problems. To see what the",
 				"problems are, please push the Check Topology button in the editor." );
@@ -608,7 +608,7 @@ double topol::belyegszamitas( void ) {
 }
 
 // Ha Sarvari, megvizsgalja hogy palya megfelel-e sarvari verzionak:
-// Ha nem, akkor kilep corrupt hibauzenettel:
+// Ha No, akkor kilep corrupt erroruzenettel:
 void topol::checklevelforsarvari( void ) {
 	//Maxpont_sarvari
 	//Maxkerek_sarvari
@@ -619,11 +619,11 @@ void topol::checklevelforsarvari( void ) {
 			if( ptomb[i] ) {
 				gyuruszam++;
 				if( ptomb[i]->pontszam > Maxpont_sarvari )
-					hiba( "checklevelforsarvari-ban tul sok pont!" );
+					error( "checklevelforsarvari-ban tul sok pont!" );
 			}
 		}
 		if( gyuruszam > Maxgyuru_sarvari )
-			hiba( "checklevelforsarvari-ban tul sok gyuru!" );
+			error( "checklevelforsarvari-ban tul sok gyuru!" );
 
 		int kerekszam = 0;
 		for( i = 0; i < MAXKEREK; i++ ) {
@@ -632,7 +632,7 @@ void topol::checklevelforsarvari( void ) {
 			}
 		}
 		if( kerekszam > Maxkerek_sarvari )
-			hiba( "checklevelforsarvari-ban tul sok kerek!" );
+			error( "checklevelforsarvari-ban tul sok kerek!" );
 	#endif
 }
 
@@ -649,7 +649,7 @@ void topol::checklevelforsarvari( void ) {
 
 
 
-// Barmilyen hiba eseten 1-el ter vissza:
+// Barmilyen error eseten 1-el ter vissza:
 unsigned long getbelyeg( char* name ) {
 	FILE* h = fopen( name, "rb" );
 	if( !h )
@@ -711,7 +711,7 @@ char* getlevelname( char* name ) {
 		y = 0 - y;
 	y *= 1000.0;
 	if( y > double(0x6fffffff) )
-		hiba( "double2belyeg-ben y > 0x6fffffff!" );
+		error( "double2belyeg-ben y > 0x6fffffff!" );
 
 	unsigned long l = y;
 	return l;

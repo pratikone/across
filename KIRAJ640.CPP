@@ -2,22 +2,22 @@
 
 vector2 Fejr( 0, 0 );
 
-static int Elso640 = 1;
+static int first640 = 1;
 static int Gmode640;
 
 // 640-es modban nincs mit resetalni:
-void resetkirajzol( void ) {
+void resetkidrawol( void ) {
 }
 
 void setgraph( void ) {
 	if( !EGAVGAjo )
-		hiba( "set640-ban !EGAVGAjo!" );
+		error( "set640-ban !EGAVGAjo!" );
 	if( Vid640 )
 		return;
 	if( Vid320 )
-		hiba( "setgraph-ban Vid320!" );
-	if( Elso640 ) {
-		Elso640 = 0;
+		error( "setgraph-ban Vid320!" );
+	if( first640 ) {
+		first640 = 0;
 		int gdriver = VGA;
 		Gmode640 = VGAHI;
 		initgraph( &gdriver, &Gmode640, "" );
@@ -26,12 +26,12 @@ void setgraph( void ) {
 			printf( "Graphics error: %s\n", grapherrormsg( errorcode ) );
 			exit( 0 );
 		}
-		Vid320 = 0; // Ez elvileg nem kell!
+		Vid320 = 0; // Ez elvileg No kell!
 		Vid640 = 1;
 		return;
 	}
 	setgraphmode( Gmode640 );
-	Vid320 = 0; // Ez elvileg nem kell!
+	Vid320 = 0; // Ez elvileg No kell!
 	Vid640 = 1;
 }
 
@@ -45,8 +45,8 @@ static vector2 interpolal( vector2 v1, vector2 v2, double x ) {
 	return vissza;
 }
 
-static void vonalki( vector2 p1, vector2 p2 ) {
-	vonalki( p1.x, p1.y, p2.x, p2.y );
+static void LINEki( vector2 p1, vector2 p2 ) {
+	LINEki( p1.x, p1.y, p2.x, p2.y );
 }
 
 static int K1x = 200, K1y = 200, K2x = 200, K2y = 200,
@@ -59,7 +59,7 @@ static vector2 P_0, P_1, P_2, P_3, P_4, P_5,
 
 static double T = 0;
 
-void kirajzol640( double t, targytomb* pttt, double ugrasnagysag ) {
+void kidrawol640( double t, targytomb* pttt, double ugrasnagysag ) {
 	// Kiszamoljuk kepernyo bal also sarkat:
 	vector2 motorkozep = Kor1.r;
 	double x0 = motorkozep.x-4.0;
@@ -92,7 +92,7 @@ void kirajzol640( double t, targytomb* pttt, double ugrasnagysag ) {
 	Alfa4 = Kor4.alfa;
 	kiteljeskerek( K4x, K4y, Kor4.sugar*Arany, Alfa4 );
 
-	// Most jon motoros kirajzolasa:
+	// Most jon motoros kidrawolasa:
 	vector2 sarok = vector2(x0,y0);
 	vector2 p_k1 = (Kor2.r-sarok)*Arany;
 	vector2 p_k2 = (Kor4.r-sarok)*Arany;
@@ -114,39 +114,39 @@ void kirajzol640( double t, targytomb* pttt, double ugrasnagysag ) {
 	vector2 p_11 = interpolal( p_9, p_k2, 0.3 );
 	vector2 p_12 = interpolal( p_7, p_9, 1.08 );
 
-	setcolor( ColorBG ); vonalki( P_12, P_9 );
-	setcolor( ColorFG ); vonalki( p_12, p_9 );
+	setcolor( ColorBG ); LINEki( P_12, P_9 );
+	setcolor( ColorFG ); LINEki( p_12, p_9 );
 
-	setcolor( ColorBG ); vonalki( P_4, P_k2 );
-	setcolor( ColorFG ); vonalki( p_4, p_k2 );
+	setcolor( ColorBG ); LINEki( P_4, P_k2 );
+	setcolor( ColorFG ); LINEki( p_4, p_k2 );
 
-	setcolor( ColorBG ); vonalki( P_2, P_4 );
-	setcolor( ColorFG ); vonalki( p_2, p_4 );
+	setcolor( ColorBG ); LINEki( P_2, P_4 );
+	setcolor( ColorFG ); LINEki( p_2, p_4 );
 
-	setcolor( ColorBG ); vonalki( P_10, P_9 );
+	setcolor( ColorBG ); LINEki( P_10, P_9 );
 	if( !Hatra )
-		setcolor( ColorFG ); vonalki( p_10, p_9 );
+		setcolor( ColorFG ); LINEki( p_10, p_9 );
 
-	setcolor( ColorBG ); vonalki( P_10, P_1 );
-	setcolor( ColorFG ); vonalki( p_10, p_1 );
+	setcolor( ColorBG ); LINEki( P_10, P_1 );
+	setcolor( ColorFG ); LINEki( p_10, p_1 );
 
-	setcolor( ColorBG ); vonalki( P_11, P_0 );
-	setcolor( ColorFG ); vonalki( p_11, p_0 );
+	setcolor( ColorBG ); LINEki( P_11, P_0 );
+	setcolor( ColorFG ); LINEki( p_11, p_0 );
 
-	setcolor( ColorBG ); vonalki( P_k1, P_8 );
-	setcolor( ColorFG ); vonalki( p_k1, p_8 );
+	setcolor( ColorBG ); LINEki( P_k1, P_8 );
+	setcolor( ColorFG ); LINEki( p_k1, p_8 );
 
-	setcolor( ColorBG ); vonalki( P_2, P_7 );
-	setcolor( ColorFG ); vonalki( p_2, p_7 );
+	setcolor( ColorBG ); LINEki( P_2, P_7 );
+	setcolor( ColorFG ); LINEki( p_2, p_7 );
 
-	setcolor( ColorBG ); vonalki( P_1, P_6 );
-	setcolor( ColorFG ); vonalki( p_1, p_6 );
+	setcolor( ColorBG ); LINEki( P_1, P_6 );
+	setcolor( ColorFG ); LINEki( p_1, p_6 );
 
-	setcolor( ColorBG ); vonalki( P_8, P_3 );
-	setcolor( ColorFG ); vonalki( p_8, p_3 );
+	setcolor( ColorBG ); LINEki( P_8, P_3 );
+	setcolor( ColorFG ); LINEki( p_8, p_3 );
 
-	setcolor( ColorBG ); vonalki( P_3, P_6 );
-	setcolor( ColorFG ); vonalki( p_3, p_6 );
+	setcolor( ColorBG ); LINEki( P_3, P_6 );
+	setcolor( ColorFG ); LINEki( p_3, p_6 );
 
 	vector2 p_5 = (Fejr-sarok)*Arany;
 
@@ -155,32 +155,32 @@ void kirajzol640( double t, targytomb* pttt, double ugrasnagysag ) {
 
 	//Fejr = p_5*(1.0/Arany)+sarok;
 
-	// Palya kirajzolasa:
-	Pszak->felsorolasresetszak();
+	// Palya kidrawolasa:
+	Pszak->ffirstrolasresetszak();
 	szakasz* pszak;
 	while( (pszak=Pszak->getnextszak()) != NULL ) {
-		vonal* pv = &pszak->vv;
+		LINE* pv = &pszak->vv;
 		setcolor( ColorBG );
-		vonalki( (pv->r.x-X0)*Arany, (pv->r.y-Y0)*Arany,
+		LINEki( (pv->r.x-X0)*Arany, (pv->r.y-Y0)*Arany,
 					(pv->r.x+pv->v.x-X0)*Arany,
 					(pv->r.y+pv->v.y-Y0)*Arany );
 		setcolor( ColorFG );
-		vonalki( (pv->r.x-x0)*Arany, (pv->r.y-y0)*Arany,
+		LINEki( (pv->r.x-x0)*Arany, (pv->r.y-y0)*Arany,
 					(pv->r.x+pv->v.x-x0)*Arany,
 					(pv->r.y+pv->v.y-y0)*Arany );
 	}
-	// Hordok kirajzolasa:
+	// Hordok kidrawolasa:
 	Phordok->resethordok();
 	hordo* phordo = Phordok->getnexthordo();
 	while( phordo ) {
-		for( int i = 0; i < phordo->vonalszam; i++ ) {
-			vonal* pv = &phordo->vonaltomb[i];
+		for( int i = 0; i < phordo->LINEszam; i++ ) {
+			LINE* pv = &phordo->LINEtomb[i];
 			setcolor( ColorBG );
-			vonalki( (pv->r.x-X0)*Arany, (pv->r.y-Y0)*Arany,
+			LINEki( (pv->r.x-X0)*Arany, (pv->r.y-Y0)*Arany,
 						(pv->r.x+pv->v.x-X0)*Arany,
 						(pv->r.y+pv->v.y-Y0)*Arany );
 			setcolor( ColorFG );
-			vonalki( (pv->r.x-x0)*Arany, (pv->r.y-y0)*Arany,
+			LINEki( (pv->r.x-x0)*Arany, (pv->r.y-y0)*Arany,
 						(pv->r.x+pv->v.x-x0)*Arany,
 						(pv->r.y+pv->v.y-y0)*Arany );
 		}
@@ -188,8 +188,8 @@ void kirajzol640( double t, targytomb* pttt, double ugrasnagysag ) {
 		phordo = Phordok->getnexthordo();
 	}
 
-	// Spriteok kirajzolasa:
-	Pszakt->felsorolasresetszak();
+	// Spriteok kidrawolasa:
+	Pszakt->ffirstrolasresetszak();
 	szakasz* psz;
 	while( (psz=Pszakt->getnextszak()) != NULL ) {
 		targy* pt = psz->ptargy;

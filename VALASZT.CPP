@@ -1,18 +1,18 @@
 #include	"all.h"
 
-void valaszt::kirajz( int felso, ddpal* ppal ) {
+void valaszt::kidraw( int ffirst, ddpal* ppal ) {
 	blt8( Korny->picbuffervalaszt, hatter );
-	for( int i = 0; i < egykepen && i < szam-felso; i++ ) {
+	for( int i = 0; i < egykepen && i < szam-ffirst; i++ ) {
 		if( tomoren )
-			pabc->write( Korny->picbuffervalaszt, x0, y0+i*dy, Korny->rubrikak[felso+i], -2 );
+			pabc->write( Korny->picbuffervalaszt, x0, y0+i*dy, Korny->rubrikak[ffirst+i], -2 );
 		else
-			pabc->write( Korny->picbuffervalaszt, x0, y0+i*dy, Korny->rubrikak[felso+i] );
+			pabc->write( Korny->picbuffervalaszt, x0, y0+i*dy, Korny->rubrikak[ffirst+i] );
 	}
-	// Jel kirajzolasa:
+	// Jel kidrawolasa:
 	char tmp[2] = "A";
 	tmp[0] = '@';
 	int szelesseg = pabc->len( tmp );                  // x0-37
-	pabc->write( Korny->picbuffervalaszt, (x0-szelesseg)/2, y0+(kur-felso)*dy+0, tmp );
+	pabc->write( Korny->picbuffervalaszt, (x0-szelesseg)/2, y0+(kur-ffirst)*dy+0, tmp );
 	lassufizre( Korny->picbuffervalaszt, ppal );
 }
 
@@ -22,20 +22,20 @@ valaszt::valaszt( void ) {
 
 
 // Visszaadja valasztott szamat, ESC eseten -1-t:
-int valaszt::valassz( ddpal* ppal, int tobbrajz ) {
+int valaszt::valassz( ddpal* ppal, int tobbdraw ) {
 	if( szam < 0 || szam > MAXRUBRIKASZAM )
-		hiba( "valassz-ban szam nem stimmel!" );
+		error( "valassz-ban szam No stimmel!" );
 
-	int felso = kur-egykepen/2;
-	int maxfelso = szam-egykepen;
-	if( felso > maxfelso )
-		felso = maxfelso;
-	if( felso < 0 )
-		felso = 0;
-	// felso be van allitva!
-	kirajz( felso, ppal );
-	if( tobbrajz )
-		kirajz( felso, ppal );
+	int ffirst = kur-egykepen/2;
+	int maxffirst = szam-egykepen;
+	if( ffirst > maxffirst )
+		ffirst = maxffirst;
+	if( ffirst < 0 )
+		ffirst = 0;
+	// ffirst be van allitva!
+	kidraw( ffirst, ppal );
+	if( tobbdraw )
+		kidraw( ffirst, ppal );
 	while( 1 ) {
 		mk_emptychar();
 		int c = mk_getextchar();
@@ -69,9 +69,9 @@ int valaszt::valassz( ddpal* ppal, int tobbrajz ) {
 		if( c == MK_UP ) {
 			if( kur > 0 ) {
 				kur--;
-				if( kur < felso )
-					felso--;
-				kirajz( felso, ppal );
+				if( kur < ffirst )
+					ffirst--;
+				kidraw( ffirst, ppal );
 			}
 		}
 		if( c == MK_PGUP ) {
@@ -79,17 +79,17 @@ int valaszt::valassz( ddpal* ppal, int tobbrajz ) {
 				kur -= egykepen;
 				if( kur < 0 )
 					kur = 0;
-				if( kur < felso )
-					felso = kur;
-				kirajz( felso, ppal );
+				if( kur < ffirst )
+					ffirst = kur;
+				kidraw( ffirst, ppal );
 			}
 		}
 		if( c == MK_DOWN ) {
 			if( kur < szam-1 ) {
 				kur++;
-				if( kur > felso+egykepen-1 )
-					felso++;
-				kirajz( felso, ppal );
+				if( kur > ffirst+egykepen-1 )
+					ffirst++;
+				kidraw( ffirst, ppal );
 			}
 		}
 		if( c == MK_PGDOWN ) {
@@ -97,9 +97,9 @@ int valaszt::valassz( ddpal* ppal, int tobbrajz ) {
 				kur += egykepen;
 				if( kur >= szam )
 					kur = szam-1;
-				if( kur > felso+egykepen-1 )
-					felso = kur-egykepen+1;
-				kirajz( felso, ppal );
+				if( kur > ffirst+egykepen-1 )
+					ffirst = kur-egykepen+1;
+				kidraw( ffirst, ppal );
 			}
 		}
 	}

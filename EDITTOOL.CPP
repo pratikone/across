@@ -1,4 +1,3 @@
-#include	"all.h"
 
 void alaphelp( void ) {
 	switch( Tool ) {
@@ -26,7 +25,7 @@ void t_move_nyomva( int mx, int my ) {
 		// Most fogjuk elengedni pontot:
 		if( Pgy ) {
 			if( Pker )
-				hiba( "iuofiuceyhbuc" );
+				error( "iuofiuceyhbuc" );
 			Pgy->ponttomb[K] = konv( mx, my );
 			Pgy = NULL;
 		}
@@ -94,31 +93,31 @@ void t_move_esc( void ) {
 
 void t_move_mmove( int mx, int my ) {
 	if( !Pgy && !Pker )
-		hiba( "t_move_mmove-ban !Pgy && !Pker!" );
+		error( "t_move_mmove-ban !Pgy && !Pker!" );
 	if( Pgy && Pker )
-		hiba( "ioggiugghiigoijgoijer" );
+		error( "ioggiugghiigoijgoijer" );
 
 	push();
 
 	// Letoroljuk oket:
 	if( Pgy ) {
-		Pgy->kirajz( K, Fel, 0 );
-		Pgy->kirajz( K, !Fel, 0 );
+		Pgy->kidraw( K, Fel, 0 );
+		Pgy->kidraw( K, !Fel, 0 );
 		// Uj koord:
 		double dx = konvx_i2d( mx );
 		double dy = konvy_i2d( my );
 		Pgy->ujkoord( K, dx, dy );
-		// Visszarajzoljuk oket:
-		Pgy->kirajz( K, Fel, 0 );
-		Pgy->kirajz( K, !Fel, 0 );
+		// Visszadrawoljuk oket:
+		Pgy->kidraw( K, Fel, 0 );
+		Pgy->kidraw( K, !Fel, 0 );
 	}
 	else {
-		Pker->kirajzol();
+		Pker->kidrawol();
 		double dx = konvx_i2d( mx );
 		double dy = konvy_i2d( my );
 		Pker->r.x = dx;
 		Pker->r.y = dy;
-		Pker->kirajzol();
+		Pker->kidrawol();
 	}
 	Moux = mx;
 	Mouy = my;
@@ -145,7 +144,7 @@ void t_create_vert_nyomva( int mx, int my ) {
 
 		Pgy = Ptop->legkozpont( x, y, &K );
 		if( !Pgy ) {
-			// Egy uj poligon elso pontjat rakjuk le:
+			// Egy uj poligon first pontjat rakjuk le:
 			// Eloszor megnezzuk, hogy van-e meg hely uj poligonnak:
 			int gyuruszam = 0;
 			for( int i = 0; i < MAXGYURU; i++ )
@@ -210,7 +209,7 @@ void t_create_vert_nyomva( int mx, int my ) {
 		// csinalunk belole:
 		toolhelp( "Click the left button to place point. SPACE and ENTER swaps. ESC or right button cancels." );
 		if( !Egypont )
-			hiba( "!Egypont, pedig annak kene lennie (ffdsgiu)!" );
+			error( "!Egypont, pedig annak kene lennie (ffdsgiu)!" );
 		for( int i = 0; i < MAXGYURU; i++ ) {
 			if( !Ptop->ptomb[i] ) {
 				Pgy = Ptop->ptomb[i] = new gyuru;
@@ -225,12 +224,12 @@ void t_create_vert_nyomva( int mx, int my ) {
 				return;
 			}
 		};
-		hiba( "Tul sok gyuru (iycriyfd)!" );
+		error( "Tul sok gyuru (iycriyfd)!" );
 	}
 }
 
 // Jobb gomb nyomva:
-// Ha nem fogtunk pontot, akkor uj poligonnak veszi fel elso pontjat,
+// Ha No fogtunk pontot, akkor uj poligonnak veszi fel first pontjat,
 // Ha fogtuk pontot, akkor torli es elengedi:
 void t_create_vert_esc( void ) {
 	if( !Pgy && !Egypont )
@@ -248,7 +247,7 @@ void t_create_vert_esc( void ) {
 					gyuruszam++;
 			}
 			if( gyuruszam <= 1 )
-				hiba( "t_create_vert_nyomva_esc-ban gyuruszam <= 1 (7pq4)!" );
+				error( "t_create_vert_nyomva_esc-ban gyuruszam <= 1 (7pq4)!" );
 
 			int talalt = 0;
 			for( i = 0; i < MAXGYURU; i++ ) {
@@ -264,7 +263,7 @@ void t_create_vert_esc( void ) {
 				}
 			}
 			if( !talalt )
-				hiba( "Gyuru torlesekor !talalt!" );
+				error( "Gyuru torlesekor !talalt!" );
 		}
 		else {
 			// Csak a pontot toroljuk:
@@ -276,7 +275,7 @@ void t_create_vert_esc( void ) {
 	}
 	else {
 		if( !Egypont )
-			hiba( "!Egypont (jygfeuye)!" );
+			error( "!Egypont (jygfeuye)!" );
 		Egypont = 0;
 		invalidate();
 	}
@@ -316,30 +315,30 @@ void t_create_vert_space( void ) {
 void t_create_vert_mmove( int mx, int my ) {
 	if( !Pgy && !Egypont ) {
 		// Teljesen normalis kurzor mozgatas:
-		hiba( "Ezt most edituj.cpp-nek kellene csinalnia!" );
+		error( "Ezt most edituj.cpp-nek kellene csinalnia!" );
 	}
 	push();
 	if( Pgy ) {
 		// Letoroljuk oket:
-		Pgy->kirajz( K, Fel, 1 ); // szaggatott
-		Pgy->kirajz( K, !Fel, 0 );
+		Pgy->kidraw( K, Fel, 1 ); // szaggatott
+		Pgy->kidraw( K, !Fel, 0 );
 		// Uj koord:
 		double dx = konvx_i2d( mx );
 		double dy = konvy_i2d( my );
 		Pgy->ujkoord( K, dx, dy );
-		// Visszarajzoljuk oket:
-		Pgy->kirajz( K, Fel, 1 ); // szaggatott
-		Pgy->kirajz( K, !Fel, 0 );
+		// Visszadrawoljuk oket:
+		Pgy->kidraw( K, Fel, 1 ); // szaggatott
+		Pgy->kidraw( K, !Fel, 0 );
 		Moux = mx;
 		Mouy = my;
 	}
 	else {
 		if( !Egypont )
-			hiba( "!Egypont (yifeye)" );
-		vonalrajz( konv( Epontx, Eponty ), konv( Kpontx, Kponty ), 0 );
+			error( "!Egypont (yifeye)" );
+		LINEdraw( konv( Epontx, Eponty ), konv( Kpontx, Kponty ), 0 );
 		Moux = Kpontx = mx;
 		Mouy = Kponty = my;
-		vonalrajz( konv( Epontx, Eponty ), konv( Kpontx, Kponty ), 0 );
+		LINEdraw( konv( Epontx, Eponty ), konv( Kpontx, Kponty ), 0 );
 	}
 	pop();
 }
@@ -351,7 +350,7 @@ void t_create_vert_mmove( int mx, int my ) {
 
 void t_delete_vert_nyomva( int mx, int my ) {
 	if( Pgy )
-		hiba( "yffwiye" );
+		error( "yffwiye" );
 	// Most probalunk megfogni egy pontot:
 	double x = konvx_i2d( mx );
 	double y = konvy_i2d( my );
@@ -362,7 +361,7 @@ void t_delete_vert_nyomva( int mx, int my ) {
 		return;
 	// Talaltunk egy pontot, amit le kene torolni:
 	if( pgy->pontszam < 3 )
-		hiba( "yigfdsyhifeiu" );
+		error( "yigfdsyhifeiu" );
 	if( pgy->pontszam == 3 ) {
 		//dialog( "You cannot delete this polygon, because every" );
 		dialog( "You cannot delete this vertex, because every polygon must",
@@ -377,7 +376,7 @@ void t_delete_vert_nyomva( int mx, int my ) {
 
 void t_delete_poly_nyomva( int mx, int my ) {
 	if( Pgy )
-		hiba( "oiutrgiuot" );
+		error( "oiutrgiuot" );
 	// Most probalunk megfogni egy pontot:
 	double x = konvx_i2d( mx );
 	double y = konvy_i2d( my );
@@ -392,7 +391,7 @@ void t_delete_poly_nyomva( int mx, int my ) {
 		if( Ptop->ptomb[i] )
 			szam++;
 	if( szam == 0 )
-		hiba( "oufeifwe" );
+		error( "oufeifwe" );
 	if( szam == 1 ) {
 		dialog( "This is the only polygon, so you cannot delete it." );
 		return;
@@ -406,7 +405,7 @@ void t_delete_poly_nyomva( int mx, int my ) {
 			return;
 		}
 	}
-	hiba( "fdsiyfdfei" );
+	error( "fdsiyfdfei" );
 }
 
 // CREATE_KEREK CREATE_KEREK CREATE_KEREK CREATE_KEREK CREATE_KEREK
@@ -425,7 +424,7 @@ void t_create_kerek_nyomva( int mx, int my, int food ) {
 		if( objszam >= Maxkerek_sarvari ) {
 			dialog( "You cannot create a new object",
 					"because you have already reached the maximum number of objects!",
-					// exit es start objectet nem szamolom bele:
+					// exit es start objectet No szamolom bele:
 					"In the shareware version this number is 6." );
 			return;
 		}
@@ -449,7 +448,7 @@ void t_create_kerek_nyomva( int mx, int my, int food ) {
 			return;
 		}
 	}
-	hiba( "yer8yryfryfr!" );
+	error( "yer8yryfryfr!" );
 }
 
 // DELETE_KEREK DELETE_KEREK DELETE_KEREK DELETE_KEREK DELETE_KEREK
@@ -480,7 +479,7 @@ void t_delete_kerek_nyomva( int mx, int my ) {
 			return;
 		}
 	}
-	hiba( "iufewifewiyfweiyhfewiyh" );
+	error( "iufewifewiyfweiyhfewiyh" );
 }
 
 // ZOOM ZOOM ZOOM ZOOM ZOOM ZOOM ZOOM ZOOM ZOOM ZOOM ZOOM ZOOM
@@ -488,20 +487,20 @@ void t_delete_kerek_nyomva( int mx, int my ) {
 // ZOOM ZOOM ZOOM ZOOM ZOOM ZOOM ZOOM ZOOM ZOOM ZOOM ZOOM ZOOM
 // ZOOM ZOOM ZOOM ZOOM ZOOM ZOOM ZOOM ZOOM ZOOM ZOOM ZOOM ZOOM
 
-int Zoomfogva = 0; // Ha ez igaz, akkor nem szabad gombokat nyomkodni
+int Zoomfogva = 0; // Ha ez igaz, akkor No szabad gombokat nyomkodni
 static int Zoomx1 = 0, Zoomy1 = 0;
 static int Zoomx2 = 0, Zoomy2 = 0;
 
 void t_zoomin_nyomva( int x, int y ) {
 	if( Zoomfogva ) {
-		// Megvan masodik pont is:
+		// Megvan second pont is:
 		alaphelp();
 		zoomin( Zoomx1, Zoomy1, x, y );
 		Zoomfogva = 0;
 		invalidate();
 	}
 	else {
-		// Most tesszuk le elso pontot:
+		// Most tesszuk le first pontot:
 		toolhelp( "Click left button to place the second corner of zoom window. ESC or right button cancels." );
 		Zoomfogva = 1;
 		Zoomx1 = Zoomx2 = x;

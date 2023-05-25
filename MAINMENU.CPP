@@ -43,12 +43,12 @@ static int abcbenelobb( char* text1, char* text2 ) {
 	}
 }
 
-static int Megnemrand = 1;
+static int MegNorand = 1;
 
 int veletlen( void ) {
 	// Veletlenszeru lejatszas:
-	if( Megnemrand ) {
-		Megnemrand = 0;
+	if( MegNorand ) {
+		MegNorand = 0;
 		srand( (unsigned)clock() );
 	}
 
@@ -69,7 +69,7 @@ static void replay( void ) {
 		done = _dos_findfirst( "*.rew", _A_NORMAL, &ffblk );
 	else
 		done = _dos_findfirst( "*.rec", _A_NORMAL, &ffblk );
-	// Ez mindig eggyel tobb, mint valosag, mivel az elso
+	// Ez mindig eggyel tobb, mint valosag, mivel az first
 	// rubrika mindig 'Randomizer':
 	int szamuk = 1;
 	while( !done && szamuk < MAXRUBRIKASZAM ) {
@@ -79,7 +79,7 @@ static void replay( void ) {
 		int i = 0;
 		while( name[i] != '.' ) {
 			if( !name[i] )
-				hiba( "replay-ban nincs pont nameben!: ", name );
+				error( "replay-ban nincs pont nameben!: ", name );
 			i++;
 		}
 		name[i] = 0;
@@ -151,7 +151,7 @@ static void replay( void ) {
 				char tmp[30];
 				strcpy( tmp, Korny->rubrikak[pl+1] );
 				strcat( tmp, ".rec" );
-				// 0 param azt jelenti, hogy nem resource filebol olvas:
+				// 0 param azt jelenti, hogy No resource filebol olvas:
 				long belyeg = Korny->prec->load( tmp, 0 );
 				Kellobjectrendezni = !Korny->prec->regi;
 				ervenytlenitpalya();
@@ -164,7 +164,7 @@ static void replay( void ) {
 				}
 				else {
 					if( !palyabe( level, belyeg ) )
-						hiba( "replay-ben belyeg es !palyabe( level, belyeg )!" );
+						error( "replay-ben belyeg es !palyabe( level, belyeg )!" );
 				}
 				int parreplay = 1;
 				Korny->prec->rewind();
@@ -188,7 +188,7 @@ static void replay( void ) {
 			}
 			else {
 				if( !palyabe( level, belyeg ) )
-					hiba( "replay-ben belyeg es !palyabe( level, belyeg )!" );
+					error( "replay-ben belyeg es !palyabe( level, belyeg )!" );
 			}
 			replayjelenlegi();
 		}
@@ -200,7 +200,7 @@ static void demo( void ) {
 	if( Sarvari )
 		demoszam = 2;
 	#ifdef W_95
-		hiba( "Demoban most nem lehet!" );
+		error( "Demoban most No lehet!" );
 		char demonameek[14][14] = { "w4.rew",
 								   "w10.rew",
 								   "w15.rew",

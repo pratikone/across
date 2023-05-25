@@ -6,7 +6,7 @@ typedef char rubrika[MAXRUBRIKAHOSSZ+2];
 
 // Felhasznalja, Korny rubrikak-at es picbuffer-t!
 class valaszt {
-	void kirajz( int felso, ddpal* ppal );
+	void kidraw( int ffirst, ddpal* ppal );
 public:
 	int szam, kur, egykepen;
 	int x0, y0, dy;
@@ -16,7 +16,7 @@ public:
 
 	valaszt( void );
 	// Visszaadja valasztott szamat, ESC eseten -1-t:
-	// tobbrajz eseten tobbszor is kirajzolja kezdetben (Win95):
-	int valassz( ddpal* ppal, int tobbrajz = 0 );
+	// tobbdraw eseten tobbszor is kidrawolja kezdetben (Win95):
+	int valassz( ddpal* ppal, int tobbdraw = 0 );
 };
 

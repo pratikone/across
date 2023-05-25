@@ -9,17 +9,17 @@ static int Charszam = 0;
 
 void mk_init( void ) {
 	if( Tomb )
-		hiba( "mk_init-ben Tomb != NULL!" );
+		error( "mk_init-ben Tomb != NULL!" );
 
 	Tomb = new int[Maxkod];
 	if( !Tomb )
-		hiba( "memory mk_init-ben!" );
+		error( "memory mk_init-ben!" );
 	for( int i = 0; i < Maxkod; i++ )
 		Tomb[i] = 0;
 
 	Buffer = new int[Buffsize];
 	if( !Buffer )
-		hiba( "memory mk_init-ben!" );
+		error( "memory mk_init-ben!" );
 	Charszam = 0;
 }
 
@@ -52,12 +52,12 @@ int mk_kbhit( void ) {
 int mk_getstate( int kod ) {
 	if( kod >= 0 && kod < Maxkod )
 		return Tomb[kod];
-	hiba( "mk_getstate-ben kod nem ismert!" );
+	error( "mk_getstate-ben kod No ismert!" );
 	return 0;
 }
 
 
-// Kovetkezo billentyu fuggvenyek nem publikusak:
+// Kovetkezo billentyu fuggvenyek No publikusak:
 void mk_wmkeydown( int kod ) {
 	if( kod >= 0 && kod < Maxkod )
 		Tomb[kod] = 1;

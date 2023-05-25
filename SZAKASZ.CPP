@@ -19,7 +19,7 @@ int Ucsoloadszakasz_lezart = 0;
 	cellameret = 1.0;
 	origo = vector2( 0, 0 );
 	nextnode = NULL;
-	pelsocsomag = NULL;
+	pfirstcsomag = NULL;
 	csomagbanbetelt = 0;
 
 
@@ -43,13 +43,13 @@ szakaszok::szakaszok( FILE* h, int targyas ) {
 	cellameret = 1.0;
 	origo = vector2( 0, 0 );
 	nextnode = NULL;
-	pelsocsomag = NULL;
+	pfirstcsomag = NULL;
 	csomagbanbetelt = 0;
 
 	#ifndef WATCOM
 		// Fel lehet emelni 64000-re:
 		if( long(Szakaszmaxszam) * sizeof( szakasz ) > 64000l )
-			hiba( "szakaszok::szakaszok-ban long(Szakaszmaxszam) * sizeof( szakasz ) > 64000l!" );
+			error( "szakaszok::szakaszok-ban long(Szakaszmaxszam) * sizeof( szakasz ) > 64000l!" );
 	#endif
 
 	{ tomb = NEW(szakasz*) szakasz[Szakaszmaxszam]; }
@@ -64,40 +64,40 @@ szakaszok::szakaszok( FILE* h, int targyas ) {
 	char sor[200];
 	// Verzio beolvasasa:
 	if( fgets( sor, 190, h ) == NULL ) {
-		hiba( "Nem tudott olvasni txt file-bol!" );
+		error( "No tudott olvasni txt file-bol!" );
 		return;
 	}
 	int verzio = 0;
 	char verstring[200];
 	if( sscanf( sor, "%s %d\n", verstring, &verzio ) != 2 ) {
-		hiba( "Nem tudta feldolgozni sort!: ", sor );
+		error( "No tudta feldolgozni sort!: ", sor );
 		return;
 	}
 	if( verzio < 3 || verzio > 5 ) {
-		hiba( "Verzio nem stimmel!: ", sor );
+		error( "Verzio No stimmel!: ", sor );
 		return;
 	}
 	if( strcmp( verstring, "Verzio:" ) != 0 ) {
-		hiba( "Nem tudta beolvasni verziot!: ", sor );
+		error( "No tudta beolvasni verziot!: ", sor );
 		return;
 	}
 
 	// Elemszam beolvasasa:
 	if( fgets( sor, 190, h ) == NULL ) {
-		hiba( "Nem tudott olvasni txt file-bol!" );
+		error( "No tudott olvasni txt file-bol!" );
 		return;
 	}
 	if( sscanf( sor, "%d\n", &szam ) != 1 ) {
-		hiba( "Nem tudta feldolgozni sort!: ", sor );
+		error( "No tudta feldolgozni sort!: ", sor );
 		return;
 	}
 
 	if( szam >= Szakaszmaxszam )
-		hiba( "Nincs eleg hely szakaszoknak!" );
+		error( "Nincs eleg hely szakaszoknak!" );
 
 	for( i = 0; i < szam; i++ ) {
 		if( fgets( sor, 190, h ) == NULL ) {
-			hiba( "Nem tudott olvasni txt file-bol!" );
+			error( "No tudott olvasni txt file-bol!" );
 			return;
 		}
 
@@ -106,19 +106,19 @@ szakaszok::szakaszok( FILE* h, int targyas ) {
 		long ldx = 0;
 		long ldy = 0;
 		if( verzio <= 1 )
-			hiba( "Verzio kisebb 2!" );
+			error( "Verzio kisebb 2!" );
 		int balfold = 1;
 		if( verzio < 5 ) {
 			if( sscanf( sor, "%d %ld %ld %ld %ld", &balfold,
 					&lx, &ly, &ldx, &ldy ) != 5 ) {
-				hiba( "Nem tudta feldolgozni sort!: ", sor );
+				error( "No tudta feldolgozni sort!: ", sor );
 				return;
 			}
 		}
 		else {
 			if( sscanf( sor, "%ld %ld %ld %ld",
 					&lx, &ly, &ldx, &ldy ) != 4 ) {
-				hiba( "Nem tudta feldolgozni sort!: ", sor );
+				error( "No tudta feldolgozni sort!: ", sor );
 				return;
 			}
 		}
@@ -160,7 +160,7 @@ szakaszok::szakaszok( topol* ptop, int targyas ) {
 	cellameret = 1.0;
 	origo = vector2( 0, 0 );
 	nextnode = NULL;
-	pelsocsomag = NULL;
+	pfirstcsomag = NULL;
 	csomagbanbetelt = 0;
 
 	{ tomb = NEW(szakasz*) szakasz[Szakaszmaxszam]; }
@@ -178,17 +178,17 @@ szakaszok::szakaszok( topol* ptop, int targyas ) {
 			if( !pker )
 				continue;
 			if( szam >= Szakaszmaxszam )
-				hiba( "szakaszok::szakaszok-ban szam >= Szakaszmaxszam (ker)!" );
+				error( "szakaszok::szakaszok-ban szam >= Szakaszmaxszam (ker)!" );
 			tomb[szam].vv.r = pker->r;
 			tomb[szam].vv.r.y = -tomb[szam].vv.r.y; // fejjel lefele
 			tomb[szam].vv.v = vector2( 0.0, 0.0 );
 
 			{ tomb[szam].ptargy = NEW(targy*) targy; }
 			if( !tomb[szam].ptargy )
-				hiba( "Nincs eleg memoria szakaszok::szakaszok-ban ptargynak!" );
+				error( "Nincs eleg memoria szakaszok::szakaszok-ban ptargynak!" );
 
 			if( pker->tipus < T_CEL || pker->tipus > T_KEZDO )
-				hiba( "szakaszok::szakaszok-ban pker->tipus < T_CEL || pker->tipus > T_KEZDO!" );
+				error( "szakaszok::szakaszok-ban pker->tipus < T_CEL || pker->tipus > T_KEZDO!" );
 
 			tomb[szam].ptargy->mozgo = 0;
 			tomb[szam].ptargy->szam = pker->tipus-T_CEL;
@@ -208,7 +208,7 @@ szakaszok::szakaszok( topol* ptop, int targyas ) {
 				continue;
 			for( int j = 0; j < pgy->pontszam; j++ ) {
 				if( szam >= Szakaszmaxszam )
-					hiba( "szakaszok::szakaszok-ban z >= Szakaszmaxszam!" );
+					error( "szakaszok::szakaszok-ban z >= Szakaszmaxszam!" );
 
 				vector2 r1, r2;
 				if( j < pgy->pontszam - 1 ) {
@@ -261,14 +261,14 @@ void szakaszok::save( FILE* h, int targyas ) {
 		}
 		else {
 			if( tomb[i].ptargy )
-				hiba( "szakaszok::save-ben !targyas, megis van benne targy!" );
+				error( "szakaszok::save-ben !targyas, megis van benne targy!" );
 		}
 	}
 }
 
 /*void szakaszok::add( vector2 r, vector2 v, int targyas ) {
 	if( szam >= maxszam ) {
-		hiba( "Nincs eleg hely uj szakasz hozzaadasahoz!" );
+		error( "Nincs eleg hely uj szakasz hozzaadasahoz!" );
 		return;
 	}
 	tomb[szam].vv.r = r;
@@ -297,29 +297,29 @@ void szakaszok::save( FILE* h, int targyas ) {
 			return;
 		}
 	}
-	hiba( "szakaszok::remove-ban nem talalja torlendo szakaszt!" );
+	error( "szakaszok::remove-ban No talalja torlendo szakaszt!" );
 } */
 
 // NODE-kezeles:
 
 /*#define CSOMAGBANNODESZAM (500)
 struct soknodecsomag {
-	vonalnode nodetomb[CSOMAGBANNODESZAM];
+	LINEnode nodetomb[CSOMAGBANNODESZAM];
 	soknodecsomag* nextcsomag;
 };
-soknodecsomag* pelsocsomag;
+soknodecsomag* pfirstcsomag;
 int csomagbanbetelt;
 */
 
-vonalnode* szakaszok::getnewnode( void ) {
-	if( !pelsocsomag ) {
-		{ pelsocsomag = NEW(soknodecsomag*) soknodecsomag; }
-		if( !pelsocsomag )
+LINEnode* szakaszok::getnewnode( void ) {
+	if( !pfirstcsomag ) {
+		{ pfirstcsomag = NEW(soknodecsomag*) soknodecsomag; }
+		if( !pfirstcsomag )
 			uzenet( "memory!" );
-		pelsocsomag->nextcsomag = NULL;
+		pfirstcsomag->nextcsomag = NULL;
 		csomagbanbetelt = 0;
 	}
-	soknodecsomag* curcsomag = pelsocsomag;
+	soknodecsomag* curcsomag = pfirstcsomag;
 	while( curcsomag->nextcsomag )
 		curcsomag = curcsomag->nextcsomag;
 	if( csomagbanbetelt == CSOMAGBANNODESZAM ) {
@@ -335,8 +335,8 @@ vonalnode* szakaszok::getnewnode( void ) {
 }
 
 void szakaszok::deleteallnodes( void ) {
-	soknodecsomag* curcsomag = pelsocsomag;
-	pelsocsomag = NULL;
+	soknodecsomag* curcsomag = pfirstcsomag;
+	pfirstcsomag = NULL;
 	while( curcsomag ) {
 		soknodecsomag* elozocsomag = curcsomag;
 		curcsomag = curcsomag->nextcsomag;
@@ -346,18 +346,18 @@ void szakaszok::deleteallnodes( void ) {
 
 
 
-// Egy cellaba bekoti vonalat, ha meg nincs benne es rajta van tablan:
-void szakaszok::bekot( int cellax, int cellay, vonal* pv ) {
+// Egy cellaba bekoti LINEat, ha meg nincs benne es rajta van tablan:
+void szakaszok::bekot( int cellax, int cellay, LINE* pv ) {
 	#ifdef TEST
 		if( cellax < 0 || cellay < 0 )
-			hiba( "cellax < 0 || cellay < 0!" );
+			error( "cellax < 0 || cellay < 0!" );
 	#endif
 	if( cellax >= xdim || cellay >= ydim )
 		return;
-	vonalnode* pujnode = getnewnode();
+	LINEnode* pujnode = getnewnode();
 	pujnode->pnext = NULL;
-	pujnode->pvonal = pv;
-	vonalnode* pn = tertomb[xdim*cellay+cellax];
+	pujnode->pLINE = pv;
+	LINEnode* pn = tertomb[xdim*cellay+cellax];
 	if( !pn ) {
 		tertomb[xdim*cellay+cellax] = pujnode;
 		return;
@@ -369,12 +369,12 @@ void szakaszok::bekot( int cellax, int cellay, vonal* pv ) {
 	pn->pnext = pujnode;
 }
 
-// Egy vonalat hozzarendel osszes olyan cellahoz, amihez koze lehet:
-void szakaszok::beindexelvonalat( vonal* pv, double maxtav ) {
-	// Kitolti vonal egyseg es hossz rubrikait:
+// Egy LINEat hozzarendel osszes olyan cellahoz, amihez koze lehet:
+void szakaszok::beindexelLINEat( LINE* pv, double maxtav ) {
+	// Kitolti LINE egyseg es hossz rubrikait:
 	pv->hossz = abs( pv->v );
 	if( pv->hossz < 0.00000001 )
-		hiba( "Vonal hossza tul kicsi!" );
+		error( "LINE hossza tul kicsi!" );
 	pv->egyseg = egys( pv->v );
 
 	vector2 v = pv->v;
@@ -409,7 +409,7 @@ void szakaszok::beindexelvonalat( vonal* pv, double maxtav ) {
 	if( xkezdo > 0 )
 		cellax = xkezdo;
 	if( r.x+v.x+maxtav < 0 )
-		hiba( "szakaszok::beindexelvonalat-ban r.x+v.x+maxtav < 0!" );
+		error( "szakaszok::beindexelLINEat-ban r.x+v.x+maxtav < 0!" );
 	int ucsocellax = r.x+v.x+maxtav;
 	while( cellax <= ucsocellax ) {
 		double y1 = m*cellax + y0;
@@ -424,10 +424,10 @@ void szakaszok::beindexelvonalat( vonal* pv, double maxtav ) {
 		y2 += maxtav;
 		#ifdef TEST
 			if( y1 > y2 )
-				hiba( "Bug!" );
+				error( "Bug!" );
 		#endif
 		if( y2 < 0.0 )
-			hiba( "Bug!" );
+			error( "Bug!" );
 		int cellay = 0;
 		if( y1 > 0 )
 			cellay = y1;
@@ -448,11 +448,11 @@ void szakaszok::beindexelvonalat( vonal* pv, double maxtav ) {
 void szakaszok::rendez( double maxtav ) {
 	// Ellenorzes:
 	if( szam <= 0 )
-		hiba( "szakaszok::rendez-ben szam <= 0!" );
+		error( "szakaszok::rendez-ben szam <= 0!" );
 	if( tomb[0].ptargy )
-		hiba( "szakaszok::rendez-ben tomb[0].ptargy igaz!" );
+		error( "szakaszok::rendez-ben tomb[0].ptargy igaz!" );
 	if( tertomb )
-		hiba( "szakaszok::rendez-ban nodetomb != NULL!" );
+		error( "szakaszok::rendez-ban nodetomb != NULL!" );
 
 	#ifdef WATCOM
 		cellameret = 1.0;
@@ -461,10 +461,10 @@ void szakaszok::rendez( double maxtav ) {
 	#endif
 
 	// Megkeresi palya kiterjedeset:
-	felsorolasresetszak();
+	ffirstrolasresetszak();
 	szakasz* psz = getnextszak();
 	if( !psz )
-		hiba( "Nincs egyetlen szakasz sem definialva!" );
+		error( "Nincs egyetlen szakasz sem definialva!" );
 	double minx = psz->vv.r.x;
 	double maxx = psz->vv.r.x;
 	double miny = psz->vv.r.y;
@@ -500,20 +500,20 @@ void szakaszok::rendez( double maxtav ) {
 	xdim = xsized/cellameret+1;
 	ydim = ysized/cellameret+1;
 	if( xdim < 0 || ydim < 0 )
-		hiba( "xdim < 0 || ydim < 0!" );
+		error( "xdim < 0 || ydim < 0!" );
 	#ifndef WATCOM
 		// DOS es DOSX286:
 		if( xdim > 100 || ydim > 100 )
-			hiba( "xdim > 100 || ydim > 100!" );
+			error( "xdim > 100 || ydim > 100!" );
 	#else
 		// WATCOM:
 		if( xdim > 200 || ydim > 200 )
-			hiba( "xdim > 200 || ydim > 200!" );
+			error( "xdim > 200 || ydim > 200!" );
 	#endif
 
 	// Lefoglalja tombot:
 	unsigned tombmeret = xdim * ydim;
-	{ tertomb = NEW(pvonalnode*) pvonalnode[tombmeret]; }
+	{ tertomb = NEW(pLINEnode*) pLINEnode[tombmeret]; }
 	if( !tertomb )
 		uzenet( "memory!" );
 	int hatar = xdim*ydim;
@@ -521,17 +521,17 @@ void szakaszok::rendez( double maxtav ) {
 		tertomb[i] = NULL;
 
 	// Most vegigmegy szakaszokon es beilleszti oket:
-	felsorolasresetszak();
+	ffirstrolasresetszak();
 	psz = getnextszak();
 	while( psz ) {
-		beindexelvonalat( &psz->vv, maxtav );
+		beindexelLINEat( &psz->vv, maxtav );
 		psz = getnextszak();
 	}
 }
 
-void szakaszok::felsorolasreset( vector2 r ) {
+void szakaszok::ffirstrolasreset( vector2 r ) {
 	if( !tertomb )
-		hiba( "szakaszok::felsorolasreset-ban !tertomb!" );
+		error( "szakaszok::ffirstrolasreset-ban !tertomb!" );
 	r = (r-origo)*(1/cellameret);
 	int cellax = 0;
 	if( r.x > 0 )
@@ -541,30 +541,30 @@ void szakaszok::felsorolasreset( vector2 r ) {
 		cellay = r.y;
 
 	if( cellax > xdim )
-		hiba( "szakaszok::felsorolasreset-ben cellax > xdim!" );
+		error( "szakaszok::ffirstrolasreset-ben cellax > xdim!" );
 	if( cellax == xdim )
 		cellax = xdim-1;
 	if( cellay > ydim )
-		hiba( "szakaszok::felsorolasreset-ben cellay > ydim!" );
+		error( "szakaszok::ffirstrolasreset-ben cellay > ydim!" );
 	if( cellay == ydim )
 		cellay = ydim-1;
 	nextnode = tertomb[xdim*cellay+cellax];
 }
 
-vonal* szakaszok::getnext( void ) {
+LINE* szakaszok::getnext( void ) {
 	if( !nextnode )
 		return NULL;
 	#ifdef TEST
-		if( !nextnode->pvonal )
-			hiba( "szakaszok::getnext-ben !nextnode->pvonal" );
+		if( !nextnode->pLINE )
+			error( "szakaszok::getnext-ben !nextnode->pLINE" );
 	#endif
-	vonal* pret = nextnode->pvonal;
+	LINE* pret = nextnode->pLINE;
 	nextnode = nextnode->pnext;
 	return pret;
 }
 
 // Szakaszos kereso:
-void szakaszok::felsorolasresetszak( void ) {
+void szakaszok::ffirstrolasresetszak( void ) {
 	szakfuto = 0;
 }
 
@@ -582,15 +582,15 @@ int szakaszok::setallaktiv( int targytipusszam, targytomb* ptt ) {
 	int voltkezdo = 0;
 	for( int i = 0; i < szam; i++ ) {
 		if( !tomb[i].ptargy )
-			hiba( "szakaszok::setallaktiv-ban nem ptargy!" );
+			error( "szakaszok::setallaktiv-ban No ptargy!" );
 		tomb[i].ptargy->aktiv = 1;
 		if( tomb[i].ptargy->szam >= targytipusszam )
-			hiba( "tomb[i].ptargy->szam >= targytipusszam!" );
+			error( "tomb[i].ptargy->szam >= targytipusszam!" );
 		if( ptt->targytipusok[tomb[i].ptargy->szam].tipus == T_KAJA )
 			kajaszam++;
 		if( ptt->targytipusok[tomb[i].ptargy->szam].tipus == T_KEZDO ) {
 			if( voltkezdo )
-				hiba( "Palyan ket kezdo is van!" );
+				error( "Palyan ket kezdo is van!" );
 			voltkezdo = 1;
 			tomb[i].ptargy->aktiv = 0;
 			vector2 diff = tomb[i].vv.r - Kor2.r;
@@ -600,22 +600,22 @@ int szakaszok::setallaktiv( int targytipusszam, targytomb* ptt ) {
 		}
 	}
 	if( !voltkezdo )
-		hiba( "Palyan nincs kezdo!" );
+		error( "Palyan nincs kezdo!" );
 	return kajaszam;
 }
 
 // Killereket veszi legelore, utan foodokat, majd vegul exit:
 void szakaszok::killerekelore( targytomb* ptt ) {
 	if( szam < 2 )
-		hiba( "szakaszok::killerekelore-ben szam < 2!" );
+		error( "szakaszok::killerekelore-ben szam < 2!" );
 	for( int j = 0; j < szam+4; j++ ) {
 		for( int i = 0; i < szam-1; i++ ) {
 			if( !tomb[i].ptargy )
-				hiba( "szakaszok::setallaktiv-ban nem ptargy!" );
+				error( "szakaszok::setallaktiv-ban No ptargy!" );
 			int tipus1 = ptt->targytipusok[tomb[i].ptargy->szam].tipus;
 
 			if( !tomb[i+1].ptargy )
-				hiba( "szakaszok::setallaktiv-ban nem ptargy!" );
+				error( "szakaszok::setallaktiv-ban No ptargy!" );
 			int tipus2 = ptt->targytipusok[tomb[i+1].ptargy->szam].tipus;
 
 			// Sullyozzuk tipusokat hogy sorrendiseget lehessen megallapitani:
@@ -647,25 +647,25 @@ void szakaszok::killerekelore( targytomb* ptt ) {
 
 szakasz* szakaszok::getptrszakasz( int sorszam ) {
 	if( sorszam >= szam )
-		hiba( "szakaszok::getptrszakasz-ban sorszam >= szam!" );
+		error( "szakaszok::getptrszakasz-ban sorszam >= szam!" );
 	return &tomb[sorszam];
 }
 
 int szakaszok::getsorszam( szakasz* pszakasz ) {
 	for( int i = 0; i < szam; i++ ) {
 		if( !tomb[i].ptargy )
-			hiba( "szakaszok::getsorszam-ban nem ptargy!" );
+			error( "szakaszok::getsorszam-ban No ptargy!" );
 		if( &tomb[i] == pszakasz )
 			return i;
 	}
-	hiba( "getsorszam-ban nincs meg szakasz!" );
+	error( "getsorszam-ban nincs meg szakasz!" );
 	return -1;
 }
 
 void loadszakaszok( char* name, int kulso, szakaszok** ppszak,
 						szakaszok** ppszakt ) {
 	if( *ppszak || *ppszakt )
-		hiba( "loadszakaszok-ban *ppszak || *ppszakt!" );
+		error( "loadszakaszok-ban *ppszak || *ppszakt!" );
 
 	FILE* h = NULL;
 	if( kulso )
@@ -673,13 +673,13 @@ void loadszakaszok( char* name, int kulso, szakaszok** ppszak,
 	else
 		h = qopen( name, "rt" );
 	if( !h )
-		hiba( "Nem tudta megnyitni file-t!: ", name );
+		error( "No tudta megnyitni file-t!: ", name );
 
 	// Eldontese hogy regi vagy uj tipusu file-e:
 	int ujtipus = 0;
 	char tmp[10] = "AAAAA";
 	if( fread( tmp, 1, 4, h ) != 4 )
-		hiba( "Nem tudott olvasni txt file-bol!" );
+		error( "No tudott olvasni txt file-bol!" );
 	if( strncmp( tmp, "POT", 3 ) == 0 )
 		ujtipus = 1;
 
@@ -691,7 +691,7 @@ void loadszakaszok( char* name, int kulso, szakaszok** ppszak,
 	// Beolvasas:
 	if( ujtipus ) {
 		topol* ptop = new topol( name, kulso );
-		if( ptop->hibas )
+		if( ptop->errors )
 			uzenet( "This level file has some topology errors.",
 					"If you can load it to the editor you may be able to correct these errors.",
 					name );
@@ -707,7 +707,7 @@ void loadszakaszok( char* name, int kulso, szakaszok** ppszak,
 	}
 	else {
 		if( kulso )
-			hiba( "iopvwoiuvfriuo" );
+			error( "iopvwoiuvfriuo" );
 		h = qopen( name, "rt" );
 		{ *ppszak = NEW(szakaszok*) szakaszok( h, 0 ); }
 		{ *ppszakt = NEW(szakaszok*) szakaszok( h, 1 ); }
@@ -720,7 +720,7 @@ void saveszakaszok( char* name, szakaszok* pszak, szakaszok* pszakt ) {
 	strcat( tmp, name );
 	FILE* h = fopen( tmp, "wt" );
 	if( !h )
-		hiba( "Nem tudta megnyitni file-t!: ", name );
+		error( "No tudta megnyitni file-t!: ", name );
 	pszak->save( h, 0 );
 	pszakt->save( h, 1 );
 	fclose( h );

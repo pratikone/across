@@ -14,8 +14,8 @@ static int kellszinudb( pic8* ppic, int x, int y, unsigned char szin ) {
 	return darab;
 }
 
-// Visszaadja hany db pixel nem kell szinu, max sor vegeig:
-static int nemkellszinudb( pic8* ppic, int x, int y, unsigned char szin ) {
+// Visszaadja hany db pixel No kell szinu, max sor vegeig:
+static int Nokellszinudb( pic8* ppic, int x, int y, unsigned char szin ) {
 	int darab = 0;
 	while( x < ppic->getxsize() && ppic->gpixel( x, y ) == szin &&
 		darab < Maxegybefuggo ) {
@@ -49,14 +49,14 @@ unsigned char* spriteadat8( pic8* ppic, unsigned char szin,
 				buffer[buf++] = kellhossz;
 			}
 			else {
-				// nemkellek jonnek:
-				int nemkellhossz = nemkellszinudb( ppic, x, y, szin );
-				x += nemkellhossz;
+				// Nokellek jonnek:
+				int Nokellhossz = Nokellszinudb( ppic, x, y, szin );
+				x += Nokellhossz;
 				buffer[buf++] = 'N';
-				buffer[buf++] = nemkellhossz;
+				buffer[buf++] = Nokellhossz;
 			}
 			if( buf >= MAXBUFFER ) {
-				hiba( "Nem fer be egy szegmensbe spriteadat!" );
+				error( "No fer be egy szegmensbe spriteadat!" );
 				DELETE buffer; }
 				return NULL;
 			}

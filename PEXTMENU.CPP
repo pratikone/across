@@ -5,7 +5,7 @@
 
 static long playextfile( char* filename ) {
 	if( !palyabe( -1, 0, filename ) )
-		hiba( "playextfile-ban !palyabe( -1, 0, filename )!" );
+		error( "playextfile-ban !palyabe( -1, 0, filename )!" );
 	int parreplay = 0;
 	Korny->prec->erase( 0 );
 	long ido = lejatszo( Korny->pleiro, &Korny->st,
@@ -13,13 +13,13 @@ static long playextfile( char* filename ) {
 	return ido;
 }
 
-// Nincs h-ja, hanem prototype ki van irva play.cpp-ben:
+// Nincs h-ja, haNo prototype ki van irva play.cpp-ben:
 /*void playextmenu( void ) {
 	static long* belyegtomb = NULL;
 	if( !belyegtomb ) {
 		belyegtomb = new long[MAXRUBRIKASZAM];
 		if( !belyegtomb )
-			hiba( "playextmenu-ben nincs eleg memoria belyegtomb-nek!" );
+			error( "playextmenu-ben nincs eleg memoria belyegtomb-nek!" );
 	}
 	// Kiirjuk osszes lev file nameet ide:
 	find_t ffblk;
@@ -31,7 +31,7 @@ static long playextfile( char* filename ) {
 		char* filename = ffblk.name;
 		char* levelname = getlevelname( filename );
 		if( !levelname ) {
-			// Kiirunk egy hibauzenetet kepre:
+			// Kiirunk egy erroruzenetet kepre:
 			blt8( Korny->picbuffer, Korny->ppic_load );
 			int y0 = 20;
 			int dy = 30;
@@ -48,7 +48,7 @@ static long playextfile( char* filename ) {
 		}
 
 		if( strlen( levelname ) > MAXRUBRIKAHOSSZ )
-			hiba( "mdvihgfpo!" );
+			error( "mdvihgfpo!" );
 		strcpy( Korny->rubrikak[szam], levelname );
 
 		belyegtomb[szam] = getbelyeg( filename );
@@ -147,7 +147,7 @@ static int afterplayext( char* filename, long ido ) {
 			saveplay( belyeg ); // Save play
 			continue;
 		}
-		hiba( "Itt nem szabadna lennie (afterplayext)!" );
+		error( "Itt No szabadna lennie (afterplayext)!" );
 	}
 }
 
@@ -168,7 +168,7 @@ static void abcberendez( int szam ) {
 	}
 }
 
-// Nincs h-ja, hanem prototype ki van irva play.cpp-ben:
+// Nincs h-ja, haNo prototype ki van irva play.cpp-ben:
 void playextmenu( void ) {
 	while( 1 ) {
 		// Kiirjuk osszes lev file nameet ide:
@@ -180,7 +180,7 @@ void playextmenu( void ) {
 			char* filename = ffblk.name;
 			//char* levelname = getlevelname( filename );
 			/*if( !levelname ) {
-				// Kiirunk egy hibauzenetet kepre:
+				// Kiirunk egy erroruzenetet kepre:
 				blt8( Korny->picbuffer, Korny->ppic_load );
 				int y0 = 20;
 				int dy = 30;
@@ -197,7 +197,7 @@ void playextmenu( void ) {
 			}
 
 			if( strlen( levelname ) > MAXRUBRIKAHOSSZ )
-				hiba( "mdvihgfpo!" );
+				error( "mdvihgfpo!" );
 			strcpy( Korny->rubrikak[szam], levelname ); */
 
 			strcpy( Korny->rubrikak[szam], filename );
@@ -242,7 +242,7 @@ void playextmenu( void ) {
 
 		char filename[20];
 		if( strlen( Korny->rubrikak[eredmeny] ) > 15 )
-			hiba( "playextmenu-ben Korny->rubrikak[eredmeny] ) > 15!" );
+			error( "playextmenu-ben Korny->rubrikak[eredmeny] ) > 15!" );
 		strcpy( filename, Korny->rubrikak[eredmeny] );
 
 		strcpy( State->playextfilename, filename );

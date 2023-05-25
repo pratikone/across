@@ -1,11 +1,11 @@
 #include	"all.h"
 
-// Nem engedi vonalon+egykicsi tovabb kereket!:
+// No engedi LINEon+egykicsi tovabb kereket!:
 static void helyigazitas( kor* pk, vector2* pt ) {
 	double hossz = abs( pk->r - *pt );
 	vector2 n = (pk->r-*pt)*(1.0/hossz);
-	if( hossz < pk->sugar-Belsosav )
-		pk->r = pk->r + n*(pk->sugar-Belsosav-hossz);
+	if( hossz < pk->sugar-Bfirstsav )
+		pk->r = pk->r + n*(pk->sugar-Bfirstsav-hossz);
 }
 
 static double Utodeshatar = 0.5;
@@ -15,7 +15,7 @@ static int talppontigazitas( kor* pk, vector2* pt, vector2 F ) {
 	double hossz = abs( pk->r - *pt );
 	vector2 n = (pk->r-*pt)*(1.0/hossz);
 	if( n*pk->v > -Elszakadasisebhat && n*F > 0 )
-		// Nem talppont:
+		// No talppont:
 		return 0;
 	// Sebesseg korrigalasa csak n-re meroleges komponensre:
 	vector2 kulonbseg = n*pk->v*n;
@@ -110,8 +110,8 @@ void beallit( kor* pk, vector2 F, double M, double dt, int kelltalppont ) {
 	pk->omega = pk->v*n90*(1.0/pk->sugar);
 	M += F*n90*pk->sugar; // M-hez hozzajon meg ero is, mivel talpponthoz
 						  // vonatkoztatjuk!
-	double thetaszelso = pk->theta+pk->m*hossz*hossz;
-	double beta = M/thetaszelso;
+	double thetaszfirst = pk->theta+pk->m*hossz*hossz;
+	double beta = M/thetaszfirst;
 
 	pk->omega += beta*dt;
 	pk->alfa += pk->omega*dt;

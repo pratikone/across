@@ -2,7 +2,7 @@
 
 static int Highres;
 
-static int Vonalvizhossz, Vonalfugghossz;
+static int LINEvizhossz, LINEfugghossz;
 
 static int Digdx, Kozdx, Koztesdx;
 
@@ -33,40 +33,40 @@ static void kiszegmens( int szam, int x, int y, unsigned char szin,
 		case 0:
 			ppic8->fuggszegmens( x,
 								  y+1,
-								  Vonalfugghossz, szin );
+								  LINEfugghossz, szin );
 			break;
 		case 1:
-			ppic8->fuggszegmens( x+Vonalvizhossz+1,
+			ppic8->fuggszegmens( x+LINEvizhossz+1,
 								  y+1,
-								  Vonalfugghossz, szin );
+								  LINEfugghossz, szin );
 			break;
 		case 2:
 			ppic8->fuggszegmens( x,
-								  y+Vonalfugghossz+2,
-								  Vonalfugghossz, szin );
+								  y+LINEfugghossz+2,
+								  LINEfugghossz, szin );
 			break;
 		case 3:
-			ppic8->fuggszegmens( x+Vonalvizhossz+1,
-								  y+Vonalfugghossz+2,
-								  Vonalfugghossz, szin );
+			ppic8->fuggszegmens( x+LINEvizhossz+1,
+								  y+LINEfugghossz+2,
+								  LINEfugghossz, szin );
 			break;
 		case 4:
 			ppic8->vizszegmens( x+1,
 								 y,
-								 Vonalvizhossz, szin );
+								 LINEvizhossz, szin );
 			break;
 		case 5:
 			ppic8->vizszegmens( x+1,
-								 y+Vonalfugghossz+1,
-								 Vonalvizhossz, szin );
+								 y+LINEfugghossz+1,
+								 LINEvizhossz, szin );
 			break;
 		case 6:
 			ppic8->vizszegmens( x+1,
-								 y+Vonalfugghossz+Vonalfugghossz+2,
-								 Vonalvizhossz, szin );
+								 y+LINEfugghossz+LINEfugghossz+2,
+								 LINEvizhossz, szin );
 			break;
 		default:
-			hiba( "kiszegmens-ben szegmens out of range!" );
+			error( "kiszegmens-ben szegmens out of range!" );
 			break;
 	}
 }
@@ -144,7 +144,7 @@ static void kiegydigit( int c, int x, int y, unsigned char szin,
 			kiszegmens( 6, x, y, szin, ppic8 );
 			break;
 		default:
-			hiba( "kiegydigit-ben c out of range!" );
+			error( "kiegydigit-ben c out of range!" );
 	}
 }
 
@@ -164,15 +164,15 @@ void kidigit( char* time1, double time2d, unsigned char szin1,
 			// 240
 			y = 210;
 
-		Vonalvizhossz = 5,
-		Vonalfugghossz = 8;
+		LINEvizhossz = 5,
+		LINEfugghossz = 8;
 
 		Digdx = 8,
 		Kozdx = 12,
 		Koztesdx = 182;
 
 		Digitxsize = Digdx*7+Kozdx*4+Koztesdx,
-		Digitysize = 2*Vonalfugghossz+5;
+		Digitysize = 2*LINEfugghossz+5;
 	}
 	else {
 		// High resolution:
@@ -186,15 +186,15 @@ void kidigit( char* time1, double time2d, unsigned char szin1,
 			// 480
 			y = 420;
 
-		Vonalvizhossz = 10,
-		Vonalfugghossz = 16;
+		LINEvizhossz = 10,
+		LINEfugghossz = 16;
 
 		Digdx = 16,
 		Kozdx = 24,
 		Koztesdx = 364;
 
 		Digitxsize = Digdx*7+Kozdx*4+Koztesdx,
-		Digitysize = 2*Vonalfugghossz+5;
+		Digitysize = 2*LINEfugghossz+5;
 	}
 
 
@@ -202,7 +202,7 @@ void kidigit( char* time1, double time2d, unsigned char szin1,
 	char time2[20];
 	ido2string( l2, time2 );
 	// Ket ido elo van allitva!
-	// Elso:
+	// first:
 	if( time1[0] != 0 ) {
 		kiegydigit( time1[0], x, y, szin1, ppic8 );
 		x += Digdx;
@@ -223,7 +223,7 @@ void kidigit( char* time1, double time2d, unsigned char szin1,
 	}
 
 	x += Koztesdx;
-	// Masodik:
+	// second:
 	kiegydigit( time2[0], x, y, szin2, ppic8 );
 	x += Digdx;
 	kiegydigit( time2[1], x, y, szin2, ppic8 );

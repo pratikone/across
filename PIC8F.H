@@ -20,12 +20,12 @@ public:
 	unsigned char gpixel( int x, int y );
 	void ppixel( int x, int y, unsigned char szin );
 
-	void vizvonalcpy( int x, int y, unsigned char* tomb );
-	void fuggvonalcpy( int x, int y, unsigned char* tomb );
+	void vizLINEcpy( int x, int y, unsigned char* tomb );
+	void fuggLINEcpy( int x, int y, unsigned char* tomb );
 
 	void place( int x, int y );
 	// A kovetkezoek place alapjan dolgoznak:
-	void vizvonalset( int x, int y, int xsize, unsigned char szin );
+	void vizLINEset( int x, int y, int xsize, unsigned char szin );
 	void csakegyblt( pic8* pp, int x, int y );
 	void csakegyblt( pic8* pp, int x, int y, int x1, int y1, int x2, int y2 );
 	void freshrectangle( int x1, int y1, int x2, int y2 );

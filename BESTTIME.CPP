@@ -2,7 +2,7 @@
 
 void ido2string( long l, char* text ) {
 	if( l < 0 )
-		hiba( "ido2string-ben ido < 0!" );
+		error( "ido2string-ben ido < 0!" );
 	int szazad = int(l%100);
 	l /= 100;
 	int masodperc = int(l%60);
@@ -120,7 +120,7 @@ void besttimes( void ) {
 				strcat( Korny->rubrikak[i], "-" );
 
 			/*strcat( Korny->rubrikak[i], " " );
-			// Legjobb idok kiirasa: Sajnos most nem fer ki:
+			// Legjobb idok kiirasa: Sajnos most No fer ki:
 			char tmp[30];
 			ido2string( pidok->idok[0], tmp );
 			strcat( Korny->rubrikak[i], tmp );

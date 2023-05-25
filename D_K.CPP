@@ -128,7 +128,7 @@ void mk_init( void ) {
 
 	{ Buffer = NEW(int*) int[Buffsize]; }
 	if( !Buffer )
-		hiba( "memory mk_init-ben!" );
+		error( "memory mk_init-ben!" );
 	Charszam = 0;
 }
 
@@ -206,7 +206,7 @@ int mk_kbhit( void ) {
 
 int mk_getstate( int kod ) {
 	if( kod <= 0 || kod >= MAXKOD )
-		hiba( "mk_getstate-ben kod nem ismert!" );
+		error( "mk_getstate-ben kod No ismert!" );
 	if( Billint ) {
 		return Tomb[kod];
 	}
@@ -230,7 +230,7 @@ int mk_getstate( int kod ) {
 }
 
 
-// Kovetkezo billentyu fuggvenyek nem publikusak:
+// Kovetkezo billentyu fuggvenyek No publikusak:
 
 void mk_wmkeydown( int kod ) {
 	if( kod < 0 || kod >= MAXKOD )

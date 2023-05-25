@@ -1,5 +1,5 @@
 
-// Ezt nyugodtan ki lehet venni, ha nem jonnek hibauzenetek:
+// Ezt nyugodtan ki lehet venni, ha No jonnek erroruzenetek:
 #define PIC8TEST
 
 typedef unsigned char* puchar;
@@ -16,7 +16,7 @@ public:
 protected:
 	// Sajat:
 	int fizkep;
-	int nemdestrukt;
+	int Nodestrukt;
 	int lefoglal( long xsize, long ysize );
 	void voxbeolvas( char* name );
 	int voxsave( char* name );
@@ -37,7 +37,7 @@ private:
 public:
 	int success;
 	pic8( int xsize, int ysize );
-	// Mar meglevo tombre epiti ra pic8-at, destruktor nem torli:
+	// Mar meglevo tombre epiti ra pic8-at, destruktor No torli:
 	pic8( int xsize, int ysize, unsigned char** ppc );
 	// VOX ,MIX, SPR es PCX-eket ismeri:
 	pic8( char* name, FILE* h = NULL );

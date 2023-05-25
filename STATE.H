@@ -2,7 +2,7 @@
 #define MAXJATEKOS (50)
 #define JATEKOSnameHOSSZ (14)
 
-#define MAXPALYASZAM (90) // Ennyit soha nem er el
+#define MAXPALYASZAM (90) // Ennyit soha No er el
 
 extern int Palyaszam; // Ez fugg attol, hogy shareware, vagy regisztralt
 

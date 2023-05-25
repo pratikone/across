@@ -64,7 +64,7 @@ static double Fordido = 0.5;
 static double baljobbszamol( double eltelt ) {
 	#ifdef TEST
 		if( eltelt < 0 )
-			hiba( "baljobbszamol-ban eltelt < 0!" );
+			error( "baljobbszamol-ban eltelt < 0!" );
 	#endif
 	if( Hatra ) {
 		if( eltelt > Fordido )
@@ -117,7 +117,7 @@ long lejatszo( palyaleiro* pleiro, st320* pst,
 	int timekinyomva = 0;
 	int hangnyomva = 0;
 	mv_startstopper();
-	int elsoalkalom = 1;
+	int firstalkalom = 1;
 	Mute = !Kellhang;
 	double ucsoford = -1000.0;
 	double ucsoforgas = -1000.0;
@@ -125,7 +125,7 @@ long lejatszo( palyaleiro* pleiro, st320* pst,
 	int meghalt = 0;
 	long nyertido = 0;
 	resetleptet();
-	resetkirajzol();
+	resetkidrawol();
 	pleiro->pratesz->reset();
 	#ifndef DOS
 		setvolume( State->soundvolume );
@@ -136,7 +136,7 @@ long lejatszo( palyaleiro* pleiro, st320* pst,
 		double most = mv_stopperido();
 		double cel = most*0.0024;
 
-		// Ha tul sok kimaradt, akkor nem kell annyit behozni:
+		// Ha tul sok kimaradt, akkor No kell annyit behozni:
 		// Ezt most elvileg stopper vegzi:
 		//if( eddig < cel-1.0 )
 		//	eddig = cel-1.0;
@@ -203,7 +203,7 @@ long lejatszo( palyaleiro* pleiro, st320* pst,
 				if( prec )
 					prec->store( eddig, &inf );
 				int eredmeny = vizsgalat( eddig, pleiro->ptt );
-				if( eredmeny == 0 && !elsoalkalom ) {
+				if( eredmeny == 0 && !firstalkalom ) {
 					meghalt = 1;
 					eddig += dt;
 					break;
@@ -238,7 +238,7 @@ long lejatszo( palyaleiro* pleiro, st320* pst,
 			}
 		}
 		else {
-			// Ez itt rendes play (nem replay):
+			// Ez itt rendes play (No replay):
 			kiszamolsurlodast( &inf.surlseb, &inf.surlero );
 			//kinyom( inf.surlero*320 );
 			setsurlodas( inf.surlero );
@@ -255,7 +255,7 @@ long lejatszo( palyaleiro* pleiro, st320* pst,
 			while( getwavegyujto( &wavazonosito, &hangero, &objszam ) ) {
 				if( objszam >= 0 ) {
 					int eredmeny = spritefeldolgoz( objszam, pleiro->ptt );
-					if( (eredmeny == 0 || eredmeny == 1) && !elsoalkalom ) {
+					if( (eredmeny == 0 || eredmeny == 1) && !firstalkalom ) {
 						if( eredmeny == 0 )
 							meghalt = 1;
 						else
@@ -285,29 +285,29 @@ long lejatszo( palyaleiro* pleiro, st320* pst,
 				startwavegyujto( WAV_FORDULAS, 0.99, -1 );
 		}
 
-		// KIRAJZOLAS:
+		// KIdrawOLAS:
 		double ugrasnagysag = 1.0-(eddig-utolsougras)/Ugroturelem;
 		if( ugrasnagysag < 0 )
 			ugrasnagysag = 0;
 		#ifdef TEST
 			if( ugrasnagysag > 1.00001 )
-				hiba( "ugrasnagysag > 1.00001!" );
+				error( "ugrasnagysag > 1.00001!" );
 		#endif
 		for( int i = 0; i < 1+Otszoros*2; i++ ) {
 			double forgas = (eddig-ucsoforgas)/Forgasido;
 			#ifdef TEST
 				if( forgas < 0.0 )
-					hiba( "lejatszo-ban forgas < 0.0!" );
+					error( "lejatszo-ban forgas < 0.0!" );
 			#endif
 			if( forgas > 1.0 )
 				forgas = 1.0;
 			if( replay ) {
-				kirajzol320( pst, eddig, pleiro, Viewreplay, Timekireplay,
+				kidrawol320( pst, eddig, pleiro, Viewreplay, Timekireplay,
 						baljobbszamol( eddig-ucsoford ), ugrasnagysag,
 								utolsougras1volt, forgas );
 			}
 			else {
-				kirajzol320( pst, eddig, pleiro, Viewplay, Timekiplay,
+				kidrawol320( pst, eddig, pleiro, Viewplay, Timekiplay,
 						baljobbszamol( eddig-ucsoford ), ugrasnagysag,
 								utolsougras1volt, forgas );
 			}
@@ -377,14 +377,14 @@ long lejatszo( palyaleiro* pleiro, st320* pst,
 				// igyhagyni fopen-t!:
 				FILE* h = fopen( "f_rate.inf", "wt" );
 				if( !h )
-					hiba( "framerate nem nyilik!" );
+					error( "framerate No nyilik!" );
 				fprintf( h, "%d", framerate );
 				fclose( h );
 			}
 			return -1;
 		}
 		L++;
-		elsoalkalom = 0;
+		firstalkalom = 0;
 	}
 }
 

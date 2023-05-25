@@ -7,7 +7,7 @@ static void setpal( unsigned char* pal ) {
 			outp( 0x3c9, pal[i] );
 	#else
 		pal++;
-		hiba( "Itt nem szabadna lennie!" );
+		error( "Itt No szabadna lennie!" );
 	#endif
 }
 
@@ -16,7 +16,7 @@ static int Resdd = 0;
 ddpal::ddpal( unsigned char* tombp ) {
 	{ tomb = NEW(unsigned char*) unsigned char[768]; }
 	if( !tomb )
-		hiba( "memory ddpal-ban!" );
+		error( "memory ddpal-ban!" );
 	memcpy( tomb, tombp, 768 );
 }
 
@@ -33,14 +33,14 @@ static pic8* Ppicbuff = NULL;
 
 void init_d_dd( void ) {
 	if( Ppicbuff )
-		hiba( "init_d_dd ketszer hivva!" );
+		error( "init_d_dd ketszer hivva!" );
 	{ Ppicbuff = NEW(pic8*) pic8( 320, 200 ); }
 	Resdd = 1;
 }
 
 unsigned char** lockbackbuffer( int* pxs, int* pys ) {
 	if( !Ppicbuff )
-		hiba( "lockbackbuffer init_d_dd hivasa nelkul!" );
+		error( "lockbackbuffer init_d_dd hivasa nelkul!" );
 
 	*pxs = -1;
 	*pys = -1;
@@ -61,7 +61,7 @@ unsigned char** lockbackbuffer( int* pxs, int* pys ) {
 		*pys = 480;
 	}
 	if( *pxs < 1 )
-		hiba( "unlockbackbuffer-ben fizxsize < 1!" );
+		error( "unlockbackbuffer-ben fizxsize < 1!" );
 
 	return Ppicbuff->sormuttomb;
 }
@@ -69,7 +69,7 @@ unsigned char** lockbackbuffer( int* pxs, int* pys ) {
 // Ki is teszi
 void unlockbackbuffer( void ) {
 	if( !Ppicbuff )
-		hiba( "unlockbackbuffer init_d_dd hivasa nelkul!" );
+		error( "unlockbackbuffer init_d_dd hivasa nelkul!" );
 	int fizxsize = -1;
 	int fizysize = -1;
 	if( Resdd == 1 ) {
@@ -89,7 +89,7 @@ void unlockbackbuffer( void ) {
 		fizysize = 480;
 	}
 	if( fizxsize < 1 )
-		hiba( "unlockbackbuffer-ben fizxsize < 1!" );
+		error( "unlockbackbuffer-ben fizxsize < 1!" );
 
 	for( int y = 0; y < fizysize; y++ ) {
 		putline8_l( 0, y, Ppicbuff->sormuttomb[fizysize-y-1], fizxsize );
@@ -113,7 +113,7 @@ void unlockbackbuffer( void ) {
 		int dx = 2;
 		if( mk_kbhit() ) {
 			mk_getextchar();
-			hiba( "Vege!" );
+			error( "Vege!" );
 		}
 		int paros = 1;
 		for( int x = 0; x < 500; x += dx ) {
@@ -140,7 +140,7 @@ void unlockbackbuffer( void ) {
 // res: 1 -> 320x200, 3 -> 640x400, 4 -> 640x480:
 void setresdd( int res ) {
 	if( res != 1 && res != 2 && res != 3 && res != 4 )
-		hiba( "setres-ben res != 1 && res != 2 && res != 3 && res != 4!" );
+		error( "setres-ben res != 1 && res != 2 && res != 3 && res != 4!" );
 	if( Resdd == res )
 		return;
 	Resdd = res;
@@ -164,12 +164,12 @@ void setresdd( int res ) {
 		ysize = 480;
 	}
 	if( xsize < 1 )
-		hiba( "setresdd-ben xsize < 1!" );
+		error( "setresdd-ben xsize < 1!" );
 
 	setmode8_l( Resdd );
 
 	if( !Ppicbuff )
-		hiba( "setresdd-ben !Ppicbuffer!" );
+		error( "setresdd-ben !Ppicbuffer!" );
 
 	DELETE Ppicbuff; }
 

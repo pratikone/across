@@ -12,7 +12,7 @@ static void kitolt( unsigned i, int szorzo, signed short e1, signed short e2,
 wav* tulminta( wav* pw, int szorzo, signed short ucsoertek ) {
 	long nsize = pw->size*szorzo;
 	if( nsize > 64000u )
-		hiba( "tulminta-ban nsize > 64000!" );
+		error( "tulminta-ban nsize > 64000!" );
 	wav* pn = NEW wav( (unsigned short)nsize );
 	for( unsigned i = 0; i < pw->size-1; i++ )
 		kitolt( i, szorzo, pw->tomb[i], pw->tomb[i+1], pn );
@@ -24,7 +24,7 @@ wav* tulminta( wav* pw, int szorzo, signed short ucsoertek ) {
 
 void vegtelenit( wav* pw ) {
 	if( pw->size % 2 )
-		hiba( "vegtelenitben wav hossza nem paros!" );
+		error( "vegtelenitben wav hossza No paros!" );
 	int siz = pw->size/2;
 	for( int i = 0; i < siz; i++ ) {
 		pw->tomb[i] = pw->tomb[i]*(double(i)/(siz-1)) +

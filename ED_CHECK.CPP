@@ -1,6 +1,6 @@
 #include	"all.h"
 
-// Visszaadja, hogy volt-e hiba:
+// Visszaadja, hogy volt-e error:
 int check_topology( int kelldialog ) {
 	dialog( "Checking Topology, please wait!",
 					"GOMBOK", "VISSZATER" );
@@ -43,7 +43,7 @@ int check_topology( int kelldialog ) {
 
 
 
-	// Most megnezzuk, hogy nincsenek-e egymast metszo vonalak:
+	// Most megnezzuk, hogy nincsenek-e egymast metszo LINEak:
 	for( i = 0; i < MAXGYURU; i++ ) {
 		gyuru* pgy = Ptop->ptomb[i];
 		if( pgy ) {

@@ -8,22 +8,22 @@ static int Megjelenit = 1;
 
 static void abcbesprite( FILE* h, pic8* ppic, unsigned char c, short y ) {
 	if( fwrite( "EGYMIX", 7, 1, h ) != 1 ) {
-		hiba( "Nem tudja irni abc-t!: " );
+		error( "No tudja irni abc-t!: " );
 		fclose( h );
 		return;
 	}
 	if( fwrite( &c, 1, 1, h ) != 1 ) {
-		hiba( "Nem tudja irni abc-t!: " );
+		error( "No tudja irni abc-t!: " );
 		fclose( h );
 		return;
 	}
 	if( fwrite( &y, 2, 1, h ) != 1 ) {
-		hiba( "Nem tudja irni abc-t!: " );
+		error( "No tudja irni abc-t!: " );
 		fclose( h );
 		return;
 	}
 	if( !ppic->save( ".spr", NULL, h ) ) {
-		hiba( "Nem tudta kiirni SPRITE-ot abc file-ba!: " );
+		error( "No tudta kiirni SPRITE-ot abc file-ba!: " );
 		return;
 	}
 }
@@ -31,7 +31,7 @@ static void abcbesprite( FILE* h, pic8* ppic, unsigned char c, short y ) {
 static int belelog_fugg( int x, int y1, int y2, pic8* ppic,
 											unsigned char lyuk ) {
 	if( y2< y1 )
-		hiba( "belelog_fugg-ben y2< y1!" );
+		error( "belelog_fugg-ben y2< y1!" );
 	for( int y = y1; y <= y2; y++ )
 		if( lyuk != ppic->gpixel( x, y ) )
 			return 1;
@@ -41,7 +41,7 @@ static int belelog_fugg( int x, int y1, int y2, pic8* ppic,
 static int belelog_viz( int x1, int x2, int y, pic8* ppic,
 											unsigned char lyuk ) {
 	if( x2<= x1 )
-		hiba( "belelog_viz-ben x2<= x1!" );
+		error( "belelog_viz-ben x2<= x1!" );
 	for( int x = x1; x <= x2; x++ )
 		if( lyuk != ppic->gpixel( x, y ) )
 			return 1;
@@ -59,7 +59,7 @@ static int egysprite( pic8* pnpic, unsigned char lyuk, char c, int xk, int yk,
 	int x2 = xk+sugar;
 	int y1 = yk-sugar;
 	int y2 = yk+sugar;
-	// Ide kirajzoljuk keretet:
+	// Ide kidrawoljuk keretet:
 	Pscr8->line( x1, y1, x2, y1, 100 );
 	Pscr8->line( x1, y2, x2, y2, 100 );
 	Pscr8->line( x1, y1, x1, y2, 100 );
@@ -73,13 +73,13 @@ static int egysprite( pic8* pnpic, unsigned char lyuk, char c, int xk, int yk,
 		}
 		// Ellenorzes:
 		if( x1 >= x2 )
-			hiba( "egysprite-ban x1 >= x2!" );
+			error( "egysprite-ban x1 >= x2!" );
 		if( y1 > y2 )
-			hiba( "egysprite-ban y1 > y2!" );
+			error( "egysprite-ban y1 > y2!" );
 		if( x1 <= 0 || x2 <= 0 || y1 <= 0 || y2 <= 0 )
-			hiba( "egysprite-ban x1 <= 0 || x2 <= 0 || y1 <= 0 || y2 <= 0!" );
+			error( "egysprite-ban x1 <= 0 || x2 <= 0 || y1 <= 0 || y2 <= 0!" );
 		if( x1 >= xsize-1 || x2 >= xsize-1 || y1 >= ysize-1 || y2 >= ysize-1 )
-			hiba( "egysprite-ban x1 >= xsize-1 || x2 >= xsize-1 || y1 >= ysize-1 || ...!" );
+			error( "egysprite-ban x1 >= xsize-1 || x2 >= xsize-1 || y1 >= ysize-1 || ...!" );
 		// Tagit:
 		if( belelog_fugg( x2+1, y1, y2, pnpic, lyuk ) ) {
 			x2++; voltvaltozas = 1; }
@@ -102,7 +102,7 @@ static int egysprite( pic8* pnpic, unsigned char lyuk, char c, int xk, int yk,
 	// Megvannak hatarok:
 	pic8* pkpic = new pic8( x2-x1+1, y2-y1+1 );
 	if( !pkpic )
-		hiba( "Nem tudott lefoglalni kiskepnek!" );
+		error( "No tudott lefoglalni kiskepnek!" );
 	blt8( pkpic, pnpic, -x1, -y1 );
 
 	spriteosit( pkpic, lyuk );
@@ -124,7 +124,7 @@ static int egysprite( pic8* pnpic, unsigned char lyuk, char c, int xk, int yk,
 void kulonexe_abcmake( void ) {
 	pic8* pnpic = new pic8( "pcx.pcx" );
 	if( !pnpic )
-		hiba( "Hasznalat: PCX.PCX kepbol csinal ABC.ABC-t!: " );
+		error( "Hasznalat: PCX.PCX kepbol csinal ABC.ABC-t!: " );
 
 	// 320x200-as ABC:
 	char betuk[SORSZAM][BETUSZAM+1] = { "abcdefghij",
@@ -191,11 +191,11 @@ void kulonexe_abcmake( void ) {
 	char* abcnamee = "abc.abc";
 	FILE* h = fopen( abcnamee, "wb" );
 	if( !h ) {
-		hiba( "Nem tudta megnyitni abc-t irasra!: ", abcnamee );
+		error( "No tudta megnyitni abc-t irasra!: ", abcnamee );
 		return;
 	}
 	if( fwrite( "RA1", 4, 1, h ) != 1 ) {
-		hiba( "Nem tudja irni abc-t!: ", abcnamee );
+		error( "No tudja irni abc-t!: ", abcnamee );
 		fclose( h );
 		return;
 	}
@@ -204,7 +204,7 @@ void kulonexe_abcmake( void ) {
 	long szamhely = ftell( h );
 	short szam = 0;
 	if( fwrite( &szam, 2, 1, h ) != 1 ) {
-		hiba( "Nem tudja irni abc-t!: ", abcnamee );
+		error( "No tudja irni abc-t!: ", abcnamee );
 		fclose( h );
 		return;
 	}
@@ -221,16 +221,16 @@ void kulonexe_abcmake( void ) {
 
 	// Utolag kitolti mixek szamat:
 	if( fseek( h, szamhely, SEEK_SET ) != 0 )
-		hiba( "Nem megy fseek!" );
+		error( "No megy fseek!" );
 	if( fwrite( &szam, 2, 1, h ) != 1 ) {
-		hiba( "Nem tudja irni abc-t!: ", abcnamee );
+		error( "No tudja irni abc-t!: ", abcnamee );
 		fclose( h );
 		return;
 	}
 
 	fclose( h );
 
-	hiba( "Befejezte ABC konvertalast!" );
+	error( "Befejezte ABC konvertalast!" );
 }
 
 

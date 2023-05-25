@@ -97,13 +97,13 @@ static void setupinterrupt( void ) {
 /*static void ment( void ) {
 	FILE* h = fopen( "irott.wav", "wb" );
 	if( !h )
-		hiba( "Nem nyitja wavot!" );
+		error( "No nyitja wavot!" );
 
-	// elso:
+	// first:
 	for( int i = 0; i < 25000; i++ )
 		Buffer[i] = 0;
 	if( fwrite( Buffer, 1, 25000, h ) != 25000 )
-		hiba( "Nem irta wavot!" );
+		error( "No irta wavot!" );
 
 	// kozep:
 	for( i = 0; i < 10000; i++ ) {
@@ -111,13 +111,13 @@ static void setupinterrupt( void ) {
 		Buffer[i] = 128+120*sin( alfa );
 	}
 	if( fwrite( Buffer, 1, 10000, h ) != 10000 )
-		hiba( "Nem irta wavot!" );
+		error( "No irta wavot!" );
 
 	// vege:
 	for( i = 0; i < 25000; i++ )
 		Buffer[i] = 0;
 	if( fwrite( Buffer, 1, 25000, h ) != 25000 )
-		hiba( "Nem irta wavot!" );
+		error( "No irta wavot!" );
 
 	fclose( h );
 }
@@ -128,14 +128,14 @@ static void kitoltcimstrukt( cimstrukt* pcim, unsigned char* mut ) {
 
 	#ifdef DOSX286
 		if( mut != Buffer1 && mut != Buffer2 )
-			hiba( "kitoltcimstrukt-ban mut != Buffer1 && mut != Buffer2!" );
+			error( "kitoltcimstrukt-ban mut != Buffer1 && mut != Buffer2!" );
 		long fizikai = 0;
 		if( mut == Buffer1 )
 			fizikai = Fizikai1;
 		else
 			fizikai = Fizikai2;
 		if( fizikai <= 0 )
-			hiba( "kitoltcimstrukt-ban fizikai <= 0!" );
+			error( "kitoltcimstrukt-ban fizikai <= 0!" );
 		startaddr = fizikai;
 	#endif
 
@@ -162,25 +162,25 @@ static int getparams( int* pcim, int* pirq, int* pdma ) {
 		uzenet( "Missing file!: ", "setup.snd" );
 	char sor[200];
 	if( fgets( sor, 190, h ) == NULL )
-		hiba( "Nem tudott olvasni targyat!" );
+		error( "No tudott olvasni targyat!" );
 	fclose( h );
 
 	char tipusname[20] = "";
 	if( sscanf( sor, "%s", tipusname ) != 1 )
-		hiba( "Targyban nem tudta feldolgozni sort!: ", sor );
+		error( "Targyban No tudta feldolgozni sort!: ", sor );
 	if( strcmpi( tipusname, "none" ) == 0 ) {
 		Hangenabled = 0;
 		return 0;
 	}
 	if( strcmpi( tipusname, "sb" ) != 0 )
-		hiba( "Ismeretlen tipus setup.snd-ben!" );
+		error( "Ismeretlen tipus setup.snd-ben!" );
 
 	*pcim = 0;
 	*pirq = 0;
 	*pdma = 0;
 	int szam = 0;
 	if( (szam=sscanf( sor, "%s %i %d %d", tipusname, pcim, pirq, pdma )) != 4 )
-		hiba( "Targyban nem tudta feldolgozni sort!: ", sor );
+		error( "Targyban No tudta feldolgozni sort!: ", sor );
 	szam++;
 	return 1;
 }
@@ -189,7 +189,7 @@ static unsigned Buffsize = 0;
 
 int starthang( unsigned buffsize ) {
 	if( Hangmegy )
-		hiba( "starthangban hangmegy!" );
+		error( "starthangban hangmegy!" );
 
 	Buffsize = buffsize;
 
@@ -433,7 +433,7 @@ void Init_Blaster( int ioaddresspar, int intnum, int dmapar ) {
 
 	DMA_Channel = dmapar;
 	if( DMA_Channel<0 || DMA_Channel>7)
-		hiba( "Init_Blaster-ben int dmapar out of range!" );
+		error( "Init_Blaster-ben int dmapar out of range!" );
 
 	Interrupt_Num = intnum;
 
@@ -520,7 +520,7 @@ static int egypage( void* p1, void* p2 ) {
 
 void Alloc_Sound_Mem( unsigned buffsize ) {
 	if( Buffer )
-		hiba( "Alloc_Sound_Mem-ben Buffer != NULL!" );
+		error( "Alloc_Sound_Mem-ben Buffer != NULL!" );
 	{ Buffer = NEW(unsigned char*) unsigned char[buffsize*3]; }
 	if( !Buffer )
 		uzenet( "memory starthang-ban!" );
@@ -530,15 +530,15 @@ void Alloc_Sound_Mem( unsigned buffsize ) {
 		Buffer1 += buffsize;
 		eltolva = 1;
 		if( !egypage( Buffer1, Buffer1+buffsize-1 ) )
-			hiba( "starthang-ban 2x eltolas!" );
+			error( "starthang-ban 2x eltolas!" );
 	}
 	Buffer2 = Buffer1 + buffsize;
 	if( !egypage( Buffer2, Buffer2+buffsize-1 ) ) {
 		if( eltolva )
-			hiba( "starthang-ban 2x eltolas!" );
+			error( "starthang-ban 2x eltolas!" );
 		Buffer2 += buffsize;
 		if( !egypage( Buffer2, Buffer2+buffsize-1 ) )
-			hiba( "starthang-ban 2x eltolas!" );
+			error( "starthang-ban 2x eltolas!" );
 	}
 	{ Shortbuffer = NEW(short*) short[buffsize]; }
 	if( !Shortbuffer )
@@ -581,7 +581,7 @@ static int egypagefizikai( long a, long b ) {
 
 static void Alloc_Sound_Mem( unsigned buffsize ) {
 	if( buffsize > 15000 )
-		hiba( "Alloc_Sound_Mem-ben buffsize > 15000!" );
+		error( "Alloc_Sound_Mem-ben buffsize > 15000!" );
 	unsigned short paragraf = 0;
 	unsigned short selector = 0;
 	DosAllocRealSeg( 4*buffsize, &paragraf, &selector );
@@ -646,18 +646,18 @@ void Alloc_Sound_Mem( unsigned buffsize ) {
 		Buffer1 += buffsize;
 		eltolva = 1;
 		if( !egypage( Buffer1, Buffer1+buffsize-1 ) )
-			hiba( "starthang-ban 2x eltolas!" );
+			error( "starthang-ban 2x eltolas!" );
 	}
 	Buffer2 = Buffer1 + buffsize;
 	if( !egypage( Buffer2, Buffer2+buffsize-1 ) ) {
 		if( eltolva )
-			hiba( "starthang-ban 2x eltolas!" );
+			error( "starthang-ban 2x eltolas!" );
 		Buffer2 += buffsize;
 		if( !egypage( Buffer2, Buffer2+buffsize-1 ) )
-			hiba( "starthang-ban 2x eltolas!" );
+			error( "starthang-ban 2x eltolas!" );
 	}
 	if( Shortbuffer )
-		hiba( "Alloc_Sound_Mem-ben Shortbuffer != NULL!" );
+		error( "Alloc_Sound_Mem-ben Shortbuffer != NULL!" );
 	{ Shortbuffer = NEW(short*) short[buffsize]; }
 	if( !Shortbuffer )
 		uzenet( "memory!" );
@@ -687,7 +687,7 @@ void setvolume( double hangero ) {
 	if( !Hangenabled )
 		return;
 	if( hangero < 0.0 || hangero > 1.0 )
-		hiba( "setvolume-ban hangero < 0.0 || hangero > 1.0!" );
+		error( "setvolume-ban hangero < 0.0 || hangero > 1.0!" );
 	outp(ic(MIXER_WRITE_INDEX), 4 );
 	unsigned char adat = 1.5 + hangero*14.0;
 	adat += adat*16;

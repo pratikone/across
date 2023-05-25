@@ -17,7 +17,7 @@ void mv_main( void ) {
 		char tmp[10];
 		long l = mv_stopperido()*1000.0/182.0;
 		ltoa( l, tmp, 10 );
-		szovegki( 100, tmp );
+		text( 100, tmp );
 
 		/*char tmp[20];
 		double eltelt = mv_getsec();
@@ -25,7 +25,7 @@ void mv_main( void ) {
 			Elteltelozo = eltelt;
 		sprintf( tmp, "%f", (float)(eltelt-Elteltelozo) );
 		strcat( tmp, "          " );
-		szovegki( 100, tmp );
+		text( 100, tmp );
 		Elteltelozo = eltelt;
 
 		for( long l = 0; l < 100000l; )
@@ -33,28 +33,28 @@ void mv_main( void ) {
 		*/
 
 		//if( szam == 100000l )
-		//	hiba( "Szazezzer!" );
+		//	error( "Szazezzer!" );
 
 		if( mk_kbhit() ) {
-			char szoveg[10];
+			char text[10];
 			int c = mk_getextchar();
 			if( c == 'q' )
 				mv_exit();
 			if( c == 'd' )
-				hiba( "d lenyomva!" );
-			itoa( c, szoveg, 10 );
-			szovegki( 20, szoveg );
-			szoveg[0] = (char)c;
-			szoveg[1] = 0;
-			szovegki( 40, szoveg );
+				error( "d lenyomva!" );
+			itoa( c, text, 10 );
+			text( 20, text );
+			text[0] = (char)c;
+			text[1] = 0;
+			text( 40, text );
 		}
 
 		for( int i = 0; i < 100; i++ ) {
 			if( mk_getstate( MK_ESC ) ) {
-				szovegki( 60, "ESC               " );
+				text( 60, "ESC               " );
 			}
 			if( mk_getstate( MK_ENTER ) ) {
-				szovegki( 60, "ENTER               " );
+				text( 60, "ENTER               " );
             //ddinit();
 			   // Betoltunk valamit back bufferbe:
             unsigned char buff1[640];
@@ -91,28 +91,28 @@ void mv_main( void ) {
 		  		   unlockbackbuffer();
             }
 			   //ddfinish();
-			   hiba( "Befejezte dd probat!" );
+			   error( "Befejezte dd probat!" );
 			}
 			if( mk_getstate( MK_UP ) ) {
-				szovegki( 60, "UP               " );
+				text( 60, "UP               " );
 			}
 			if( mk_getstate( MK_DOWN ) ) {
-				szovegki( 60, "DOWN               " );
+				text( 60, "DOWN               " );
 			}
 			if( mk_getstate( MK_RIGHT ) ) {
-				szovegki( 60, "RIGHT               " );
+				text( 60, "RIGHT               " );
 			}
 			if( mk_getstate( MK_LEFT ) ) {
-				szovegki( 60, "LEFT               " );
+				text( 60, "LEFT               " );
 			}
          if( mk_getstate( MK_PGUP ) ) {
-				szovegki( 60, "PGUP               " );
+				text( 60, "PGUP               " );
 			}
 			if( mk_getstate( MK_PGDOWN ) ) {
-				szovegki( 60, "PGDOWN               " );
+				text( 60, "PGDOWN               " );
 			}                           
          if( mk_getstate( MK_BACKSPACE ) ) {
-				szovegki( 60, "BACKSPACE               " );
+				text( 60, "BACKSPACE               " );
 			}
 		}
 	}

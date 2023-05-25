@@ -30,7 +30,7 @@ public:
 	kiskep* pkisc;
 	kiskep* pkisd;
 	kiskep* pkise;
-	kiskep* pkiselsorud;
+	kiskep* pkisfirstrud;
 	kiskep* pkishatsorud;
 	kiskep* pkisalkar;
 	kiskep* pkisfelkar;

@@ -4,7 +4,7 @@ static const unsigned short Save_as_box_szin = 215, Save_as_szelszin = 0;
 
 static unsigned short Openlistaszin = 173, Openlistainvszin = 205;
 
-static int Maxname = 1000; // Nem lehet nagyobb 3000-nel!
+static int Maxname = 1000; // No lehet nagyobb 3000-nel!
 static char* Sokname = NULL;
 
 static void abcberendez( int nameszam ) {
@@ -26,12 +26,12 @@ static void abcberendez( int nameszam ) {
 
 static void betolt( char* name ) {
 	if( !Ptop )
-		hiba( "uoiwfiufre" );
+		error( "uoiwfiufre" );
 	if( !*name )
-		hiba( "oiufewguyxygxw" );
+		error( "oiufewguyxygxw" );
 	char tmp[15];
 	if( strlen( name ) > 8 )
-		hiba( "iovffiufi" );
+		error( "iovffiufi" );
 	strcpy( tmp, name );
 	strcat( tmp, ".lev" );
 
@@ -40,13 +40,13 @@ static void betolt( char* name ) {
 
 	Valtozott = 0;
 	if( strlen( tmp ) > 12 )
-		hiba( "betolt-ben strlen( tmp ) > 12!" );
+		error( "betolt-ben strlen( tmp ) > 12!" );
 	strcpy( State->editfilename, tmp );
 	if( Ptop->lezart ) {
-		char szoveg[40];
-		sprintf( szoveg, "The file '%s' is locked, you cannot edit it!",
+		char text[40];
+		sprintf( text, "The file '%s' is locked, you cannot edit it!",
 											State->editfilename );
-		dialog( szoveg );
+		dialog( text );
 		delete Ptop;
 		Ptop = new topol;
 		Valtozott = 0;
@@ -59,18 +59,18 @@ static void betolt( char* name ) {
 	kitolt();
 }
 
-static void igazit( int* pkur, int* pfelso, int nameszam, int helyszam ) {
+static void igazit( int* pkur, int* pffirst, int nameszam, int helyszam ) {
 	if( *pkur < 0 )
 		*pkur = 0;
 	if( *pkur > nameszam-1 )
 		*pkur = nameszam-1;
-	if( *pfelso > *pkur )
-		*pfelso = *pkur;
-	if( *pfelso < *pkur-helyszam+1 )
-		*pfelso = *pkur-helyszam+1;
+	if( *pffirst > *pkur )
+		*pffirst = *pkur;
+	if( *pffirst < *pkur-helyszam+1 )
+		*pffirst = *pkur-helyszam+1;
 }
 
-static void boxbarajz( pic8* ppic, box abox, unsigned char szin, int fel ) {
+static void boxbadraw( pic8* ppic, box abox, unsigned char szin, int fel ) {
 	int x1 = abox.x1; int y1 = abox.y1;
 	int x2 = abox.x2; int y2 = abox.y2;
 	int szeltav = 16;
@@ -110,7 +110,7 @@ void tolt_open( void ) {
 	if( !Sokname ) {
 		Sokname = new char[Maxname*10+100];
 		if( !Sokname )
-			hiba( "Nincs eleg memoria tolt_open-ben (hjfdf)!" );
+			error( "Nincs eleg memoria tolt_open-ben (hjfdf)!" );
 	}
 	for( int i = 0; i < Maxname*10+10; i++ )
 		Sokname[i] = 0;
@@ -120,19 +120,19 @@ void tolt_open( void ) {
 	int nameszam = 0;
 	while( !done ) {
 		if( strlen( ffblk.name ) > 14 )
-			hiba( "ijhfiyewpp" );
+			error( "ijhfiyewpp" );
 		char* name = &Sokname[nameszam*10];
 		strcpy( name, ffblk.name );
 		// Leveszi kiterjesztest:
 		int i = 0;
 		while( name[i] != '.' ) {
 			if( !name[i] )
-				hiba( "Nincs pont nameben! (yewruyrewuy): ", name );
+				error( "Nincs pont nameben! (yewruyrewuy): ", name );
 			i++;
 		}
 		name[i] = 0;
 		if( strlen( name ) > 8 )
-			hiba( "iuoriureiur" );
+			error( "iuoriureiur" );
 
 		done = _dos_findnext( &ffblk );
 		nameszam++;
@@ -158,7 +158,7 @@ void tolt_open( void ) {
 			kur = i;
 	}
 
-	//State->editfilename[0] = 0; Igy nem lesz unnamed CANCEL utan
+	//State->editfilename[0] = 0; Igy No lesz unnamed CANCEL utan
 
 	// Koordok megadasa:
 	int helyszam = 10;
@@ -176,8 +176,8 @@ void tolt_open( void ) {
 	box boxle =  { x1+10, y2 - 30, x1+110, y2 -10 };
 	box boxcancel = { x1+121, (y2+y1)/2-10, x1+121 + 70, (y2+y1)/2+10 };
 
-	int felso = 0;
-	int eddigfelso = -1;
+	int ffirst = 0;
+	int eddigffirst = -1;
 	int eddigkur = 0;
 	mk_emptychar();
 	int egerballevoltnyomva = 0;
@@ -188,7 +188,7 @@ void tolt_open( void ) {
 			if( c == MK_ESC )
 				return;
 			if( c == MK_ENTER ) {
-				igazit( &kur, &felso, nameszam, helyszam );
+				igazit( &kur, &ffirst, nameszam, helyszam );
 				betolt( &Sokname[kur*10] );
 				return;
 			}
@@ -225,7 +225,7 @@ void tolt_open( void ) {
 				if( ujy < ly1 + dy*helyszam ) {
 					// Egy nameet el is talalt:
 					int index = (ujy-ly1)/dy;
-					index += felso;
+					index += ffirst;
 					if( index < nameszam ) {
 						betolt( &Sokname[index*10] );
 						return;
@@ -233,33 +233,33 @@ void tolt_open( void ) {
 				}
 			}
 		}
-		igazit( &kur, &felso, nameszam, helyszam );
-		if( felso != eddigfelso || kur != eddigkur ) {
-			// Kirajzoljuk, mivel valtozott kep:
+		igazit( &kur, &ffirst, nameszam, helyszam );
+		if( ffirst != eddigffirst || kur != eddigkur ) {
+			// Kidrawoljuk, mivel valtozott kep:
 			push();
-			kirajzbox( Editbuffer, x1, y1, x2, y2, Dialogszin, Dialogszelszin );
-			kirajzbox( Editbuffer, lx1, ly1, lx2, ly2, Openlistaszin,  Dialogszelszin );
+			kidrawbox( Editbuffer, x1, y1, x2, y2, Dialogszin, Dialogszelszin );
+			kidrawbox( Editbuffer, lx1, ly1, lx2, ly2, Openlistaszin,  Dialogszelszin );
 			for( int i = 0; i < helyszam && i < nameszam; i++ ) {
-				if( i + felso == kur ) {
+				if( i + ffirst == kur ) {
 					// Ez most kuurens name:
 					Editbuffer->fillbox( lx1+1, ly1+i*dy + 1,
 							lx2-1, ly1+(i+1)*dy-1, Openlistainvszin );
 				}
-				Pabc2->write( Editbuffer, lx1+3, ly1+15+i*dy, &Sokname[(i+felso)*10] );
+				Pabc2->write( Editbuffer, lx1+3, ly1+15+i*dy, &Sokname[(i+ffirst)*10] );
 			}
 			// Most jonnek gombok:
-			kirajzbox( Editbuffer, boxfel, Buttonszin, Dialogszelszin );
-			boxbarajz( Editbuffer, boxfel, Dialogszelszin, 1 );
-			kirajzbox( Editbuffer, boxle, Buttonszin, Dialogszelszin );
-			boxbarajz( Editbuffer, boxle, Dialogszelszin, 0 );
-			kirajzbox( Editbuffer, boxcancel, Buttonszin, Dialogszelszin );
+			kidrawbox( Editbuffer, boxfel, Buttonszin, Dialogszelszin );
+			boxbadraw( Editbuffer, boxfel, Dialogszelszin, 1 );
+			kidrawbox( Editbuffer, boxle, Buttonszin, Dialogszelszin );
+			boxbadraw( Editbuffer, boxle, Dialogszelszin, 0 );
+			kidrawbox( Editbuffer, boxcancel, Buttonszin, Dialogszelszin );
 			Pabc2->writekozep( Editbuffer, (boxcancel.x1+boxcancel.x2)/2,
 										  boxcancel.y1 + 15, "CANCEL" );
 
 			blt8( Pscr8, Editbuffer, x1, y1, x1, y1, x2, y2 );
 			pop();
 
-			eddigfelso = felso;
+			eddigffirst = ffirst;
 			eddigkur = kur;
 		}
 		int ujx = 0, ujy = 0;
@@ -279,7 +279,7 @@ void kivalasztkezdetit( void ) {
 	if( !Sokname ) {
 		Sokname = new char[Maxname*10+100];
 		if( !Sokname )
-			hiba( "Nincs eleg memoria tolt_open-ben (hjfdf)!" );
+			error( "Nincs eleg memoria tolt_open-ben (hjfdf)!" );
 	}
 	for( int i = 0; i < Maxname*10+10; i++ )
 		Sokname[i] = 0;
@@ -289,7 +289,7 @@ void kivalasztkezdetit( void ) {
 	int nameszam = 0;
 	while( !done ) {
 		if( strlen( ffblk.name ) > 14 )
-			hiba( "ijhfiyewpp" );
+			error( "ijhfiyewpp" );
 		char* name = &Sokname[nameszam*10];
 		strcpy( name, ffblk.name );
 
@@ -297,12 +297,12 @@ void kivalasztkezdetit( void ) {
 		int i = 0;
 		while( name[i] != '.' ) {
 			if( !name[i] )
-				hiba( "Nincs pont nameben! (yewruyrewuy): ", name );
+				error( "Nincs pont nameben! (yewruyrewuy): ", name );
 			i++;
 		}
 		name[i] = 0;
 		if( strlen( name ) > 8 )
-			hiba( "iuoriureiur" );
+			error( "iuoriureiur" );
 
 		done = _dos_findnext( &ffblk );
 		nameszam++;
@@ -347,8 +347,8 @@ void kivalasztkezdetit( void ) {
 	box boxcancel = { x1+121, (y2+y1)/2-10, x1+121 + 70, (y2+y1)/2+10 };
 	box boxnew = { x1+121, (y2+y1)/2-40, x1+121 + 70, (y2+y1)/2-20 };
 
-	int felso = 0;
-	int eddigfelso = -1;
+	int ffirst = 0;
+	int eddigffirst = -1;
 
 	int eddigkur = 0;
 	mk_emptychar();
@@ -360,10 +360,10 @@ void kivalasztkezdetit( void ) {
 			if( c == MK_ESC )
 				return;
 			if( c == MK_ENTER ) {
-				igazit( &kur, &felso, nameszam, helyszam );
+				igazit( &kur, &ffirst, nameszam, helyszam );
 				char* name = &Sokname[kur*10];
 				if( strlen( name ) > 8 )
-					hiba( "iovfgsdgffiufi" );
+					error( "iovfgsdgffiufi" );
 				strcpy( State->editfilename, name );
 				strcat( State->editfilename, ".lev" );
 				return;
@@ -403,11 +403,11 @@ void kivalasztkezdetit( void ) {
 				if( ujy < ly1 + dy*helyszam ) {
 					// Egy nameet el is talalt:
 					int index = (ujy-ly1)/dy;
-					index += felso;
+					index += ffirst;
 					if( index < nameszam ) {
 						char* name = &Sokname[index*10];
 						if( strlen( name ) > 8 )
-							hiba( "iovfgsdgffiufi" );
+							error( "iovfgsdgffiufi" );
 						strcpy( State->editfilename, name );
 						strcat( State->editfilename, ".lev" );
 						return;
@@ -415,29 +415,29 @@ void kivalasztkezdetit( void ) {
 				}
 			}
 		}
-		igazit( &kur, &felso, nameszam, helyszam );
-		if( felso != eddigfelso || kur != eddigkur ) {
-			// Kirajzoljuk, mivel valtozott kep:
+		igazit( &kur, &ffirst, nameszam, helyszam );
+		if( ffirst != eddigffirst || kur != eddigkur ) {
+			// Kidrawoljuk, mivel valtozott kep:
 			push();
-			kirajzbox( Editbuffer, x1, y1, x2, y2, Dialogszin, Dialogszelszin );
-			kirajzbox( Editbuffer, lx1, ly1, lx2, ly2, Openlistaszin,  Dialogszelszin );
+			kidrawbox( Editbuffer, x1, y1, x2, y2, Dialogszin, Dialogszelszin );
+			kidrawbox( Editbuffer, lx1, ly1, lx2, ly2, Openlistaszin,  Dialogszelszin );
 			for( int i = 0; i < helyszam && i < nameszam; i++ ) {
-				if( i + felso == kur ) {
+				if( i + ffirst == kur ) {
 					// Ez most kuurens name:
 					Editbuffer->fillbox( lx1+1, ly1+i*dy + 1,
 							lx2-1, ly1+(i+1)*dy-1, Openlistainvszin );
 				}
-				Pabc2->write( Editbuffer, lx1+3, ly1+15+i*dy, &Sokname[(i+felso)*10] );
+				Pabc2->write( Editbuffer, lx1+3, ly1+15+i*dy, &Sokname[(i+ffirst)*10] );
 			}
 			// Most jonnek gombok:
-			kirajzbox( Editbuffer, boxfel, Buttonszin, Dialogszelszin );
-			boxbarajz( Editbuffer, boxfel, Dialogszelszin, 1 );
-			kirajzbox( Editbuffer, boxle, Buttonszin, Dialogszelszin );
-			boxbarajz( Editbuffer, boxle, Dialogszelszin, 0 );
-			kirajzbox( Editbuffer, boxcancel, Buttonszin, Dialogszelszin );
+			kidrawbox( Editbuffer, boxfel, Buttonszin, Dialogszelszin );
+			boxbadraw( Editbuffer, boxfel, Dialogszelszin, 1 );
+			kidrawbox( Editbuffer, boxle, Buttonszin, Dialogszelszin );
+			boxbadraw( Editbuffer, boxle, Dialogszelszin, 0 );
+			kidrawbox( Editbuffer, boxcancel, Buttonszin, Dialogszelszin );
 			Pabc2->writekozep( Editbuffer, (boxcancel.x1+boxcancel.x2)/2,
 										  boxcancel.y1 + 15, "CANCEL" );
-			kirajzbox( Editbuffer, boxnew, Buttonszin, Dialogszelszin );
+			kidrawbox( Editbuffer, boxnew, Buttonszin, Dialogszelszin );
 			Pabc2->writekozep( Editbuffer, (boxnew.x1+boxnew.x2)/2,
 										  boxnew.y1 + 15, "NEW" );
 
@@ -445,7 +445,7 @@ void kivalasztkezdetit( void ) {
 			blt8( Pscr8, Editbuffer, x1, y1, x1, y1, x2, y2 );
 			pop();
 
-			eddigfelso = felso;
+			eddigffirst = ffirst;
 			eddigkur = kur;
 		}
 		int ujx = 0, ujy = 0;
@@ -469,7 +469,7 @@ void tolt_new( void ) {
 	}
 
 	if( !Ptop )
-		hiba( "uofggiwfiufre" );
+		error( "uofggiwfiufre" );
 
 	delete Ptop;
 	Ptop = new topol;
@@ -501,10 +501,10 @@ int tolt_save_as( int lokkolhato ) {
 	box boxsavelock = { 320-45, 340, 320+45, 357 };
 
 	push();
-	kirajzbox( Editbuffer, boxnagy, Dialogszin, Dialogszelszin );
-	kirajzbox( Editbuffer, boxsave, Buttonszin, Dialogszelszin );
+	kidrawbox( Editbuffer, boxnagy, Dialogszin, Dialogszelszin );
+	kidrawbox( Editbuffer, boxsave, Buttonszin, Dialogszelszin );
 	if( lokkolhato )
-		kirajzbox( Editbuffer, boxsavelock, Buttonszin, Dialogszelszin );
+		kidrawbox( Editbuffer, boxsavelock, Buttonszin, Dialogszelszin );
 	Pabc2->writekozep( Editbuffer, (boxnagy.x2+boxnagy.x1)/2, 220, "Type in the file name and press ENTER or click on SAVE, or press ESC to cancel!" );
 	if( lokkolhato )
 		Pabc2->writekozep( Editbuffer, (boxnagy.x2+boxnagy.x1)/2, 320, "If you click on the SAVE LOCKED button, the saved file won't be modifiable anymore. " );
@@ -688,7 +688,7 @@ int tolt_save_as( int lokkolhato ) {
 }
 
 void change_level_name( void ) {
-	push(); // Itt levesszuk egeret es nem is tesszuk vissza vegeig:
+	push(); // Itt levesszuk egeret es No is tesszuk vissza vegeig:
 
 	invalidateegesz();
 	// Itt most be kell olvasnunk egy nameet:

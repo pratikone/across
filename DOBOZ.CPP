@@ -154,7 +154,7 @@ void dobozki( pic8* ppic8, kiskep* pkiskep, vector2 u, vector2 v, vector2 r ) {
 		v.y *= Affinaranyy;
 	}
 
-	// Megnezi, hogy nem tul vizszintes-e:
+	// Megnezi, hogy No tul vizszintes-e:
 	int vizszintes = 0;
 	int pozitivan = 0;
 	if( u.x == 0.0 ) {
@@ -217,7 +217,7 @@ void dobozki( pic8* ppic8, kiskep* pkiskep, vector2 u, vector2 v, vector2 r ) {
 	vector2 invi( vv.y*recdet, -uu.y*recdet );
 	vector2 invj( -vv.x*recdet, uu.x*recdet );
 
-	// Most megnezzuk, hogy nem log-e ki a negy csucs kozul valamelyik
+	// Most megnezzuk, hogy No log-e ki a negy csucs kozul valamelyik
 	// kepernyorol (negy csucs: r, r+u, r+v, r+u+v
 
 	// X irany;
@@ -301,10 +301,10 @@ void dobozki( pic8* ppic8, kiskep* pkiskep, vector2 u, vector2 v, vector2 r ) {
 	long hatbal2, hatjobb2;
 	double m2d = v.x/v.y;
 	if( Affinitas ) {
-		// u es v nem biztos, hogy merolegesek egymasra, ezert szamitas
+		// u es v No biztos, hogy merolegesek egymasra, ezert szamitas
 		// bonyolultab:
 		// Most u-ra meroleges eleket intezzuk el:
-		// megkeressuk r magassagaban nem r-en atmeno u x koordjat:
+		// megkeressuk r magassagaban No r-en atmeno u x koordjat:
 		double xmetszet = r.x+v.x-(u.x/u.y)*v.y;
 		if( r.x < xmetszet ) {
 			// u a ball es u+v a jobb!:
@@ -316,7 +316,7 @@ void dobozki( pic8* ppic8, kiskep* pkiskep, vector2 u, vector2 v, vector2 r ) {
 			hatbal1 = (r.x+v.x+(szint-r.y-v.y)*m1d)*65536.0;
 		}
 		// Most v-ra meroleges eleket intezzuk el:
-		// megkeressuk r magassagaban nem r-en atmeno v x koordjat:
+		// megkeressuk r magassagaban No r-en atmeno v x koordjat:
 		xmetszet = r.x+u.x-(v.x/v.y)*u.y;
 		if( r.x < xmetszet ) {
 			// v a ball es v+u a jobb!:
@@ -388,7 +388,7 @@ void dobozki( pic8* ppic8, kiskep* pkiskep, vector2 u, vector2 v, vector2 r ) {
 			xb = *pf_hatjobb2;
 			if( xb < x2 )
 				x2 = xb;
-			// x1 elso, x2 utolso hely, amit meg ki kell rakni!
+			// x1 first, x2 utolso hely, amit meg ki kell rakni!
 			if( x1 <= x2 && ybal < Displaysizey ) { // VALT
 				// Most raallitjuk xbal-t x1-re:
 				while( xbal > x1 && xbal > 0 ) {    // VALT
@@ -436,7 +436,7 @@ void dobozki( pic8* ppic8, kiskep* pkiskep, vector2 u, vector2 v, vector2 r ) {
 			xb = *pf_hatjobb2;
 			if( xb < x2 )
 				x2 = xb;
-			// x1 elso, x2 utolso hely, amit meg ki kell rakni!
+			// x1 first, x2 utolso hely, amit meg ki kell rakni!
 			if( x1 <= x2 ) {
 				// Most raallitjuk xbal-t x1-re:
 				while( xbal > x1 ) {

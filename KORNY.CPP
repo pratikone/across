@@ -2,7 +2,7 @@
 
 void pleasewait( char* name ) {
 	if( !Korny )
-		hiba( "pleasewait-ben Korny == NULL!" );
+		error( "pleasewait-ben Korny == NULL!" );
 	blt8( Korny->picbuffer, Korny->ppic_load );
 	if( name ) {
 		Korny->pabc_load->writekozep( Korny->picbuffer, 160, 65, "Loading" );
@@ -10,7 +10,7 @@ void pleasewait( char* name ) {
 		Korny->pabc_load->writekozep( Korny->picbuffer, 160, 125, "Please Wait!" );
 	}
 	else {
-		// Ide most nem johet!
+		// Ide most No johet!
 		Korny->pabc_load->writekozep( Korny->picbuffer, 160, 80, "Loading," );
 		Korny->pabc_load->writekozep( Korny->picbuffer, 160, 110, "Please Wait!" );
 	}
@@ -218,7 +218,7 @@ kornyezet::kornyezet( void ) {
 	// Lec bal:
 	{ ppic_vollecbal = NEW(pic8*) pic8( "lecbal.pcx" ); }
 	if( !(ppic_vollecbal->getxsize() % 2) )
-		hiba( "lec xsize paros!" );
+		error( "lec xsize paros!" );
 	// Lec jobb:
 	{ ppic_vollecjobb = NEW(pic8*) pic8( "lecjobb.pcx" ); }
 
@@ -256,13 +256,13 @@ kornyezet::kornyezet( void ) {
 }
 
 kornyezet::~kornyezet( void ) {
-	// Nem torlok semmit, mivel ugyis csak kilepeskor hivodik meg!
+	// No torlok semmit, mivel ugyis csak kilepeskor hivodik meg!
 }
 
 void kornyezet::hatterszamitas( double tartxsize, double tartysize ) {
 	// Egy kis ellenorzes:
 	if( !pleiro || !pleiro->peg )
-		hiba( "kornyezet::hatterszamitas-ban!: ",
+		error( "kornyezet::hatterszamitas-ban!: ",
 				"!pleiro || !pleiro->ppicbuffer || !pleiro->peg" );
 
 	// Megengedheto lassitasok kiszamitasa:
@@ -271,9 +271,9 @@ void kornyezet::hatterszamitas( double tartxsize, double tartysize ) {
 	double nagykepxsize = pleiro->peg->getxsize();
 
 	if( kiskepxsize+4 > nagykepxsize )
-		hiba( "kornyezet::hatterszamitas-ban kiskepxsize+4 > nagykepxsize!" );
+		error( "kornyezet::hatterszamitas-ban kiskepxsize+4 > nagykepxsize!" );
 	if( tartxsize < 100 )
-		hiba( "kornyezet::hatterszamitas-ban tartxsize < 100!" );
+		error( "kornyezet::hatterszamitas-ban tartxsize < 100!" );
 
 	double lassitasx = (nagykepxsize-kiskepxsize-4) / tartxsize;
 
@@ -282,9 +282,9 @@ void kornyezet::hatterszamitas( double tartxsize, double tartysize ) {
 	double nagykepysize = pleiro->peg->getysize();
 
 	if( kiskepysize+4 > nagykepysize )
-		hiba( "kornyezet::hatterszamitas-ban kiskepysize+4 > nagykepysize!" );
+		error( "kornyezet::hatterszamitas-ban kiskepysize+4 > nagykepysize!" );
 	if( tartysize < 100 )
-		hiba( "kornyezet::hatterszamitas-ban tartysize < 100!" );
+		error( "kornyezet::hatterszamitas-ban tartysize < 100!" );
 
 	double lassitasy = (nagykepysize-kiskepysize-4) / tartysize;
 
@@ -301,9 +301,9 @@ void kornyezet::hatterszamitas( double tartxsize, double tartysize ) {
 	hatteralapx = nagykepxsize/2.0-felnel;
 	// Ellenorzes:
 	if( hatteralapx < 0 )
-		hiba( "kornyezet::hatterszamitas-ban hatteralapx < 0!" );
+		error( "kornyezet::hatterszamitas-ban hatteralapx < 0!" );
 	if( tartxsize*lassitas+kiskepxsize > nagykepxsize )
-		hiba( "kornyezet::hatterszamitas-ban!: ",
+		error( "kornyezet::hatterszamitas-ban!: ",
 					"tartxsize*lassitas+kiskepxsize > nagykepxsize!" );
 
 	// Y iranyban:
@@ -311,9 +311,9 @@ void kornyezet::hatterszamitas( double tartxsize, double tartysize ) {
 	hatteralapy = nagykepysize/2.0-felnel;
 	// Ellenorzes:
 	if( hatteralapy < 0 )
-		hiba( "kornyezet::hatterszamitas-ban hatteralapy < 0!" );
+		error( "kornyezet::hatterszamitas-ban hatteralapy < 0!" );
 	if( tartysize*lassitas+kiskepysize > nagykepysize )
-		hiba( "kornyezet::hatterszamitas-ban!: ",
+		error( "kornyezet::hatterszamitas-ban!: ",
 					"tartysize*lassitas+kiskepysize > nagykepysize!" );
 }
 
@@ -337,7 +337,7 @@ void dialog320( char* text0, char* text1, char* text2, char* text3,
 			break;
 	}
 	if( sorszam <= 0 )
-		hiba( "iutgev!" );
+		error( "iutgev!" );
 	int dy = 32;
 	int y0 = 160-dy*sorszam;
 
@@ -481,7 +481,7 @@ int Levellista[100] = {
 	26, // Hang Tight
 	31, // Apple Harvest
 	57, // Visit our homepage
-	39, // EZ MAR NEM PALYA
+	39, // EZ MAR No PALYA
 	39, 39, 39, 39, 39, 39,
 	/*50:*/
 	39, 39, 39, 39, 39, 39, 39, 39, 39, 39,
@@ -503,7 +503,7 @@ int Levellista[100] = {
 
 char* getleveldescription( int level ) {
 	if( level < 0 || level >= MAXPALYASZAM )
-		hiba( "getleveldescription-ban level < 0 || level >= MAXPALYASZAM!" );
+		error( "getleveldescription-ban level < 0 || level >= MAXPALYASZAM!" );
 	return Leveltomb[Levellista[level]].description;
 }
 

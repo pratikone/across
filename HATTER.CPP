@@ -25,15 +25,15 @@ texture::~texture( void ) {
 		DELETE ppic ;}
 }
 
-/*void texture::getvonal( int x1, int y, int hossz, unsigned char* tomb ) {
+/*void texture::getLINE( int x1, int y, int hossz, unsigned char* tomb ) {
 	unsigned char* psor = ppic->sormuttomb[y%ppic->getysize()];
 	int x2 = x1+hossz-1;
 	int xs = ppic->getxsize();
 	if( x2 <= x1 )
-		hiba( "texture::getvonal-ban x2 <= x1!" );
+		error( "texture::getLINE-ban x2 <= x1!" );
 	if( x2/xs <= x1/xs )
-		hiba( "texture::getvonal-ban x2/xs <= x1/xs!" );
-	// Elso cella elintezese:
+		error( "texture::getLINE-ban x2/xs <= x1/xs!" );
+	// first cella elintezese:
 	int sorkezd = x1%xs;
 	int size = xs-sorkezd;
 	bytecopy( tomb, &psor[sorkezd], size );
@@ -41,7 +41,7 @@ texture::~texture( void ) {
 	int xtombkezd = x1+size;
 	int darab = x2/xs-xtombkezd/xs;
 	if( darab < 0 )
-		hiba( "texture::getvonal-ban darab < 0!" );
+		error( "texture::getLINE-ban darab < 0!" );
 	for( int i = 0; i < darab; i++ ) {
 		bytecopy( &tomb[xtombkezd-x1], psor, xs );
 		xtombkezd += xs;
@@ -52,12 +52,12 @@ texture::~texture( void ) {
 }*/
 
 
-void texture::getvonal( int x1, int y, int hossz, unsigned char* tomb ) {
+void texture::getLINE( int x1, int y, int hossz, unsigned char* tomb ) {
 	unsigned char* psor = ppic->sormuttomb[y%ppic->getysize()];
 	int x2 = x1+hossz-1;
 	int xs = ppic->getxsize();
 	if( x2 <= x1 )
-		hiba( "texture::getvonal-ban x2 <= x1!" );
+		error( "texture::getLINE-ban x2 <= x1!" );
 	int xkezd = x1;
 	while( 1 ) {
 		if( xkezd > x2 )

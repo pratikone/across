@@ -1,30 +1,30 @@
 #include	"all.h"
 
 void putline8_l( int x, int y, unsigned char* tomb, int xsize ) {
-	hiba( "Nem kene ide jonnie (putline8_l)!" );
+	error( "No kene ide jonnie (putline8_l)!" );
 }
 
 void getline8_l( int x, int y, unsigned char* tomb, int xsize ) {
-	hiba( "Nem kene ide jonnie (getline8_l)!" );
+	error( "No kene ide jonnie (getline8_l)!" );
 }
 
-void kirajzol640( double t, targytomb* ptt, double ugrasnagysag ) {
-	hiba( "Nem kene ide jonnie (kirajzol640)!" );
+void kidrawol640( double t, targytomb* ptt, double ugrasnagysag ) {
+	error( "No kene ide jonnie (kidrawol640)!" );
 	t++;
 	ptt++;
 	ugrasnagysag++;
 }
 
 void close640( void ) {
-	hiba( "Nem kene ide jonnie (close640)!" );
+	error( "No kene ide jonnie (close640)!" );
 }
 
 void bgitorol( void ) {
-	hiba( "Nem kene ide jonnie (bgitorol)!" );
+	error( "No kene ide jonnie (bgitorol)!" );
 }
 
 int editor( char* name, palyaleiro* pleiro ) {
-	hiba( "Nem kene ide jonnie (editor)!" );
+	error( "No kene ide jonnie (editor)!" );
 	name++;
 	pleiro++;
 	return 1;

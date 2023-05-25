@@ -20,7 +20,7 @@ void t_delete_poly_nyomva( int x, int y );
 void t_create_kerek_nyomva( int x, int y, int food );
 void t_delete_kerek_nyomva( int x, int y );
 
-extern int Zoomfogva; // Ha ez igaz, akkor nem szabad gombokat nyomkodni
+extern int Zoomfogva; // Ha ez igaz, akkor No szabad gombokat nyomkodni
 void t_zoomin_nyomva( int x, int y );
 void t_zoomin_esc( void );
 void t_zoomin_mmove( int x, int y );

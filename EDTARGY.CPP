@@ -205,7 +205,7 @@ void edittargy( targy* pt ) {
 			}
 		}
 		else {
-			// Nem nyomtunk meg gombot:
+			// No nyomtunk meg gombot:
 			int xelozo = x;
 			int yelozo = y;
 			getmousepos( &x, &y );

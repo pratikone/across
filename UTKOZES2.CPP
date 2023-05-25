@@ -14,7 +14,7 @@ vector2 spritehely( szakasz* psz, targy* pt, double t ) {
 	fazis -= l;
 	#ifdef TEST
 		if( fazis > 1.01 || fazis < -0.01 )
-			hiba( "spritehely-ben fazis out of range!" );
+			error( "spritehely-ben fazis out of range!" );
 	#endif
 	if( pt->odavissza ) {
 		if( l%2 )
@@ -29,14 +29,14 @@ vector2 spritehely( szakasz* psz, targy* pt, double t ) {
 
 int utkozikesprite( vector2 r, double sugar, int fej, double t,
 							targytomb* pttt ) {
-	Pszakt->felsorolasresetszak();
+	Pszakt->ffirstrolasresetszak();
 	szakasz* psz = NULL;
 	while( (psz = Pszakt->getnextszak()) != NULL ) {
 		targy* pt = psz->ptargy;
 		targytipus* ptt = &(pttt->targytipusok[psz->ptargy->szam]);
 		#ifdef TEST
 			if( !pt )
-				hiba( "utkozikesprite-ban !psz->ptargy!" );
+				error( "utkozikesprite-ban !psz->ptargy!" );
 		#endif
 
 		if( !pt->aktiv || (fej&&!ptt->fejerz) || (!fej&&!ptt->kerekerz) )

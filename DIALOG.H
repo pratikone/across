@@ -19,6 +19,6 @@ struct box {
 
 int boxban( int x, int y, box boxa );
 
-void kirajzbox( pic8* ppic, int x1, int y1, int x2, int y2,
+void kidrawbox( pic8* ppic, int x1, int y1, int x2, int y2,
 						unsigned char felulet, unsigned char szele );
-void kirajzbox( pic8* ppic, box boxa, unsigned char felulet, unsigned char szele );
+void kidrawbox( pic8* ppic, box boxa, unsigned char felulet, unsigned char szele );

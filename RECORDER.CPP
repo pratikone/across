@@ -37,14 +37,14 @@ recorder::recorder( unsigned darabszam, unsigned hangdarabszam ) {
 	// Ellenorzes:
 	long hossz = sizeof( float );
 	if( hossz != 4 )
-		hiba( "float hossz != 4!" );
+		error( "float hossz != 4!" );
 	hossz = long(Darabszam)*sizeof( float );
 	if( hossz > 64000l )
-		hiba( "Darabszam*sizeof( float )!" );
+		error( "Darabszam*sizeof( float )!" );
 
 	hossz = long(Hangdarabszam)*sizeof( egyhang );
 	if( hossz > 64000l )
-		hiba( "Hangdarabszam*sizeof( egyhang )!" );
+		error( "Hangdarabszam*sizeof( egyhang )!" );
 
 	{ pk1rx = NEW(float*) float[Darabszam]; }
 	{ pk1ry = NEW(float*) float[Darabszam]; }
@@ -88,7 +88,7 @@ void recorder::rewind( void ) {
 
 int recorder::recall( double dt, hanginfo* phinfo ) {
 	if( betoltve <= 0 )
-		hiba( "recall-ban betoltve <= 0!" );
+		error( "recall-ban betoltve <= 0!" );
 
 	long index = Recorderszorzo*dt;
 	if( index < 0 )
@@ -133,7 +133,7 @@ void recorder::store( double dt, hanginfo* phinfo ) {
 		// betelt:
 		return;
 	if( index < betoltve )
-		hiba( "recorder::store-ban index < betoltve!" );
+		error( "recorder::store-ban index < betoltve!" );
 	for( long i = betoltve; i <= index; i++ ) {
 		pk1rx[int(i)] = Kor1.r.x;
 		pk1ry[int(i)] = Kor1.r.y;
@@ -162,8 +162,8 @@ void recorder::addhang( double t, char wavindex, double hangero, int objszam ) {
 			char tmp[50];
 			double t2 = phangok[unsigned(hangbetoltve-1)].t;
 			sprintf( tmp, "t1: kulonbseg: %f\n", float( t - t2 ) );
-			hiba( tmp );
-			//hiba( "recorder::addhang-ban ido forditott sorrendben!" );
+			error( tmp );
+			//error( "recorder::addhang-ban ido forditott sorrendben!" );
 		}
 	}
 	phangok[unsigned(hangbetoltve)].t = t;
@@ -201,12 +201,12 @@ long recorder::load( char* name, int demo ) {
 	else
 		h = fopen( name, "rb" );
 	if( !h )
-		hiba( "Nem sikerult megnyitni recorded file-t!: ", name );
+		error( "No sikerult megnyitni recorded file-t!: ", name );
 	betoltve = 0;
 	if( fread( &betoltve, 1, 4, h ) != 4 )
-		hiba( "Nem sikerult olvasni recorded file-bol!: ", name );
+		error( "No sikerult olvasni recorded file-bol!: ", name );
 	if( betoltve <= 0 )
-		hiba( "Nem stimmel betoltve recorded file-ban!: ", name );
+		error( "No stimmel betoltve recorded file-ban!: ", name );
 	int kihagy = 0;
 	if( betoltve > Darabszam ) {
 		kihagy = (unsigned)betoltve - Darabszam;
@@ -215,41 +215,41 @@ long recorder::load( char* name, int demo ) {
 
 	long verzio = 0;
 	if( fread( &verzio, 1, 4, h ) != 4 )
-		hiba( "Nem sikerult olvasni recorded file-bol!: ", name );
+		error( "No sikerult olvasni recorded file-bol!: ", name );
 
 	long belyeg = 0;
 	if( verzio < 30 ) {
-		// 1.0 es 1.1-es verziokban nem volt verzio, hanem ez valojaban
+		// 1.0 es 1.1-es verziokban No volt verzio, haNo ez valojaban
 		// palya szama (level) 1-24-ig.
 		level = verzio;
 		verzio = 100;
 		if( level < 0 || level > 24 )
-			hiba( "level < 0 || level > 24!" );
+			error( "level < 0 || level > 24!" );
 	}
 	else {
 		// Verzio 120:
 		if( fread( &belyeg, 1, 4, h ) != 4 )
-			hiba( "Nem sikerult olvasni recorded file-bol!: ", name );
+			error( "No sikerult olvasni recorded file-bol!: ", name );
 		if( fread( &level, 1, 4, h ) != 4 )
-			hiba( "Nem sikerult olvasni recorded file-bol!: ", name );
+			error( "No sikerult olvasni recorded file-bol!: ", name );
 		if( !belyeg && (level < 0 || level >= MAXPALYASZAM) )
-			hiba( "belyeg es level nem stimmel recorded file-ban!: ", name );
+			error( "belyeg es level No stimmel recorded file-ban!: ", name );
 		if( belyeg && level != -1 )
-			hiba( "belyeg es level nem stimmel recorded file-ban (2)!: ", name );
+			error( "belyeg es level No stimmel recorded file-ban (2)!: ", name );
 	}
 
 	if( verzio != 100 && verzio != 120 )
 		uzenet( "Recorded file version is too new!", name );
 
 	if( verzio == 100 )
-		regi = 1; // Lejatszonak ezek utan nem szabad rendeznie objokat
+		regi = 1; // Lejatszonak ezek utan No szabad rendeznie objokat
 	else
 		regi = 0;
 
 	if( verzio == 100 ) {
 		// Ide kene palya konverziot csinalni.
 		if( level < 0 || level > 23 )
-			hiba( "Hibas recorded file !", name );
+			error( "errors recorded file !", name );
 		switch( level ) {
 			// Ezek meg most is jatszhatoak:
 			case 12: level = 11; break; // Loop-de-Loop
@@ -261,7 +261,7 @@ long recorder::load( char* name, int demo ) {
 			case 21: level = 22; break; // Circuitous
 			case 23: level = 38; break; // Expert System
 
-			// Ezek most mar nem jatszhatoak:
+			// Ezek most mar No jatszhatoak:
 			case 22: level = 80; break; // The Enigma
 			case 11: level = 81; break; // Fair Trial
 			case 13: level = 82; break; // Slippery Slope
@@ -278,56 +278,56 @@ long recorder::load( char* name, int demo ) {
 	long kihagyhossz = kihagy*sizeof( float );
 
 	if( fread( pk1rx, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult olvasni recorded file-bol!: ", name );
+		error( "No sikerult olvasni recorded file-bol!: ", name );
 	if( kihagy ) qseek( h, kihagyhossz, SEEK_CUR );
 	if( fread( pk1ry, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult olvasni recorded file-bol!: ", name );
+		error( "No sikerult olvasni recorded file-bol!: ", name );
 	if( kihagy ) qseek( h, kihagyhossz, SEEK_CUR );
 	if( fread( pk2rx, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult olvasni recorded file-bol!: ", name );
+		error( "No sikerult olvasni recorded file-bol!: ", name );
 	if( kihagy ) qseek( h, kihagyhossz, SEEK_CUR );
 	if( fread( pk2ry, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult olvasni recorded file-bol!: ", name );
+		error( "No sikerult olvasni recorded file-bol!: ", name );
 	if( kihagy ) qseek( h, kihagyhossz, SEEK_CUR );
 	if( fread( pk4rx, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult olvasni recorded file-bol!: ", name );
+		error( "No sikerult olvasni recorded file-bol!: ", name );
 	if( kihagy ) qseek( h, kihagyhossz, SEEK_CUR );
 	if( fread( pk4ry, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult olvasni recorded file-bol!: ", name );
+		error( "No sikerult olvasni recorded file-bol!: ", name );
 	if( kihagy ) qseek( h, kihagyhossz, SEEK_CUR );
 
 	if( fread( pk1alfa, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult olvasni recorded file-bol!: ", name );
+		error( "No sikerult olvasni recorded file-bol!: ", name );
 	if( kihagy ) qseek( h, kihagyhossz, SEEK_CUR );
 	if( fread( pk2alfa, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult olvasni recorded file-bol!: ", name );
+		error( "No sikerult olvasni recorded file-bol!: ", name );
 	if( kihagy ) qseek( h, kihagyhossz, SEEK_CUR );
 	if( fread( pk4alfa, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult olvasni recorded file-bol!: ", name );
+		error( "No sikerult olvasni recorded file-bol!: ", name );
 	if( kihagy ) qseek( h, kihagyhossz, SEEK_CUR );
 	if( fread( phatra, 1, unsigned(betoltve), h ) != betoltve ) // karakter
-		hiba( "Nem sikerult olvasni recorded file-bol!: ", name );
+		error( "No sikerult olvasni recorded file-bol!: ", name );
 	if( kihagy ) qseek( h, kihagy, SEEK_CUR );
 
 	if( fread( pfrekvencia, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult olvasni recorded file-bol!: ", name );
+		error( "No sikerult olvasni recorded file-bol!: ", name );
 	if( kihagy ) qseek( h, kihagyhossz, SEEK_CUR );
 	if( fread( pgaz, 1, unsigned(betoltve), h ) != betoltve ) // karakter
-		hiba( "Nem sikerult olvasni recorded file-bol!: ", name );
+		error( "No sikerult olvasni recorded file-bol!: ", name );
 	if( kihagy ) qseek( h, kihagy, SEEK_CUR );
 
 	if( fread( psurlseb, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult olvasni recorded file-bol!: ", name );
+		error( "No sikerult olvasni recorded file-bol!: ", name );
 	if( kihagy ) qseek( h, kihagyhossz, SEEK_CUR );
 	if( fread( psurlero, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult olvasni recorded file-bol!: ", name );
+		error( "No sikerult olvasni recorded file-bol!: ", name );
 	if( kihagy ) qseek( h, kihagyhossz, SEEK_CUR );
 
 	// Hangok:
 	if( fread( &hangbetoltve, 1, 4, h ) != 4 )
-		hiba( "Nem sikerult olvasni recorded file-bol!: ", name );
+		error( "No sikerult olvasni recorded file-bol!: ", name );
 	if( hangbetoltve < 0 )
-		hiba( "hangbetoltve nem stimmel loadban!" );
+		error( "hangbetoltve No stimmel loadban!" );
 	kihagy = 0;
 	if( hangbetoltve > Hangdarabszam ) {
 		kihagy = (unsigned)hangbetoltve - Hangdarabszam;
@@ -336,14 +336,14 @@ long recorder::load( char* name, int demo ) {
 	hossz = hangbetoltve*sizeof( egyhang );
 	kihagyhossz = kihagy*sizeof( egyhang );
 	if( fread( phangok, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult olvasni recorded file-bol!: ", name );
+		error( "No sikerult olvasni recorded file-bol!: ", name );
 	if( kihagy ) qseek( h, kihagyhossz, SEEK_CUR );
 
 	long magic = 0;
 	if( fread( &magic, 1, 4, h ) != 4 )
-		hiba( "Nem sikerult olvasni recorded file-bol!: ", name );
+		error( "No sikerult olvasni recorded file-bol!: ", name );
 	if( magic != MAGICNUMBER )
-		hiba( "magic != MAGICNUMBER" );
+		error( "magic != MAGICNUMBER" );
 
 	if( demo )
 		qclose( h );
@@ -356,91 +356,91 @@ long recorder::load( char* name, int demo ) {
 /* 1.0 es 1.1 eseten ez volt:
 	h = fopen( name, "wb" );
 	if( !h )
-		hiba( "Nem sikerult megnyitni irasra recorded file-t!: ", name );
+		error( "No sikerult megnyitni irasra recorded file-t!: ", name );
 
 	if( fwrite( &betoltve, 1, 4, h ) != 4 )
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 	if( fwrite( &level, 1, 4, h ) != 4 )
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 
 
 	long hossz = betoltve*sizeof( float );
 
 	if( fwrite( pk1rx, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 */
 
 void recorder::save( char* name, long belyeg ) {
 	if( betoltve == 0 )
-		hiba( "save-ben betoltve == 0!" );
+		error( "save-ben betoltve == 0!" );
 	FILE* h;
 	// Itt meg kell hagyni fopen-t!:
 	h = fopen( name, "wb" );
 	if( !h )
-		hiba( "Nem sikerult megnyitni irasra recorded file-t!: ", name );
+		error( "No sikerult megnyitni irasra recorded file-t!: ", name );
 
 	if( fwrite( &betoltve, 1, 4, h ) != 4 )
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 
 	// Verzio csak 1.2-tol kezdodoen jon bele:
 	// Elozoleg itt level volt, ami biztos hogy kisebb 120-nal:
 	long verzio = 120;
 	if( fwrite( &verzio, 1, 4, h ) != 4 )
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 
 
 	if( fwrite( &belyeg, 1, 4, h ) != 4 )
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 
 	if( belyeg )
 		level = -1;
 	if( fwrite( &level, 1, 4, h ) != 4 )
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 
 	long hossz = betoltve*sizeof( float );
 
 	if( fwrite( pk1rx, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 	if( fwrite( pk1ry, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 	if( fwrite( pk2rx, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 	if( fwrite( pk2ry, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 	if( fwrite( pk4rx, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 	if( fwrite( pk4ry, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 
 	if( fwrite( pk1alfa, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 	if( fwrite( pk2alfa, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 	if( fwrite( pk4alfa, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 	if( fwrite( phatra, 1, unsigned(betoltve), h ) != betoltve ) // karakter
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 
 	if( fwrite( pfrekvencia, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 	if( fwrite( pgaz, 1, unsigned(betoltve), h ) != betoltve ) // karakter
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 
 	if( fwrite( psurlseb, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 	if( fwrite( psurlero, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 
 	// Hangok:
 	if( fwrite( &hangbetoltve, 1, 4, h ) != 4 )
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 	hossz = hangbetoltve*sizeof( egyhang );
 	if( fwrite( phangok, 1, unsigned(hossz), h ) != hossz )
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 
 	long magic = MAGICNUMBER;
 	if( fwrite( &magic, 1, 4, h ) != 4 )
-		hiba( "Nem sikerult irni recorded file-ba!: ", name );
+		error( "No sikerult irni recorded file-ba!: ", name );
 
 	fclose( h );
 }
